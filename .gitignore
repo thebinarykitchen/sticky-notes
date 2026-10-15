@@ -1,0 +1,32 @@
+.DS_Store
+xcuserdata/
+DerivedData/
+.swiftpm/
+
+# SwiftPM's build directory, and the `-derivedDataPath` an `xcodebuild` run may write to:
+# products, module caches, and run logs. Entirely reproducible, safe to delete.
+.build/
+
+# Xcode's build folder from `xcodebuild` run in a project directory: intermediates and
+# products, entirely reproducible.
+build/
+
+# Per-machine Claude Code state.
+.claude/
+
+# Result bundles from a manual `xcodebuild … -resultBundlePath <name>.xcresult test`.
+*.xcresult
+
+# .appstore holds generated release artifacts — except <version>/metadata/, which is
+# authored App Store copy (descriptions, what's new, …) and must stay in the repo.
+# The first-level negation is required for git to reach the metadata folders; the
+# DerivedData re-ignore keeps git from descending into the (huge) build cache.
+.appstore/**
+!.appstore/*/
+.appstore/DerivedData/
+!.appstore/*/metadata/
+!.appstore/*/metadata/**
+
+# App Store Connect credentials — never commit these.
+credentials.env
+*.p8
