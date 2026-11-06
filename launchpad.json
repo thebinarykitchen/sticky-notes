@@ -1,0 +1,17 @@
+{
+  "project": "StickyNotes.xcodeproj",
+  "scheme": "StickyNotes",
+
+  "screenshots": {
+    "testBundle": "Screenshots/Listing",
+    "platforms": ["ios"],
+    "devices": ["iPhone 17 Pro Max", "iPad Pro 13-inch (M5)"]
+  },
+
+  "video-preview": {
+    "testBundle": "Screenshots/VideoPreviews",
+    "posterBeat": "notes-made",
+    "platform": "ios",
+    "devices": ["iPhone 17 Pro Max", "iPad Pro 13-inch (M5)"]
+  }
+}

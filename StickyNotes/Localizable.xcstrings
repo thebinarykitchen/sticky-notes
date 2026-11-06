@@ -1,0 +1,516 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ and its notes will be deleted. This can't be undone." : {
+      "comment" : "Before deleting a board. The argument is the board's name."
+    },
+    "%lld boards free" : {
+      "comment" : "Under the boards offer on the Pro sheet. The number is the free boards.",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld board free"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld boards free"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld free every month" : {
+      "comment" : "Under Make Notes on the Pro sheet. The number is the free uses.",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld free every month"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld free every month"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Add Note" : {
+      "comment" : "Adds a note: the toolbar button, and what Undo and Redo call it."
+    },
+    "Add Notes" : {
+      "comment" : "Makes and adds the notes: the button that does, and what Undo and Redo call it."
+    },
+    "Also in Pro" : {
+      "comment" : "Heads the rest of what Pro adds, on the Pro sheet."
+    },
+    "Apples, bread and milk" : {
+      "comment" : "Written on the tour's practice note \"Groceries\", as the tour shows writing."
+    },
+    "Ask Sam" : {
+      "comment" : "A note on the tour's practice board."
+    },
+    "Blue" : {
+      "comment" : "A color in a note's menu."
+    },
+    "Blue note" : {
+      "comment" : "VoiceOver name for a note."
+    },
+    "Board name" : {
+      "comment" : "VoiceOver label for a board's name field."
+    },
+    "Boards" : {
+      "comment" : "The title of the list of boards."
+    },
+    "Boards have no edges: hold a note near the edge of the screen, and the board scrolls along with it." : {
+      "comment" : "On the tour, once a note has been moved."
+    },
+    "Boards have no edges: hold a note near the edge of the window, and the board scrolls along with it." : {
+      "comment" : "On the tour, once a note has been moved, on a Mac."
+    },
+    "Book the vet" : {
+      "comment" : "A note on the tour's practice board."
+    },
+    "Bring lemonade" : {
+      "comment" : "The note the tour's practice board adds on a double tap."
+    },
+    "Call Grandma" : {
+      "comment" : "A note on the tour's practice board."
+    },
+    "Can't make notes from that. Try different words." : {
+      "comment" : "Above what was written, when no notes can be made from it."
+    },
+    "Canvas" : {
+      "comment" : "VoiceOver label for the board."
+    },
+    "Change Color" : {
+      "comment" : "What Undo and Redo call changing a note's color."
+    },
+    "Click a note to write on it." : {
+      "comment" : "How to write on a note, on the tour, on a Mac."
+    },
+    "Click to Write" : {
+      "comment" : "Title of the tour page on writing on a note, on a Mac."
+    },
+    "Color" : {
+      "comment" : "Labels the colors in a note's menu."
+    },
+    "Control-Click for the Menu" : {
+      "comment" : "Title of the tour page on a note's menu, which changes its color, on a Mac."
+    },
+    "Control-click a note, then pick a color for it." : {
+      "comment" : "How to open a note's menu and change its color, on the tour, on a Mac."
+    },
+    "Couldn't make notes just now. Try again." : {
+      "comment" : "Above what was written, when making notes failed."
+    },
+    "Couldn't restore your purchases. Try again." : {
+      "comment" : "On the Pro sheet, when Restore Purchases failed."
+    },
+    "Create" : {
+      "comment" : "Adds the board just named."
+    },
+    "Delete" : {
+      "comment" : "Deletes a board, after asking.\nRemoves a note."
+    },
+    "Delete Board" : {
+      "comment" : "Deletes a board and its notes."
+    },
+    "Delete Board?" : {
+      "comment" : "Asks before deleting a board."
+    },
+    "Delete Note" : {
+      "comment" : "What Undo and Redo call deleting a note."
+    },
+    "Dentist on Tuesday" : {
+      "comment" : "A note on the tour's practice board."
+    },
+    "Done" : {
+      "comment" : "Ends writing on a note: what VoiceOver calls the blur over the board."
+    },
+    "Done already" : {
+      "comment" : "A note on the tour's practice board."
+    },
+    "Double-Click to Add" : {
+      "comment" : "Title of the tour page on adding a note, on a Mac."
+    },
+    "Double-Tap to Add" : {
+      "comment" : "Title of the tour page on adding a note."
+    },
+    "Double-click an empty spot on the board, and a note appears there." : {
+      "comment" : "How to add a note, on the tour, on a Mac."
+    },
+    "Double-tap an empty spot on the board, and a note appears there." : {
+      "comment" : "How to add a note, on the tour."
+    },
+    "Double-tap anywhere to add a note" : {
+      "comment" : "Shown on an empty canvas."
+    },
+    "Drag a note onto the bin that appears at the bottom, and let go once the bin turns red." : {
+      "comment" : "How to delete a note by dragging it onto the bin, on the tour."
+    },
+    "Drag a note to move it somewhere else on the board." : {
+      "comment" : "How to move a note, on the tour."
+    },
+    "Drag to Move" : {
+      "comment" : "Title of the tour page on moving a note."
+    },
+    "Drag to the Bin" : {
+      "comment" : "Title of the tour page on deleting a note by dragging it onto the bin."
+    },
+    "Each board is a canvas with no edges, and you work on its notes with the pointer and the trackpad. Nothing on screen points out how, so this quick tour shows you each one. With a mouse, Control-click a note for its menu." : {
+      "comment" : "The tour's welcome page, its first paragraph, on a Mac."
+    },
+    "Each board is a canvas with no edges, and you work on its notes with your fingers. Nothing on screen points out how, so this quick tour shows you each gesture." : {
+      "comment" : "The tour's welcome page, its first paragraph."
+    },
+    "Every delete offers Undo for a few seconds, so nothing goes by accident." : {
+      "comment" : "On the tour, once a note has been deleted."
+    },
+    "Every free board is in use" : {
+      "comment" : "Under the boards offer on the Pro sheet when every free board is used."
+    },
+    "Every page has a board to practice on. Its notes aren't yours, so try anything." : {
+      "comment" : "The tour's welcome page, its second paragraph."
+    },
+    "Four colors are always free" : {
+      "comment" : "Under the colors offer on the Pro sheet."
+    },
+    "Gestures" : {
+      "comment" : "Puts the tour of the gestures back up, over the list of boards."
+    },
+    "Get Started" : {
+      "comment" : "Ends the tour, on its last page."
+    },
+    "Gray" : {
+      "comment" : "A color in a note's menu."
+    },
+    "Gray note" : {
+      "comment" : "VoiceOver name for a note."
+    },
+    "Green" : {
+      "comment" : "A color in a note's menu."
+    },
+    "Green note" : {
+      "comment" : "VoiceOver name for a note."
+    },
+    "Groceries" : {
+      "comment" : "A note on the tour's practice board; the tour writes a list under it."
+    },
+    "Gym bag" : {
+      "comment" : "A note on the tour's practice board."
+    },
+    "Ideas for the party" : {
+      "comment" : "A note on the tour's practice board."
+    },
+    "Keep this one" : {
+      "comment" : "A note on the tour's practice board."
+    },
+    "Make Bigger" : {
+      "comment" : "Makes a note one step larger."
+    },
+    "Make Blue" : {
+      "comment" : "VoiceOver action that recolors a note."
+    },
+    "Make Gray" : {
+      "comment" : "VoiceOver action that recolors a note."
+    },
+    "Make Green" : {
+      "comment" : "VoiceOver action that recolors a note."
+    },
+    "Make Notes" : {
+      "comment" : "Opens the sheet that makes notes, and its title."
+    },
+    "Make Orange" : {
+      "comment" : "VoiceOver action that recolors a note."
+    },
+    "Make Pink" : {
+      "comment" : "VoiceOver action that recolors a note."
+    },
+    "Make Purple" : {
+      "comment" : "VoiceOver action that recolors a note."
+    },
+    "Make Smaller" : {
+      "comment" : "Makes a note one step smaller."
+    },
+    "Make Teal" : {
+      "comment" : "VoiceOver action that recolors a note."
+    },
+    "Make Yellow" : {
+      "comment" : "VoiceOver action that recolors a note."
+    },
+    "Make as many boards as you like" : {
+      "comment" : "What Pro adds, on the Pro sheet: boards without a limit."
+    },
+    "Make notes from lists and topics" : {
+      "comment" : "What Pro adds, on the Pro sheet: Make Notes without a monthly limit."
+    },
+    "Making notes…" : {
+      "comment" : "What VoiceOver says while notes are being made."
+    },
+    "More Colors with Pro" : {
+      "comment" : "The Pro sheet's title when a color only Pro has is picked for a note."
+    },
+    "Move Down" : {
+      "comment" : "Moves a note down by its height."
+    },
+    "Move Left" : {
+      "comment" : "Moves a note left by its width."
+    },
+    "Move Note" : {
+      "comment" : "What Undo and Redo call moving a note."
+    },
+    "Move Right" : {
+      "comment" : "Moves a note right by its width."
+    },
+    "Move Up" : {
+      "comment" : "Moves a note up by its height."
+    },
+    "My Board" : {
+      "comment" : "The name of the board made on first launch."
+    },
+    "Name" : {
+      "comment" : "Placeholder for a board's name."
+    },
+    "New Board" : {
+      "comment" : "Adds a board: the toolbar button, and the title of the prompt naming it."
+    },
+    "Next" : {
+      "comment" : "Goes on to the tour's next page."
+    },
+    "No purchases to restore for this Apple Account." : {
+      "comment" : "On the Pro sheet, when Restore Purchases found nothing."
+    },
+    "None left until the 1st" : {
+      "comment" : "Under Make Notes on the Pro sheet once this month's free uses are gone."
+    },
+    "Note deleted" : {
+      "comment" : "Shown briefly after a note is deleted."
+    },
+    "Note text" : {
+      "comment" : "VoiceOver label for a note's text field."
+    },
+    "Old shopping list" : {
+      "comment" : "A note on the tour's practice board."
+    },
+    "On the trackpad, pinch a note smaller and keep going until it crumples. Then let go." : {
+      "comment" : "How to delete a note by pinching it, on the tour, on a Mac."
+    },
+    "On your own boards, a new note opens for writing straight away. The + button adds one in the middle of the screen, too." : {
+      "comment" : "On the tour, once a note has been added."
+    },
+    "On your own boards, a new note opens for writing straight away. The + button adds one in the middle of the window, too." : {
+      "comment" : "On the tour, once a note has been added, on a Mac."
+    },
+    "One purchase lifts every limit below." : {
+      "comment" : "Under the Pro sheet's title, when it was opened from the list of boards."
+    },
+    "One-time purchase. No subscription." : {
+      "comment" : "Under the Pro sheet's buy button."
+    },
+    "Only with Pro" : {
+      "comment" : "Under the colors offer on the Pro sheet when one of them was picked."
+    },
+    "Orange" : {
+      "comment" : "A color in a note's menu."
+    },
+    "Orange note" : {
+      "comment" : "VoiceOver name for a note."
+    },
+    "Orange, purple, teal and gray notes" : {
+      "comment" : "What Pro adds, on the Pro sheet: the four colors only Pro has."
+    },
+    "Pack a blanket" : {
+      "comment" : "A note on the tour's practice board."
+    },
+    "Paste a list to turn into notes, or name a topic for ideas" : {
+      "comment" : "Placeholder in the field notes are made from."
+    },
+    "Pinch a note on the trackpad. Spread your fingers to make it bigger, or bring them together to make it smaller." : {
+      "comment" : "How to resize a note, on the tour, on a Mac."
+    },
+    "Pinch a note smaller, and keep going until it crumples. Then let go." : {
+      "comment" : "How to delete a note by pinching it, on the tour."
+    },
+    "Pinch a note with two fingers. Spread them to make it bigger, or bring them together to make it smaller." : {
+      "comment" : "How to resize a note, on the tour."
+    },
+    "Pinch to Crumple" : {
+      "comment" : "Title of the tour page on deleting a note by pinching it very small."
+    },
+    "Pinch to Resize" : {
+      "comment" : "Title of the tour page on resizing a note."
+    },
+    "Pink" : {
+      "comment" : "A color in a note's menu."
+    },
+    "Pink note" : {
+      "comment" : "VoiceOver name for a note."
+    },
+    "Plan the picnic" : {
+      "comment" : "A note on the tour's practice board."
+    },
+    "Practiced" : {
+      "comment" : "VoiceOver, after a tour page's instruction, once its gesture is done."
+    },
+    "Purple" : {
+      "comment" : "A color in a note's menu."
+    },
+    "Purple note" : {
+      "comment" : "VoiceOver name for a note."
+    },
+    "Rename" : {
+      "comment" : "Renames a board."
+    },
+    "Rename Board" : {
+      "comment" : "The title of the prompt renaming a board."
+    },
+    "Resize Note" : {
+      "comment" : "What Undo and Redo call resizing a note."
+    },
+    "Restore Purchases" : {
+      "comment" : "Asks the App Store for a Pro bought before, on the Pro sheet."
+    },
+    "Search Notes" : {
+      "comment" : "Placeholder in the field that searches every board's notes."
+    },
+    "Seven Gestures" : {
+      "comment" : "The title of the tour's welcome page: the tour has a page for each of seven gestures."
+    },
+    "Show Me How" : {
+      "comment" : "Under the empty canvas: puts the tour of the gestures back up."
+    },
+    "Skip" : {
+      "comment" : "Leaves the tour, from any of its pages."
+    },
+    "Start" : {
+      "comment" : "Starts the tour, on its welcome page."
+    },
+    "Step %lld of %lld" : {
+      "comment" : "VoiceOver label for the tour's page dots: which page this is, of how many.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Step %1$lld of %2$lld"
+          }
+        }
+      }
+    },
+    "Sticky Notes Pro" : {
+      "comment" : "The name of the one thing this app sells, and the Pro sheet's title."
+    },
+    "Sticky Notes Pro…" : {
+      "comment" : "The app menu item that opens the Pro sheet."
+    },
+    "Sticky Notes Tour" : {
+      "comment" : "The Help menu item that puts the tour of the gestures back up."
+    },
+    "Still to do" : {
+      "comment" : "A note on the tour's practice board."
+    },
+    "Tap a note to write on it." : {
+      "comment" : "How to write on a note, on the tour."
+    },
+    "Tap to Write" : {
+      "comment" : "Title of the tour page on writing on a note."
+    },
+    "Teal" : {
+      "comment" : "A color in a note's menu."
+    },
+    "Teal note" : {
+      "comment" : "VoiceOver name for a note."
+    },
+    "That's too long to make notes from. Try a shorter piece." : {
+      "comment" : "Above what was written, when it is too long to make notes from."
+    },
+    "The menu also makes a note bigger or smaller, or deletes it. New notes take the color after the last one." : {
+      "comment" : "On the tour, once a note's color has been changed."
+    },
+    "The note comes to the middle while you write, and goes back when you click anywhere around it." : {
+      "comment" : "On the tour, once a note has been opened for writing, on a Mac."
+    },
+    "The note comes to the middle while you write, and goes back when you tap anywhere around it." : {
+      "comment" : "On the tour, once a note has been opened for writing."
+    },
+    "The purchase didn't go through. Try again." : {
+      "comment" : "On the Pro sheet, when buying Pro failed."
+    },
+    "The words reflow to fit. Make Bigger and Make Smaller in the note's menu do the same, a step at a time." : {
+      "comment" : "On the tour, once a note has been resized."
+    },
+    "The words reflow to fit. With a mouse, Make Bigger and Make Smaller are in the note's menu." : {
+      "comment" : "On the tour, once a note has been resized, on a Mac."
+    },
+    "Three boards are free. Pro lets you make as many as you like." : {
+      "comment" : "Under the Pro sheet's title when every free board is used."
+    },
+    "Touch and Hold for the Menu" : {
+      "comment" : "Title of the tour page on a note's menu, which changes its color."
+    },
+    "Touch and hold a note, then pick a color for it." : {
+      "comment" : "How to open a note's menu and change its color, on the tour."
+    },
+    "Try Again" : {
+      "comment" : "On the Pro sheet, in place of the buy button, when the price didn't load."
+    },
+    "Undo" : {
+      "comment" : "Brings back the note just deleted."
+    },
+    "Unlimited Boards with Pro" : {
+      "comment" : "The Pro sheet's title when New Board is tapped with every free board used."
+    },
+    "Unlimited Make Notes with Pro" : {
+      "comment" : "The Pro sheet's title once this month's free Make Notes are used."
+    },
+    "Unlock Pro for %@" : {
+      "comment" : "The Pro sheet's buy button. The argument is the price, already formatted for the reader's App Store."
+    },
+    "Unlocked" : {
+      "comment" : "Beside Sticky Notes Pro, once it is bought."
+    },
+    "Untitled Board" : {
+      "comment" : "What a board with no name is called."
+    },
+    "Waiting for approval. Pro will unlock once the purchase is approved." : {
+      "comment" : "On the Pro sheet, when the purchase waits for approval, as Ask to Buy does."
+    },
+    "Water the plants" : {
+      "comment" : "A note on the tour's practice board."
+    },
+    "What to make notes from" : {
+      "comment" : "VoiceOver label for the field notes are made from."
+    },
+    "Write something…" : {
+      "comment" : "Placeholder on an empty note."
+    },
+    "Yellow" : {
+      "comment" : "A color in a note's menu."
+    },
+    "Yellow note" : {
+      "comment" : "VoiceOver name for a note."
+    },
+    "Yellow, pink, blue and green are always free. Pro adds four more." : {
+      "comment" : "Under the Pro sheet's title when a color only Pro has is picked."
+    },
+    "You've made notes ten times this month. You'll get ten more next month." : {
+      "comment" : "Under the Pro sheet's title once this month's free Make Notes are used."
+    }
+  },
+  "version" : "1.0"
+}
