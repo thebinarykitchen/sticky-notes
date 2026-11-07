@@ -59,6 +59,9 @@
     "Add Notes" : {
       "comment" : "Makes and adds the notes: the button that does, and what Undo and Redo call it."
     },
+    "All Notes" : {
+      "comment" : "The title of a board's overview."
+    },
     "Also in Pro" : {
       "comment" : "Heads the rest of what Pro adds, on the Pro sheet."
     },
@@ -181,6 +184,9 @@
     },
     "Each board is a canvas with no edges, and you work on its notes with your fingers. Nothing on screen points out how, so this quick tour shows you each gesture." : {
       "comment" : "The tour's welcome page, its first paragraph."
+    },
+    "Empty note" : {
+      "comment" : "VoiceOver name for a note with no words on it."
     },
     "Every delete offers Undo for a few seconds, so nothing goes by accident." : {
       "comment" : "On the tour, once a note has been deleted."
@@ -398,8 +404,14 @@
     "Seven Gestures" : {
       "comment" : "The title of the tour's welcome page: the tour has a page for each of seven gestures."
     },
+    "Show All Notes" : {
+      "comment" : "Opens the overview of every note on the board."
+    },
     "Show Me How" : {
       "comment" : "Under the empty canvas: puts the tour of the gestures back up."
+    },
+    "Shows it on the board." : {
+      "comment" : "VoiceOver hint for a note in the overview."
     },
     "Skip" : {
       "comment" : "Leaves the tour, from any of its pages."

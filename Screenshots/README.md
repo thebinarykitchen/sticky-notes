@@ -146,7 +146,7 @@ of ten per section, and `app-preview` renumbers them 01…N.
 | From | What it shows |
 | --- | --- |
 | `PreviewFirstRun` | The empty first board, and the tour: its welcome, each lesson page, and the board it leaves. |
-| `PreviewTheBoard` | The board, a note added from the toolbar being written on, a note's menu, the offer to undo a delete, and a note at its largest. |
+| `PreviewTheBoard` | The board, a note added from the toolbar being written on, a note's menu, the offer to undo a delete, a note at its largest, and the overview of every note. |
 | `PreviewBoards` | The list of boards and its prompts: naming a new board, a board's menu, renaming, deleting. Then the list beside the canvas in landscape, which skips where nothing stands beside it. |
 | `PreviewSearch` | Hits on every board, no hits, and a note picked: its board, the note in the middle. |
 | `PreviewMakeNotes` | The sheet empty, written in, and the notes it made. |

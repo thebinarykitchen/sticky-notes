@@ -8,17 +8,17 @@ import SwiftUI
 /// anyone a double tap doesn't suit. Where the on-device model can run, the toolbar's Make Notes
 /// adds several there at once, made from what is written in its sheet. While a note is dragged,
 /// its stand-in and the bin that deletes it are drawn here; after a delete on this board, so is
-/// the offer to undo it. A note picked from a search is brought to the middle, and VoiceOver to
-/// it. A note being written on is drawn in the middle too, above the keyboard, with the rest of
-/// the board blurred behind it.
+/// the offer to undo it. A note picked from a search or the toolbar's overview is brought to the
+/// middle, and VoiceOver to it. A note being written on is drawn in the middle too, above the
+/// keyboard, with the rest of the board blurred behind it.
 struct CanvasView: View {
     static let space = "canvas"
 
     /// How long "Note deleted · Undo" stays up.
     static let undoOffer: Duration = .seconds(5)
 
-    /// A note to bring to the middle of the canvas: one picked from a search. Each pick is a new
-    /// one, so picking the same note again scrolls to it again.
+    /// A note to bring to the middle of the canvas: one picked from a search or the overview. Each
+    /// pick is a new one, so picking the same note again scrolls to it again.
     struct Reveal: Equatable {
         let noteID: UUID
         let boardID: UUID
@@ -48,6 +48,11 @@ struct CanvasView: View {
     @State private var isMakingNotes = false
     /// The notes Make Notes made, until its sheet has gone.
     @State private var made: [String] = []
+    @State private var isShowingOverview = false
+    /// The note picked in the overview, until its sheet has gone.
+    @State private var pickedInOverview: Reveal?
+    /// The note picked in the overview last, until a search picks another.
+    @State private var overviewReveal: Reveal?
     /// The note being written on — see ``CanvasOverlays``.
     @State private var editing: UUID?
     /// The note VoiceOver is on: moved to a revealed one.
@@ -60,6 +65,9 @@ struct CanvasView: View {
         let id = board.id
         _notes = Query(filter: #Predicate { $0.board?.id == id }, sort: \.z)
     }
+
+    /// The note picked last, from either place.
+    private var revealing: Reveal? { overviewReveal ?? reveal }
 
     var body: some View {
         ScrollView([.horizontal, .vertical]) {
@@ -81,10 +89,14 @@ struct CanvasView: View {
         // While a note is written on in the middle, its place stays where it goes back to. The
         // blur takes touches, but not a Mac's scroll wheel or a tap on the status bar.
         .scrollDisabled(editing != nil)
-        .modifier(CanvasScrolling(scroll: scroll, drag: drag, notes: notes, reveal: reveal))
+        .modifier(
+            CanvasScrolling(
+                boardID: board.id, scroll: scroll, drag: drag, notes: notes, reveal: revealing)
+        )
+        .onChange(of: reveal) { overviewReveal = nil }
         // Once it is on screen: as the board opens on it, or when picked with the board open.
         .onChange(of: scroll.isOpen) { speakRevealed() }
-        .onChange(of: reveal) { speakRevealed() }
+        .onChange(of: revealing) { speakRevealed() }
         // What VoiceOver and the UI tests know as the canvas: what's on screen, clear of the bars
         // and an iPad's sidebar. The scroll view's own frame runs under them, and its content is
         // the size of the board.
@@ -140,6 +152,22 @@ struct CanvasView: View {
             }
             ToolbarItem(placement: .primaryAction) {
                 Button {
+                    editing = nil
+                    isShowingOverview = true
+                } label: {
+                    Label {
+                        Text(
+                            "Show All Notes",
+                            comment: "Opens the overview of every note on the board.")
+                    } icon: {
+                        Image(systemName: "map")
+                    }
+                }
+                .disabled(notes.isEmpty)
+                .accessibilityIdentifier(A11y.Canvas.overviewButton)
+            }
+            ToolbarItem(placement: .primaryAction) {
+                Button {
                     let visible = scroll.visible
                     add(at: CGPoint(x: visible.midX, y: visible.midY))
                 } label: {
@@ -159,6 +187,10 @@ struct CanvasView: View {
         // Added once the sheet has gone, so they are seen arriving.
         .sheet(isPresented: $isMakingNotes, onDismiss: addMade) {
             MakeNotesSheet { made = $0 }
+        }
+        // Scrolled to once the sheet has gone, so the note is seen arriving.
+        .sheet(isPresented: $isShowingOverview, onDismiss: revealPicked) {
+            BoardOverview(notes: notes) { pickedInOverview = Reveal($0) }
         }
     }
 
@@ -231,8 +263,14 @@ struct CanvasView: View {
         if pro.hasRunOut(of: .makeNotes) { offer?.show(.makeNotes) }
     }
 
+    private func revealPicked() {
+        guard let pickedInOverview else { return }
+        overviewReveal = pickedInOverview
+        self.pickedInOverview = nil
+    }
+
     private func speakRevealed() {
-        if scroll.isOpen, let reveal { spoken = reveal.noteID }
+        if scroll.isOpen, let revealing { spoken = revealing.noteID }
     }
 }
 

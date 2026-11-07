@@ -225,6 +225,16 @@ final class PreviewTheBoard: FunctionalPreviewCase {
 
         PreviewShots(in: self, from: 124).capture("TheLargestNote")
     }
+
+    func testTheOverview() {
+        launch()
+
+        app.buttons[A11y.Canvas.overviewButton].awaiting("Show All Notes").tap()
+        app.find(A11y.Overview.note).awaiting("the overview")
+        settle()
+
+        PreviewShots(in: self, from: 125).capture("TheOverview")
+    }
 }
 
 // MARK: - Boards

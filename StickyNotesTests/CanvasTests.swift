@@ -244,6 +244,76 @@ struct CanvasScrollTests {
         #expect(scroll.visible.midX == note.midX && scroll.visible.midY == note.midY)
     }
 
+    /// Back on a board, it opens with what was at the top-left there again, whatever the content
+    /// covers now.
+    @Test func aBoardOpensWhereItWasLeft() throws {
+        let left = CGPoint(x: 240, y: 700)
+        let scroll = CanvasScroll()
+        scroll.observe(
+            geometry(scroll, at: .zero), notes: { notes }, place: { left }, isAutoscrolling: false)
+        let laidOut = scroll.observe(
+            geometry(scroll, at: .zero), notes: { notes }, place: { left }, isAutoscrolling: false)
+        let opening = try #require(laidOut.opening)
+        #expect(scroll.place == nil)
+
+        scroll.observe(geometry(scroll, at: opening), notes: { notes }, isAutoscrolling: false)
+        #expect(scroll.isOpen)
+        #expect(scroll.visible.origin == left)
+        #expect(scroll.place == left)
+    }
+
+    /// Left far from its notes, with all of them since moved or deleted, the content still reaches
+    /// that far, so the opening scroll lands.
+    @Test func aBoardLeftFarFromItsNotesStillOpensThere() {
+        let left = CGPoint(x: 5_000, y: -3_000)
+        let scroll = CanvasScroll()
+        scroll.observe(
+            geometry(scroll, at: .zero), notes: { notes }, place: { left }, isAutoscrolling: false)
+        #expect(scroll.extent.contains(CGRect(origin: left, size: viewport)))
+    }
+
+    /// A note picked from a search outranks where the board was left.
+    @Test func aRevealOutranksWhereTheBoardWasLeft() throws {
+        let note = CGRect(x: 170, y: 460, width: 160, height: 160)
+        let scroll = CanvasScroll()
+        for _ in 0..<2 {
+            scroll.observe(
+                geometry(scroll, at: .zero), notes: { notes }, target: { note },
+                place: { CGPoint(x: 240, y: 700) }, isAutoscrolling: false)
+        }
+        scroll.observe(
+            geometry(scroll, at: scroll.contentOrigin), notes: { notes }, isAutoscrolling: false)
+        let extentMiddle = CanvasScroll.needed(
+            notes: notes,
+            visible: CGRect(
+                x: note.midX - viewport.width / 2, y: note.midY - viewport.height / 2,
+                width: viewport.width, height: viewport.height))
+        #expect(scroll.extent == extentMiddle)
+    }
+
+    /// Fitting the content moves its origin; the place is in board points, so it stays.
+    @Test func thePlaceIsInBoardPointsAndSurvivesTheContentFitting() {
+        let scroll = opened()
+        _ = scroll.autoscroll(CGVector(dx: -1_200, dy: 0), for: 2, notes: notes)
+        let away = scroll.place
+
+        _ = scroll.settle(notes: notes)
+
+        #expect(scroll.place == away)
+        #expect(away == CGPoint(x: -2_400, y: 0))
+    }
+
+    @Test func aPlaceComesBackAsItWasStored() {
+        let place = CGPoint(x: -1_234.5, y: 0.25)
+        #expect(CanvasScroll.place(stored: CanvasScroll.stored(place)) == place)
+    }
+
+    @Test func anythingElseStoredIsNoPlace() {
+        for stored in ["", "12", "1,2,3", "a,b", "nan,1", "inf,1"] {
+            #expect(CanvasScroll.place(stored: stored) == nil, "\(stored)")
+        }
+    }
+
     /// On an iPad the canvas runs under the sidebar as it does under the navigation bar: the
     /// sidebar is a leading inset, and what's visible is what it leaves uncovered (measured on
     /// iOS 27, an 11-inch iPad in landscape).
@@ -357,6 +427,93 @@ struct CanvasScrollTests {
 
         #expect(scroll.settle(notes: notes) == nil)
         #expect(scroll.extent == extent)
+    }
+}
+
+struct OverviewFitTests {
+    let size = CGSize(width: 400, height: 600)
+
+    /// Twice as wide as the sheet: half the size, and whole.
+    @Test func aBoardTooBigIsScaledToFit() {
+        let frames = [
+            CGRect(x: 0, y: 0, width: 100, height: 100),
+            CGRect(x: 700, y: 0, width: 100, height: 100),
+        ]
+        let fit = OverviewFit(frames: frames, in: size)
+        #expect(fit.scale == 0.5)
+        #expect(fit.point(fromBoard: CGPoint(x: 0, y: 0)).x == 0)
+        #expect(fit.point(fromBoard: CGPoint(x: 800, y: 0)).x == 400)
+    }
+
+    /// The tighter side decides, and the other is centred.
+    @Test func theTighterSideDecides() {
+        let frames = [CGRect(x: -100, y: 500, width: 200, height: 1_200)]
+        let fit = OverviewFit(frames: frames, in: size)
+        #expect(fit.scale == 0.5)
+        #expect(fit.point(fromBoard: CGPoint(x: 0, y: 1_100)) == CGPoint(x: 200, y: 300))
+    }
+
+    @Test func aSmallBoardIsNeverEnlarged() {
+        let frames = [CGRect(x: 40, y: 40, width: 160, height: 160)]
+        let fit = OverviewFit(frames: frames, in: size)
+        #expect(fit.scale == 1)
+        #expect(fit.point(fromBoard: CGPoint(x: 120, y: 120)) == CGPoint(x: 200, y: 300))
+    }
+
+    /// The first layout can have no size yet, and a board can have no notes.
+    @Test func nothingToFitDoesNoHarm() {
+        #expect(OverviewFit(frames: [], in: size).scale == 1)
+        let unsized = OverviewFit(
+            frames: [CGRect(x: 0, y: 0, width: 160, height: 160)], in: .zero)
+        #expect(unsized.scale == 0)
+    }
+
+    @Test func aTouchPicksTheNoteUnderIt() {
+        let frames = [
+            CGRect(x: 0, y: 0, width: 100, height: 100),
+            CGRect(x: 300, y: 500, width: 100, height: 100),
+        ]
+        let fit = OverviewFit(frames: frames, in: size)
+        #expect(fit.nearest(to: CGPoint(x: 50, y: 50), among: frames, within: 22) == 0)
+        #expect(fit.nearest(to: CGPoint(x: 350, y: 550), among: frames, within: 22) == 1)
+    }
+
+    /// Where notes overlap, the one drawn on top, which is last.
+    @Test func aTouchOnOverlappingNotesPicksTheTopOne() {
+        let frames = [
+            CGRect(x: 0, y: 0, width: 100, height: 100),
+            CGRect(x: 50, y: 50, width: 100, height: 100),
+        ]
+        let fit = OverviewFit(frames: frames, in: size)
+        let shared = fit.point(fromBoard: CGPoint(x: 75, y: 75))
+        #expect(fit.nearest(to: shared, among: frames, within: 22) == 1)
+    }
+
+    /// Short of a note, within reach: a note can be drawn smaller than a finger.
+    @Test func aTouchNearANotePicksIt() {
+        let frames = [CGRect(x: 0, y: 0, width: 100, height: 100)]
+        let fit = OverviewFit(frames: frames, in: size)
+        let beside = fit.point(fromBoard: CGPoint(x: 110, y: 50))
+        #expect(fit.nearest(to: beside, among: frames, within: 22) == 0)
+    }
+
+    @Test func aTouchFarFromEveryNotePicksNothing() {
+        let frames = [CGRect(x: 0, y: 0, width: 100, height: 100)]
+        let fit = OverviewFit(frames: frames, in: size)
+        let away = fit.point(fromBoard: CGPoint(x: 130, y: 50))
+        #expect(fit.nearest(to: away, among: frames, within: 22) == nil)
+    }
+
+    /// Reach is in the overview's points, not the board's.
+    @Test func reachIsMeasuredAsDrawn() {
+        let frames = [
+            CGRect(x: 0, y: 0, width: 100, height: 100),
+            CGRect(x: 700, y: 0, width: 100, height: 100),
+        ]
+        let fit = OverviewFit(frames: frames, in: size)
+        #expect(fit.scale == 0.5)
+        let beside = fit.point(fromBoard: CGPoint(x: 130, y: 50))
+        #expect(fit.nearest(to: beside, among: frames, within: 22) == 0)
     }
 }
 

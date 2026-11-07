@@ -20,9 +20,10 @@ struct A11yTests {
             [
                 A11y.Boards.addButton, A11y.Boards.searchResult, A11y.Boards.tourButton,
                 A11y.Canvas.surface, A11y.Canvas.addButton, A11y.Canvas.makeNotesButton,
-                A11y.Canvas.emptyState, A11y.Canvas.tourButton, A11y.Canvas.undoBanner,
-                A11y.Canvas.undoButton, A11y.Canvas.blur, A11y.MakeNotes.text,
-                A11y.MakeNotes.addButton, A11y.Note.card, A11y.Note.text,
+                A11y.Canvas.overviewButton, A11y.Canvas.emptyState, A11y.Canvas.tourButton,
+                A11y.Canvas.undoBanner, A11y.Canvas.undoButton, A11y.Canvas.blur,
+                A11y.Overview.note, A11y.MakeNotes.text, A11y.MakeNotes.addButton,
+                A11y.Note.card, A11y.Note.text,
             ] + Self.tour + Self.pro
         #expect(Set(all).count == all.count)
     }
@@ -31,11 +32,12 @@ struct A11yTests {
     @Test func identifiersCarryTheirFeaturePrefix() {
         for id in [
             A11y.Canvas.surface, A11y.Canvas.addButton, A11y.Canvas.makeNotesButton,
-            A11y.Canvas.emptyState, A11y.Canvas.tourButton, A11y.Canvas.undoBanner,
-            A11y.Canvas.undoButton, A11y.Canvas.blur,
+            A11y.Canvas.overviewButton, A11y.Canvas.emptyState, A11y.Canvas.tourButton,
+            A11y.Canvas.undoBanner, A11y.Canvas.undoButton, A11y.Canvas.blur,
         ] {
             #expect(id.hasPrefix("canvas."))
         }
+        #expect(A11y.Overview.note.hasPrefix("overview."))
         for id in [A11y.Boards.addButton, A11y.Boards.searchResult, A11y.Boards.tourButton] {
             #expect(id.hasPrefix("boards."))
         }

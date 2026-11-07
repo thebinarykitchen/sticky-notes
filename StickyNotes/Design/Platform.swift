@@ -32,4 +32,14 @@ extension View {
             fullScreenCover(isPresented: isPresented, content: content)
         #endif
     }
+
+    /// Gives a board's overview a size on the Mac, where a sheet is as big as what is in it and a
+    /// map takes whatever it is given. On iPhone and iPad the sheet decides.
+    func overviewSheetSize() -> some View {
+        #if os(macOS)
+            frame(width: 640, height: 520)
+        #else
+            self
+        #endif
+    }
 }

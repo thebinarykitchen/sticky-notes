@@ -2,8 +2,9 @@
 
 StickyNotes — boards of sticky notes for iPhone, iPad and Mac. Each board is its own canvas,
 picked from a sidebar (on iPhone, the list behind the canvas). A board has no edges: the canvas
-scrolls, and a note held near an edge scrolls it along. Double-tap the canvas to add a note
-there, drag a note to move it, pinch it to resize it, tap one to write on it (it comes to the
+scrolls, and a note held near an edge scrolls it along; it reopens where it was left, and the
+toolbar's Show All Notes draws the whole board in a sheet, to go to a note from. Double-tap the
+canvas to add a note there, drag a note to move it, pinch it to resize it, tap one to write on it (it comes to the
 middle, above the keyboard, and the rest of the board blurs); its menu changes its color. Drag a note
 onto the bin, or pinch it until it crumples, to delete it; every delete offers Undo. Where the
 device has Apple Intelligence, the toolbar's Make Notes turns what is written in its sheet into
@@ -62,7 +63,9 @@ headless in seconds. Under `StickyNotes/`, dependencies only ever run down this 
   picking one opens its board with the note in the middle — a `CanvasView.Reveal`.
 - **`Canvas/`** — one board's notes, the note, and its gestures, one per file: `DragToMove` (and its
   `TrashZone`), `Autoscroll` and `PinchToResize` (and its crumple). Also `CanvasScroll` (where the
-  canvas is scrolled to, and how much of the board its content covers), `HeldNote`, `EditedNote`,
+  canvas is scrolled to, how much of the board its content covers, and where it was left),
+  `BoardOverview` (the whole board shrunk to fit a sheet; a note picked there is a
+  `CanvasView.Reveal`, as one from a search is), `HeldNote`, `EditedNote`,
   `UndoBanner`, and `CanvasOverlays`, which draws those three, the bin and the blur above a
   board's notes — the tour's practice board's too. The board runs under the toolbar and, on iPad,
   under the sidebar: both are insets of the canvas, so whatever it places by its frame — a new
@@ -236,8 +239,10 @@ Hiding the sidebar moves the board with the sidebar's edge rather than uncoverin
 it: the scroll view keeps the same board point at the top-left of the uncovered part (seen on
 iOS 27).
 
-**A board opens at (0, 0), not where it was left,** unless a search opens it on a note. Nothing
-remembers a board's scroll.
+**Where a board was left is `SceneStorage`, per window and per board,** as the chosen board is:
+it is the view's state, so it stays out of the schema. It goes when the scene does: swiped away in
+the app switcher, a board opens at (0, 0) and the app on its first board. A deleted board's entry
+stays behind, a few bytes, since a scene's storage can't be listed.
 
 **A note is square and at most `NoteGeometry.maxSide`.** At the largest Dynamic Type sizes a
 note shows what of its text fits, ending in an ellipsis; written on, the text scrolls inside it.

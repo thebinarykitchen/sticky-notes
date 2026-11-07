@@ -38,6 +38,8 @@ public enum A11y {
         public static let addButton = "canvas.addButton"
         /// The toolbar's Make Notes, there only where the on-device model can run.
         public static let makeNotesButton = "canvas.makeNotesButton"
+        /// The toolbar's Show All Notes, which opens the overview.
+        public static let overviewButton = "canvas.overviewButton"
         /// "Double-tap anywhere to add a note", shown while there are none.
         public static let emptyState = "canvas.emptyState"
         /// "Show Me How", under the empty state: puts the tour back up.
@@ -49,6 +51,13 @@ public enum A11y {
         /// The blur over the board while a note is written on in the middle of it. A tap on it
         /// ends the writing.
         public static let blur = "canvas.blur"
+    }
+
+    /// The sheet that shows every note on a board at once.
+    public enum Overview {
+        /// A note in it. Every one carries this one identifier; they are told apart by their
+        /// label, which is their text.
+        public static let note = "overview.note"
     }
 
     /// The sheet Make Notes opens, which makes notes of what is written in it.

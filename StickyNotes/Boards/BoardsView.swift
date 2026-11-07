@@ -45,7 +45,7 @@ struct BoardsView: View {
             compactColumn = .detail
         }
         // Revealed on its own board only, and only until another is chosen: coming back, a board
-        // opens as it always does.
+        // opens where it was left.
         .onChange(of: selectedID) {
             if let reveal, reveal.boardID.uuidString != selectedID { self.reveal = nil }
         }

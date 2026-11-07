@@ -31,9 +31,9 @@ final class CanvasScroll {
     /// The part of the board the content covers, in board points. Zero until the canvas has a
     /// size.
     private(set) var extent = CGRect.zero
-    /// Whether the scroll that opens the board has landed: board (0, 0) at the top-left of the
-    /// canvas, or a note being revealed in the middle. The notes are hidden until then, rather
-    /// than seen where the content starts.
+    /// Whether the scroll that opens the board has landed: a note being revealed in the middle,
+    /// where the board was left, or a new board's (0, 0), at the top-left of the canvas. The notes
+    /// are hidden until then, rather than seen where the content starts.
     private(set) var isOpen = false
 
     /// Whether the scroll view is moving: under a finger, a fling, or an animation of its own.
@@ -57,6 +57,13 @@ final class CanvasScroll {
     /// What is on screen, in board points.
     var visible: CGRect { visible(at: scrolledTo) }
 
+    /// The board point to reopen at. Nil until the board is open, so the scroll that opens it is
+    /// never taken for where it was left.
+    var place: CGPoint? {
+        guard case .open = opening else { return nil }
+        return visible.origin
+    }
+
     /// Where board (0, 0) is in the content.
     var contentOrigin: CGPoint { CGPoint(x: -extent.minX, y: -extent.minY) }
 
@@ -71,7 +78,7 @@ final class CanvasScroll {
 
     // MARK: - Following the scroll view
 
-    /// What the scroll view should do after ``observe(_:notes:target:isAutoscrolling:)``.
+    /// What the scroll view should do after ``observe(_:notes:target:place:isAutoscrolling:)``.
     struct Change: Equatable {
         /// The canvas changed size.
         var resized = false
@@ -81,13 +88,14 @@ final class CanvasScroll {
         var opening: CGPoint?
     }
 
-    /// Takes in the scroll view's latest geometry, opening the board once it can: with board
-    /// (0, 0) at the top-left, or with `target` — a note to reveal, in board points — in the
-    /// middle. The content covers either, so the opening scroll can always land.
+    /// Takes in the scroll view's latest geometry, opening the board once it can: with `target` —
+    /// a note to reveal, in board points — in the middle; failing that, with `place`, where it was
+    /// left, at the top-left; failing that, with board (0, 0) there. The content covers any of
+    /// them, so the opening scroll can always land.
     @discardableResult
     func observe(
         _ geometry: ScrollGeometry, notes: () -> CGRect?, target: () -> CGRect? = { nil },
-        isAutoscrolling: Bool
+        place: () -> CGPoint? = { nil }, isAutoscrolling: Bool
     ) -> Change {
         var change = Change(resized: geometry.containerSize != viewport)
         viewport = geometry.containerSize
@@ -101,7 +109,9 @@ final class CanvasScroll {
         switch opening {
         case .unsized:
             guard viewport.width > 0, viewport.height > 0 else { break }
-            let first = target().map(centred(on:)) ?? CGRect(origin: .zero, size: viewport)
+            let first =
+                target().map(centred(on:))
+                ?? CGRect(origin: place() ?? .zero, size: viewport)
             extent = Self.needed(notes: notes(), visible: first)
             openingPoint = CGPoint(x: first.minX - extent.minX, y: first.minY - extent.minY)
             if Self.isClose(scrolledTo, openingPoint) {
@@ -137,7 +147,7 @@ final class CanvasScroll {
     /// Where to scroll to bring `rect`, in board points, to the middle of the canvas — or as
     /// near as the content reaches, since growing it would shift it under the scroll. Nil until
     /// the board is open; opening takes its target through
-    /// ``observe(_:notes:target:isAutoscrolling:)``.
+    /// ``observe(_:notes:target:place:isAutoscrolling:)``.
     func reveal(_ rect: CGRect) -> CGPoint? {
         guard case .open = opening else { return nil }
         let visible = Self.clamp(centred(on: rect), in: extent)
@@ -192,6 +202,21 @@ final class CanvasScroll {
         let after = visible.origin
         return Step(
             scrollTo: next, moved: CGSize(width: after.x - before.x, height: after.y - before.y))
+    }
+
+    // MARK: - Where a board was left
+
+    /// `place` as `SceneStorage` keeps it.
+    nonisolated static func stored(_ place: CGPoint) -> String {
+        "\(place.x),\(place.y)"
+    }
+
+    /// What ``stored(_:)`` wrote; nil for anything else, the empty string of a board never left
+    /// included.
+    nonisolated static func place(stored: String) -> CGPoint? {
+        let parts = stored.split(separator: ",").compactMap { Double($0) }
+        guard parts.count == 2, parts.allSatisfy(\.isFinite) else { return nil }
+        return CGPoint(x: parts[0], y: parts[1])
     }
 
     // MARK: - Geometry
@@ -260,9 +285,10 @@ final class CanvasScroll {
     }
 }
 
-/// Keeps a ``CanvasScroll`` in step with the scroll view it is applied to, and autoscrolls while
-/// ``NoteDrag`` says to. A modifier of its own so that what it watches — every frame of a
-/// scroll, the notes' bounds, the drag — re-runs this rather than the canvas.
+/// Keeps a ``CanvasScroll`` in step with the scroll view it is applied to, autoscrolls while
+/// ``NoteDrag`` says to, and remembers where each board was left. A modifier of its own so that
+/// what it watches — every frame of a scroll, the notes' bounds, the drag — re-runs this rather
+/// than the canvas.
 struct CanvasScrolling: ViewModifier {
     let scroll: CanvasScroll
     let drag: NoteDrag
@@ -273,6 +299,21 @@ struct CanvasScrolling: ViewModifier {
 
     @Environment(\.motion) private var motion
     @State private var position = ScrollPosition()
+    /// Where this board was left, per window as the chosen board is: state of the view rather than
+    /// of the notes, so it isn't in the schema, or in a sync should the store ever have one.
+    @SceneStorage private var left: String
+
+    init(
+        boardID: UUID, scroll: CanvasScroll, drag: NoteDrag, notes: [Note],
+        reveal: CanvasView.Reveal?
+    ) {
+        self.scroll = scroll
+        self.drag = drag
+        self.notes = notes
+        self.reveal = reveal
+        // The canvas is a new view per board (`BoardsView`), so the key is fixed for its life.
+        _left = SceneStorage(wrappedValue: "", "boardPlace.\(boardID.uuidString)")
+    }
 
     private var notesBounds: CGRect? {
         notes.reduce(nil) { bounds, note in
@@ -293,6 +334,7 @@ struct CanvasScrolling: ViewModifier {
             .onScrollGeometryChange(for: ScrollGeometry.self, of: { $0 }) { _, geometry in
                 let change = scroll.observe(
                     geometry, notes: { notesBounds }, target: { revealed },
+                    place: { CanvasScroll.place(stored: left) },
                     isAutoscrolling: drag.isAutoscrolling)
                 if let origin = change.opening { open(at: origin) }
                 if change.resized { settle() }
@@ -300,6 +342,7 @@ struct CanvasScrolling: ViewModifier {
             .onScrollPhaseChange { _, phase in
                 scroll.isScrolling = phase != .idle
                 settle()
+                if phase == .idle { remember() }
             }
             .modifier(
                 AutoscrollClock(isRunning: drag.isAutoscrolling) { seconds in
@@ -311,14 +354,20 @@ struct CanvasScrolling: ViewModifier {
                 }
             )
             .onChange(of: notesBounds) { settle() }
-            .onChange(of: drag.isActive) { settle() }
+            // Autoscroll moves the board with no scroll phase of its own to end.
+            .onChange(of: drag.isActive) {
+                settle()
+                remember()
+            }
             .onChange(of: reveal) {
                 guard let revealed, let point = scroll.reveal(revealed) else { return }
                 withAnimation(motion.reveal) { position.scrollTo(point: point) }
+                // Without animation, under Reduce Motion, this scroll has no phase to end either.
+                remember()
             }
     }
 
-    private static func frame(of note: Note) -> CGRect {
+    static func frame(of note: Note) -> CGRect {
         CGRect(
             x: note.x - note.side / 2, y: note.y - note.side / 2, width: note.side,
             height: note.side)
@@ -338,5 +387,12 @@ struct CanvasScrolling: ViewModifier {
     private func settle() {
         guard !drag.isActive, let point = scroll.settle(notes: notesBounds) else { return }
         position.scrollTo(point: point)
+    }
+
+    /// At rest only: written on every frame of a scroll, it would re-run this for nothing.
+    private func remember() {
+        guard !drag.isActive, let place = scroll.place else { return }
+        let stored = CanvasScroll.stored(place)
+        if left != stored { left = stored }
     }
 }
