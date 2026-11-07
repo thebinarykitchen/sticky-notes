@@ -438,5 +438,5 @@ struct NoteValues {
 
 extension Logger {
     fileprivate static let store = Logger(
-        subsystem: "com.thebinarykitchen.StickyNotes", category: "store")
+        subsystem: "com.thebinarykitchen.Stickies", category: "store")
 }

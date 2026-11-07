@@ -6,7 +6,7 @@ import StoreKit
 /// The Pro in-app purchase, and all StoreKit calls.
 enum ProProduct {
     /// The non-consumable's product ID, also in `StoreKit.storekit`.
-    static let id = "com.thebinarykitchen.StickyNotes.IAP.Pro"
+    static let id = "com.thebinarykitchen.Stickies.IAP.Pro"
 
     /// False when ``LaunchFlag/noStoreKit`` is passed. Debug only: on macOS anyone can pass launch
     /// arguments, and skipping StoreKit would leave a preset unlock in place.
@@ -104,5 +104,5 @@ enum ProProduct {
 }
 
 extension Logger {
-    static let pro = Logger(subsystem: "com.thebinarykitchen.StickyNotes", category: "pro")
+    static let pro = Logger(subsystem: "com.thebinarykitchen.Stickies", category: "pro")
 }

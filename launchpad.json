@@ -16,7 +16,7 @@
   },
 
   "preflight": {
-    "bundleID": "com.thebinarykitchen.StickyNotes",
+    "bundleID": "com.thebinarykitchen.Stickies",
     "swiftVersion": "6.0",
     "deviceFamily": [1, 2],
     "supportedPlatforms": ["iphoneos", "iphonesimulator", "macosx"],
@@ -54,8 +54,7 @@
         "The Mac build has been opened and used once by hand — adding, moving and deleting notes, the tour, the Pro sheet, Sticky Notes Pro… in the app menu — since no UI suite runs on the Mac.",
         "On a device: drag a note twice in a row with Reduce Motion on. AGENTS.md's Gaps records a second drag not moving under --reduce-motion in a simulator.",
         "Make Notes on a device with Apple Intelligence: a list becomes a note per item, a topic becomes ideas. On a device without it, nothing of Make Notes is drawn.",
-        "The old All Access subscription group (com.thebinarykitchen.StickyNotes.IAP.Pro.Monthly) is not attached to this version: this build sells one non-consumable.",
-        "The in-app purchase com.thebinarykitchen.StickyNotes.IAP.Pro is a non-consumable at the price in StoreKit.storekit, is Ready to Submit, and is attached to this version.",
+        "The in-app purchase com.thebinarykitchen.Stickies.IAP.Pro is a non-consumable at the price in StoreKit.storekit, is Ready to Submit, and is attached to this version.",
         "Buy Pro on a device with a sandbox account, then delete and reinstall the app and use Restore Purchases from the Pro sheet: Pro comes back.",
         "App Privacy in App Store Connect says Data Not Collected: notes stay on the device, and Make Notes runs on the on-device model.",
         "The privacy policy and support URLs in App Store Connect are the ones the list of boards opens; both are in AppInfo."

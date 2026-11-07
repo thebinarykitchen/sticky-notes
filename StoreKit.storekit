@@ -13,7 +13,7 @@
           "locale": "en_US"
         }
       ],
-      "productID": "com.thebinarykitchen.StickyNotes.IAP.Pro",
+      "productID": "com.thebinarykitchen.Stickies.IAP.Pro",
       "referenceName": "Pro",
       "type": "NonConsumable"
     }

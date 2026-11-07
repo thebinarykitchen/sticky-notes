@@ -210,8 +210,9 @@ launchpad release --dry-run          # captures and exports, uploads nothing
 
 Rename a method in `StickyNotesUITests/PreflightTests.swift` and rename it in
 `preflight.tests.runtimeChecks` too. App Store copy is authored in `.appstore/1_0_0/metadata/` and
-committed; everything else under `.appstore/` is generated. App Store Connect's 1.0.0 train already
-has builds up to 26, from an earlier version of this app, so builds start at 27.
+committed; everything else under `.appstore/` is generated. The bundle ID is
+`com.thebinarykitchen.Stickies`: `com.thebinarykitchen.StickyNotes` belongs to an earlier app, in App
+Store Connect with its own builds and products.
 
 ## Not yet
 
