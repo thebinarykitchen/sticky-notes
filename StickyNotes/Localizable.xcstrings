@@ -50,6 +50,9 @@
         }
       }
     },
+    "About" : {
+      "comment" : "The heading over the version, support and privacy policy."
+    },
     "Add Note" : {
       "comment" : "Adds a note: the toolbar button, and what Undo and Redo call it."
     },
@@ -368,6 +371,9 @@
     "Practiced" : {
       "comment" : "VoiceOver, after a tour page's instruction, once its gesture is done."
     },
+    "Privacy Policy" : {
+      "comment" : "In the list of boards: opens the privacy policy."
+    },
     "Purple" : {
       "comment" : "A color in a note's menu."
     },
@@ -423,6 +429,9 @@
     },
     "Still to do" : {
       "comment" : "A note on the tour's practice board."
+    },
+    "Support" : {
+      "comment" : "In the list of boards: opens the support page."
     },
     "Tap a note to write on it." : {
       "comment" : "How to write on a note, on the tour."
@@ -486,6 +495,9 @@
     },
     "Untitled Board" : {
       "comment" : "What a board with no name is called."
+    },
+    "Version" : {
+      "comment" : "In the list of boards, beside the app's version."
     },
     "Waiting for approval. Pro will unlock once the purchase is approved." : {
       "comment" : "On the Pro sheet, when the purchase waits for approval, as Ask to Buy does."

@@ -20,6 +20,16 @@ public enum A11y {
         public static let tourButton = "boards.tourButton"
     }
 
+    /// The bottom of the list of boards: what App Review looks for.
+    public enum About {
+        /// The app's version and build.
+        public static let versionRow = "about.versionRow"
+        /// Opens the support page.
+        public static let supportLink = "about.supportLink"
+        /// Opens the privacy policy.
+        public static let privacyLink = "about.privacyLink"
+    }
+
     /// The board the notes sit on.
     public enum Canvas {
         /// The canvas as it is on screen, below the bars: what positions on it are measured by.

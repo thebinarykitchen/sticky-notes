@@ -171,6 +171,7 @@ struct BoardList: View {
             Section {
                 proRow
             }
+            AboutSection()
         }
     }
 
@@ -181,7 +182,9 @@ struct BoardList: View {
     private var proRow: some View {
         if pro.isUnlocked {
             LabeledContent {
+                // Primary: the default gray falls short of the audit's contrast.
                 Text("Unlocked", comment: "Beside Sticky Notes Pro, once it is bought.")
+                    .foregroundStyle(Color.primary)
             } label: {
                 proName
             }
@@ -192,7 +195,9 @@ struct BoardList: View {
                 offer?.show(nil)
             } label: {
                 LabeledContent {
-                    if let price = pro.price { Text(verbatim: price) }
+                    if let price = pro.price {
+                        Text(verbatim: price).foregroundStyle(Color.primary)
+                    }
                 } label: {
                     proName
                 }
