@@ -13,5 +13,60 @@
     "posterBeat": "notes-made",
     "platform": "ios",
     "devices": ["iPhone 17 Pro Max", "iPad Pro 13-inch (M5)"]
+  },
+
+  "preflight": {
+    "bundleID": "com.thebinarykitchen.StickyNotes",
+    "swiftVersion": "6.0",
+    "deviceFamily": [1, 2],
+    "supportedPlatforms": ["iphoneos", "iphonesimulator", "macosx"],
+    "sources": ["StickyNotes", "Packages/swift-note-kit/Sources", "Packages/swift-launch-arguments/Sources", "Packages/swift-accessibility-ids/Sources"],
+    "formatPaths": ["StickyNotes", "StickyNotesTests", "StickyNotesUITests", "Screenshots", "Packages"],
+    "simulators": {
+      "phone": "iPhone 17",
+      "pad": "iPad Pro 13-inch (M5)"
+    },
+    "launchFlags": {
+      "type": "LaunchFlag",
+      "live": ["ephemeralStore", "noAppleIntelligence", "reduceMotion"]
+    },
+    "releaseBranchPrefix": "release/",
+    "tests": {
+      "unit": "StickyNotesTests",
+      "ui": "StickyNotesUITests",
+      "runtime": "StickyNotesUITests/PreflightTests",
+      "runtimeChecks": {
+        "testColdLaunchWithNoArgumentsComesUp()": "runtime.coldLaunch",
+        "testAFirstLaunchOpensOnTheTourAndAnEmptyBoard()": "runtime.firstLaunch",
+        "testWhatIsWrittenSurvivesARelaunch()": "runtime.storeOpens",
+        "testTheListSaysTheVersionAndOffersSupportAndPrivacy()": "runtime.aboutLinks",
+        "testEveryScreenPassesTheAccessibilityAudit()": "runtime.accessibilityAudit",
+        "testNothingClipsAtTheLargestDynamicType()": "runtime.dynamicType",
+        "testEveryVerbIsReachableWithoutAGesture()": "runtime.gestureAlternatives"
+      }
+    },
+    "listing": {
+      "screenshots": [
+        { "size": "6.9-inch iPhone", "capturedOn": "iPhone 17 Pro Max" },
+        { "size": "13-inch iPad", "capturedOn": "iPad Pro 13-inch (M5)" }
+      ],
+      "handChecks": [
+        "The Mac build has been opened and used once by hand — adding, moving and deleting notes, the tour, the Pro sheet, Sticky Notes Pro… in the app menu — since no UI suite runs on the Mac.",
+        "On a device: drag a note twice in a row with Reduce Motion on. AGENTS.md's Gaps records a second drag not moving under --reduce-motion in a simulator.",
+        "Make Notes on a device with Apple Intelligence: a list becomes a note per item, a topic becomes ideas. On a device without it, nothing of Make Notes is drawn.",
+        "The old All Access subscription group (com.thebinarykitchen.StickyNotes.IAP.Pro.Monthly) is not attached to this version: this build sells one non-consumable.",
+        "The in-app purchase com.thebinarykitchen.StickyNotes.IAP.Pro is a non-consumable at the price in StoreKit.storekit, is Ready to Submit, and is attached to this version.",
+        "Buy Pro on a device with a sandbox account, then delete and reinstall the app and use Restore Purchases from the Pro sheet: Pro comes back.",
+        "App Privacy in App Store Connect says Data Not Collected: notes stay on the device, and Make Notes runs on the on-device model.",
+        "The privacy policy and support URLs in App Store Connect are the ones the list of boards opens; both are in AppInfo."
+      ],
+      "reviewNotes": [
+        "Sticky Notes needs no account and works offline. Notes are stored on the device; nothing is sent to a server.",
+        "Most verbs are gestures, each with a control as well. Double-tap the board to add a note (or the + in the toolbar). Drag a note to move it. Pinch a note to resize it. Drag a note onto the bin, or pinch it until it crumples, to delete it (or touch and hold a note and choose Delete). Every delete offers Undo. A tour of the gestures opens on first launch; the hand button over the list of boards puts it back up.",
+        "Apple Intelligence: where the on-device model is available, Make Notes in the toolbar turns what is written in its sheet into notes. Where it isn't, nothing of it is drawn, and the app is fully usable without it. Nothing leaves the device.",
+        "Sticky Notes Pro is one non-consumable purchase. Free has three boards, ten Make Notes a month and four colors; Pro lifts the limits and adds four colors. To see it, add a fourth board, pick a locked color in a note's menu, or tap the Sticky Notes Pro row in the list of boards. Restore Purchases is on the Pro sheet.",
+        "The version, support link and privacy policy are at the bottom of the list of boards."
+      ]
+    }
   }
 }

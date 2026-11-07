@@ -19,7 +19,7 @@ and store), and `swift-accessibility-ids` and `swift-launch-arguments` (names th
 tests must agree on). The infrastructure follows [`task-manager`](../task-manager), checked out
 beside this one. [`launchpad`](../launchpad), checked out beside it too, takes the screenshots,
 and `Screenshots` links its `PreviewRecording`: without that checkout the scheme does not
-resolve its packages. The rest of the release tooling is in **Not yet**.
+resolve its packages. Release is **Preflight and release**, below.
 
 This file is the map and the rules that hold everywhere. Everything else is written down beside
 the code it governs; read the one you are about to change.
@@ -197,14 +197,26 @@ functional preview. It is in the scheme, so `-only-testing` can reach it, and a 
 runs it too unless told `-skip-testing:Screenshots`. See
 [`Screenshots/AGENTS.md`](Screenshots/AGENTS.md).
 
+## Preflight and release
+
+`preflight` says whether a build is fit to send, and `launchpad release` sends it; both are
+`launchpad`'s. What preflight holds *this* app to is the `preflight` section of `launchpad.json`.
+
+```sh
+launchpad preflight                  # static and listing checks, in seconds
+launchpad preflight --stage runtime  # StickyNotesUITests/PreflightTests, under Release
+launchpad release --dry-run          # captures and exports, uploads nothing
+```
+
+Rename a method in `StickyNotesUITests/PreflightTests.swift` and rename it in
+`preflight.tests.runtimeChecks` too. App Store copy is authored in `.appstore/1_0_0/metadata/` and
+committed; everything else under `.appstore/` is generated. App Store Connect's 1.0.0 train already
+has builds up to 26, from an earlier version of this app, so builds start at 27.
+
 ## Not yet
 
 Deliberately out of the first version, and each its own decision when it comes:
 
-- **The rest of the release tooling** — `launchpad.json`'s `preflight` section, which
-  `launchpad release` refuses to go without, `PrivacyInfo.xcprivacy` and preflight tests, as in
-  `task-manager`.
-  `launchpad.json` holds only the `screenshots` and `video-preview` sections so far.
 - **A Mac listing.** `Screenshots` is iOS-only, like the UI tests, and the Mac can't be driven
   from a session here; what it would take is in [`Screenshots/AGENTS.md`](Screenshots/AGENTS.md).
 - **Zooming.** The canvas scrolls but doesn't zoom; SwiftUI's `ScrollView` has no zoom of its own.
