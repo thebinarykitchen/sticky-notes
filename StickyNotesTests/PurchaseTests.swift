@@ -1,5 +1,7 @@
 import Foundation
 import NoteModel
+import PurchaseKit
+import PurchaseTesting
 import StoreKit
 import StoreKitTest
 import Testing
@@ -13,7 +15,7 @@ import Testing
 /// nothing is asking the App Store. That flag turns all of this off, so what a real transaction
 /// does to ``Pro`` is only ever exercised here.
 ///
-/// `.serialized`: `SKTestSession` is process-wide, and so is ``ProPreference``.
+/// `.serialized`: `SKTestSession` is process-wide, and so is `UserDefaults.standard`.
 ///
 /// **These no-op where the harness isn't serving.** `SKTestSession` sometimes comes up with no
 /// products at all — seen in `task-manager` on a simulator whose automation stack had already
@@ -31,39 +33,20 @@ struct PurchaseTests {
     /// The session is held across the whole body: it stops intercepting StoreKit the moment it
     /// is released, and a `let` the compiler can see the end of is released before the
     /// assertions run — which reads as "the product wouldn't load" rather than as a lifetime bug.
-    private func withStore(_ body: (SKTestSession) async throws -> Void) async throws {
-        let session = try SKTestSession(configurationFileNamed: "StoreKit")
-        session.resetToDefaultState()
-        session.clearTransactions()
-        session.disableDialogs = true
+    private func withStore(_ body: @MainActor (SKTestSession) async throws -> Void) async throws {
+        try await withStoreSession(
+            configurationNamed: "StoreKit", product: ProProduct.store,
+            clearing: ProFeature.storedKeys, body)
+    }
 
-        let defaults = UserDefaults.standard
-        let keys =
-            [ProPreference.unlockedKey] + ProFeature.monthly.map(ProPreference.usedKey)
-            + ProFeature.monthly.map(ProPreference.periodKey)
-        let kept = keys.map { ($0, defaults.object(forKey: $0)) }
-        keys.forEach(defaults.removeObject)
-
-        defer {
-            for (key, value) in kept { defaults.set(value, forKey: key) }
-            session.clearTransactions()
-            withExtendedLifetime(session) {}
-        }
-
-        guard await ProProduct.load() != nil else {
-            // Not a failure: see the note on the suite.
-            print(
-                "note: StoreKit test session isn't serving products here — purchase tests skipped")
-            return
-        }
-
-        try await body(session)
+    private func untilOwned() async throws {
+        try await PurchaseTesting.untilOwned(ProProduct.store)
     }
 
     @Test("The product being sold is the one the app asks for")
     func theProductLoads() async throws {
         try await withStore { _ in
-            let product = try #require(await ProProduct.load(), "no product for \(ProProduct.id)")
+            let product = try #require(await ProProduct.store.load(), "no product for \(ProProduct.id)")
 
             #expect(product.id == ProProduct.id)
             #expect(product.type == .nonConsumable)
@@ -74,7 +57,7 @@ struct PurchaseTests {
     @Test("Nothing is owned before anything is bought")
     func nothingIsOwnedAtFirst() async throws {
         try await withStore { _ in
-            #expect(await ProProduct.isOwned() == false)
+            #expect(await ProProduct.store.isOwned() == false)
         }
     }
 
@@ -82,18 +65,19 @@ struct PurchaseTests {
     func buyingUnlocks() async throws {
         try await withStore { session in
             let pro = Pro()
-            await pro.refresh()
+            await pro.purchase.refresh()
             #expect(!pro.isUnlocked)
 
             _ = try await session.buyProduct(identifier: ProProduct.id)
-            await pro.refresh()
+            try await untilOwned()
+            await pro.purchase.refresh()
 
             #expect(pro.isUnlocked)
             #expect(pro.allows(.makeNotes))
             #expect(pro.allowsAnotherBoard(having: 100))
             #expect(pro.allows(NoteColor.purple))
             pro.spend(.makeNotes)
-            #expect(ProPreference.used(.makeNotes) == 0, "an owner's uses are counted anyway")
+            #expect(pro.allowance.used(.makeNotes) == 0, "an owner's uses are counted anyway")
         }
     }
 
@@ -101,10 +85,11 @@ struct PurchaseTests {
     func ownershipSurvivesALaunch() async throws {
         try await withStore { session in
             _ = try await session.buyProduct(identifier: ProProduct.id)
+            try await untilOwned()
 
             // A second `Pro` is the next launch: it starts from the cached value and asks again.
             let pro = Pro()
-            await pro.refresh()
+            await pro.purchase.refresh()
 
             #expect(pro.isUnlocked)
         }
@@ -116,14 +101,16 @@ struct PurchaseTests {
     @Test("A hand-edited default doesn't unlock Pro")
     func aForgedDefaultIsLockedBack() async throws {
         try await withStore { _ in
-            ProPreference.isUnlocked = true
+            UserDefaults.standard.set(true, forKey: ProPreference.unlockedKey)
             let pro = Pro()
             #expect(pro.isUnlocked, "the cached value is trusted until StoreKit answers")
 
-            await pro.refresh()
+            await pro.purchase.refresh()
 
             #expect(!pro.isUnlocked, "an unowned app stayed unlocked on a forged default")
-            #expect(!ProPreference.isUnlocked, "and the lock wasn't written back")
+            #expect(
+                !UserDefaults.standard.bool(forKey: ProPreference.unlockedKey),
+                "and the lock wasn't written back")
         }
     }
 
@@ -132,16 +119,16 @@ struct PurchaseTests {
     // asserting the harness rather than the app. The branch it would cover — `refresh` locking
     // when nothing is owned — is `aForgedDefaultIsLockedBack` above.
 
-    // The purchases below answer for the App Store through `Pro.buy(_:)`. The sheet's own path,
+    // The purchases below answer for the App Store through `OneTimePurchase.buy(_:)`. The sheet's own path,
     // `buy(with:)`, takes a `PurchaseAction`, which needs a window to present in.
 
     @Test("A purchase that went through unlocks Pro")
     func aCompletedPurchaseUnlocks() async throws {
         try await withStore { session in
             let pro = Pro()
-            await pro.refresh()
+            await pro.purchase.refresh()
 
-            let outcome = await pro.buy { _ in
+            let outcome = await pro.purchase.buy { _ in
                 .success(.verified(try await session.buyProduct(identifier: ProProduct.id)))
             }
 
@@ -154,15 +141,15 @@ struct PurchaseTests {
     func aFailedPurchaseUnlocksNothing() async throws {
         try await withStore { _ in
             let pro = Pro()
-            await pro.refresh()
+            await pro.purchase.refresh()
 
-            let outcome = await pro.buy { _ in
+            let outcome = await pro.purchase.buy { _ in
                 throw StoreKitError.networkError(URLError(.notConnectedToInternet))
             }
 
             #expect(outcome == .failed)
             #expect(!pro.isUnlocked)
-            #expect(await ProProduct.isOwned() == false)
+            #expect(await ProProduct.store.isOwned() == false)
         }
     }
 
@@ -171,9 +158,9 @@ struct PurchaseTests {
     func aPendingPurchaseUnlocksNothing() async throws {
         try await withStore { _ in
             let pro = Pro()
-            await pro.refresh()
+            await pro.purchase.refresh()
 
-            let outcome = await pro.buy { _ in .pending }
+            let outcome = await pro.purchase.buy { _ in .pending }
 
             #expect(outcome == .pending)
             #expect(!pro.isUnlocked)
@@ -184,10 +171,10 @@ struct PurchaseTests {
     func aCancelledPurchaseUnlocksNothing() async throws {
         try await withStore { _ in
             let pro = Pro()
-            await pro.refresh()
+            await pro.purchase.refresh()
 
-            let answered = await pro.buy { _ in .userCancelled }
-            let thrown = await pro.buy { _ in throw StoreKitError.userCancelled }
+            let answered = await pro.purchase.buy { _ in .userCancelled }
+            let thrown = await pro.purchase.buy { _ in throw StoreKitError.userCancelled }
 
             #expect(answered == .cancelled)
             #expect(thrown == .cancelled)
@@ -200,9 +187,9 @@ struct PurchaseTests {
     func anUnverifiedPurchaseUnlocksNothing() async throws {
         try await withStore { session in
             let pro = Pro()
-            await pro.refresh()
+            await pro.purchase.refresh()
 
-            let outcome = await pro.buy { _ in
+            let outcome = await pro.purchase.buy { _ in
                 let transaction = try await session.buyProduct(identifier: ProProduct.id)
                 return .success(.unverified(transaction, .invalidSignature))
             }
@@ -219,7 +206,7 @@ struct PurchaseTests {
         try await withStore { _ in
             let pro = Pro()
 
-            let outcome = await pro.restore()
+            let outcome = await pro.purchase.restore()
 
             #expect(outcome == .done)
             #expect(!pro.isUnlocked)
@@ -230,9 +217,10 @@ struct PurchaseTests {
     func restoringAPurchase() async throws {
         try await withStore { session in
             _ = try await session.buyProduct(identifier: ProProduct.id)
+            try await untilOwned()
 
             let pro = Pro()
-            let outcome = await pro.restore()
+            let outcome = await pro.purchase.restore()
 
             #expect(outcome == .done)
             #expect(pro.isUnlocked)
@@ -248,7 +236,7 @@ struct PurchaseTests {
                 .generic(.networkError(URLError(.notConnectedToInternet))), forAPI: .appStoreSync)
             let pro = Pro()
 
-            let outcome = await pro.restore()
+            let outcome = await pro.purchase.restore()
 
             #expect(outcome == .failed)
             #expect(!pro.isUnlocked)
@@ -262,7 +250,7 @@ struct PurchaseTests {
             try await session.setSimulatedError(.generic(.userCancelled), forAPI: .appStoreSync)
             let pro = Pro()
 
-            let outcome = await pro.restore()
+            let outcome = await pro.purchase.restore()
 
             #expect(outcome == .cancelled)
             try await session.setSimulatedError(nil, forAPI: .appStoreSync)
@@ -275,12 +263,13 @@ struct PurchaseTests {
     func watchingTheStore() async throws {
         try await withStore { session in
             _ = try await session.buyProduct(identifier: ProProduct.id)
+            try await untilOwned()
 
             let pro = Pro()
-            await pro.watchTheStore()
+            await pro.purchase.watchTheStore()
             #expect(pro.isUnlocked)
 
-            await pro.watchTheStore()
+            await pro.purchase.watchTheStore()
             #expect(pro.isUnlocked, "the second call took the unlock back")
         }
     }

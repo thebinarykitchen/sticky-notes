@@ -2,6 +2,7 @@ import AccessibilityIdentifiers
 import Foundation
 import LaunchArguments
 import NoteModel
+import PurchaseKit
 import Testing
 
 @testable import StickyNotes
@@ -91,9 +92,15 @@ struct ProTests {
 
     @Test("Make Notes counts under the key the UI tests preset")
     func theUsedKeyIsTheOneTheTestsPreset() {
-        #expect(ProPreference.usedKey(.makeNotes) == LaunchDefault.proUsedMakeNotes.rawValue)
+        let allowance = MonthlyAllowance<ProFeature>(
+            features: [], keyPrefix: ProPreference.allowancePrefix)
+
+        #expect(allowance.usedKey(.makeNotes) == LaunchDefault.proUsedMakeNotes.rawValue)
         #expect(ProPreference.unlockedKey == LaunchDefault.proUnlocked.rawValue)
-        #expect(ProPreference.periodKey(.makeNotes) != ProPreference.usedKey(.makeNotes))
+        // Written out, because they are customers' data: this fails if the prefix or the package's
+        // format ever changes, which would refill every free allowance in the field.
+        #expect(allowance.usedKey(.makeNotes) == "pro.used.makeNotes")
+        #expect(allowance.periodKey(.makeNotes) == "pro.period.makeNotes")
     }
 
     @Test("The identifiers package names every feature")
@@ -103,59 +110,19 @@ struct ProTests {
     }
 }
 
-/// Uses a fixed Gregorian GMT calendar, independent of the test machine's settings.
-@Suite("The month an allowance belongs to")
-struct ProPeriodTests {
-    private static let calendar: Calendar = {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = .gmt
-        return calendar
-    }()
-
-    private func stamp(year: Int, month: Int, day: Int = 1) throws -> Int {
-        let components = DateComponents(year: year, month: month, day: day)
-        let date = try #require(Self.calendar.date(from: components))
-        return ProPeriod.stamp(for: date, in: Self.calendar)
-    }
-
-    @Test("A month is one number, whatever day of it you ask on")
-    func aMonthIsOneNumber() throws {
-        #expect(try stamp(year: 2026, month: 9, day: 1) == stamp(year: 2026, month: 9, day: 30))
-    }
-
-    @Test("The next month is the next number, and next year is not this one")
-    func monthsAreConsecutive() throws {
-        let september = try stamp(year: 2026, month: 9)
-        #expect(try stamp(year: 2026, month: 10) == september + 1)
-        #expect(try stamp(year: 2027, month: 1) == stamp(year: 2026, month: 12) + 1)
-        #expect(try stamp(year: 2027, month: 9) != september)
-    }
-
-    @Test("A count is worth nothing to any month but its own")
-    func aCountBelongsToItsOwnMonth() throws {
-        let september = try stamp(year: 2026, month: 9)
-        let october = try stamp(year: 2026, month: 10)
-        #expect(ProPeriod.carried(10, stamped: september, into: september) == 10)
-        #expect(ProPeriod.carried(10, stamped: september, into: october) == 0)
-        #expect(ProPeriod.carried(9999, stamped: nil, into: september) == 0)
-    }
-}
-
 /// ``Pro`` itself, with no StoreKit: what it allows locked and unlocked, and an allowance across
 /// a month boundary it never saw an activation for.
 @MainActor
 @Suite("What Pro allows", .serialized)
 struct ProAllowanceTests {
     private final class Clock {
-        var period = ProPeriod.current
+        var period = MonthStamp.current
     }
 
     /// Runs `body` with no Pro state in defaults, and puts back what was there.
     private func withCleanDefaults(_ body: () throws -> Void) rethrows {
         let defaults = UserDefaults.standard
-        let keys =
-            [ProPreference.unlockedKey] + ProFeature.monthly.map(ProPreference.usedKey)
-            + ProFeature.monthly.map(ProPreference.periodKey)
+        let keys = ProFeature.storedKeys
         let kept = keys.map { ($0, defaults.object(forKey: $0)) }
         keys.forEach(defaults.removeObject)
         defer {
@@ -198,7 +165,7 @@ struct ProAllowanceTests {
             #expect(pro.allows(.makeNotes))
             pro.spend(.makeNotes)
             #expect(pro.hasRunOut(of: .makeNotes))
-            #expect(ProPreference.used(.makeNotes) == ProFeature.freeMakeNotes)
+            #expect(pro.allowance.used(.makeNotes) == ProFeature.freeMakeNotes)
         }
     }
 
@@ -216,5 +183,13 @@ struct ProAllowanceTests {
             pro.spend(.makeNotes)
             #expect(pro.allows(.makeNotes), "one use of the new month, not last month's plus one")
         }
+    }
+}
+
+extension ProFeature {
+    /// Everything Pro stores, for a test to clear and put back.
+    static var storedKeys: [String] {
+        [ProPreference.unlockedKey]
+            + monthly.flatMap { ["pro.used.\($0.rawValue)", "pro.period.\($0.rawValue)"] }
     }
 }

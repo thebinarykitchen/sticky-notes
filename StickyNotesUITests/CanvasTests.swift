@@ -1,4 +1,5 @@
 import AccessibilityIdentifiers
+import UITestSupport
 import XCTest
 
 final class CanvasTests: AppTestCase {
@@ -130,6 +131,10 @@ final class CanvasTests: AppTestCase {
         app.typeText(text)
         app.note(saying: text).awaiting("the typed note")
 
+        // Into the background first, as anyone leaving does, which saves typing that hasn't
+        // paused yet; then gone. Terminating straight away beats the save.
+        XCUIDevice.shared.press(.home)
+        XCTAssertTrue(app.wait(for: .runningBackground, timeout: 10), "the app never left")
         app.terminate()
         launch(store: .onDisk)
 

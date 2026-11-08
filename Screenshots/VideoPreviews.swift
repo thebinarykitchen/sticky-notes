@@ -1,6 +1,7 @@
 import AccessibilityIdentifiers
 import LaunchArguments
 import PreviewRecording
+import UITestSupport
 import XCTest
 
 /// The App Store app preview journey.
@@ -37,24 +38,24 @@ import XCTest
 /// - Motion enabled (unlike ``ScreenshotCase``).
 /// - A Debug build, for `--seed-listing` and the Make Notes stand-in.
 @MainActor
-final class VideoPreviews: XCTestCase {
-    private var app: XCUIApplication!
+final class VideoPreviews: UITestCase {
     private var recorder: PreviewRecorder!
 
     /// What the journey writes on the note it adds.
     private static let written = "Buy stamps"
 
+    override var usesFullScreenApps: Bool { true }
+
     override func setUp() async throws {
-        continueAfterFailure = false
-        Multitasking.useFullScreenApps()
+        try await super.setUp()
         recorder = PreviewRecorder()
         app = .forPreview()
         app.launch()
     }
 
     override func tearDown() async throws {
-        app = nil
         recorder = nil
+        try await super.tearDown()
     }
 
     func testThePreview() {
@@ -150,11 +151,6 @@ final class VideoPreviews: XCTestCase {
     /// before the video's first frame keeps none of its own start.
     private func holdForTheRecorder() {
         hold(4.0)
-    }
-
-    /// Holds the current screen for the recording.
-    private func hold(_ seconds: TimeInterval) {
-        _ = XCTWaiter().wait(for: [XCTestExpectation(description: "holding")], timeout: seconds)
     }
 }
 

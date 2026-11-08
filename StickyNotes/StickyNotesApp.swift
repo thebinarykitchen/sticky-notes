@@ -1,6 +1,8 @@
+import AppTour
 import LaunchArguments
 import NoteModel
 import OSLog
+import PurchaseKit
 import SwiftData
 import SwiftUI
 
@@ -11,7 +13,7 @@ struct StickyNotesApp: App {
     @State private var tourStage = TourStage()
     @State private var pro = Pro()
     @Environment(\.scenePhase) private var phase
-    private var tour = OnboardingProgress()
+    private var tour = TourProgress.app
 
     init() {
         let container = Self.openStore()
@@ -27,8 +29,8 @@ struct StickyNotesApp: App {
     var body: some Scene {
         WindowGroup {
             BoardsView()
-                .stagesTheTour()
-                .watchesTheStore(pro)
+                .stagesTheTour(.app, size: OnboardingView.macSize) { OnboardingView() }
+                .watchesTheStore(pro.purchase, onActive: pro.allowance.rollOver)
                 .environment(store)
                 .environment(tourStage)
                 .environment(pro)

@@ -1,4 +1,5 @@
 import AccessibilityIdentifiers
+import UITestSupport
 import XCTest
 
 /// Run against a Release build by `preflight --stage runtime`, so nothing here leans on a Debug
@@ -47,6 +48,10 @@ final class PreflightTests: AppTestCase {
         app.typeText(text)
         app.note(saying: text).awaiting("the typed note")
 
+        // Into the background first, as anyone leaving does, which saves typing that hasn't
+        // paused yet; then gone. Terminating straight away beats the save.
+        XCUIDevice.shared.press(.home)
+        XCTAssertTrue(app.wait(for: .runningBackground, timeout: 10), "the app never left")
         app.terminate()
         launchAsShipped(store: .onDisk)
 

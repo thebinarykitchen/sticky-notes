@@ -1,4 +1,5 @@
 import AccessibilityIdentifiers
+import UITestSupport
 import XCTest
 
 /// The note's side limits, mirrored from `NoteGeometry`, which this bundle can't import. Change

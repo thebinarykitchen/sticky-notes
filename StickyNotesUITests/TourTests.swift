@@ -1,4 +1,5 @@
 import AccessibilityIdentifiers
+import UITestSupport
 import XCTest
 
 /// The tour: up on a first launch, a page per gesture with a board to practise it on, and back

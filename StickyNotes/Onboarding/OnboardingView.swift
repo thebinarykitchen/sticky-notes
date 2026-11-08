@@ -1,4 +1,5 @@
 import AccessibilityIdentifiers
+import AppTour
 import SwiftUI
 
 /// The tour: a welcome page, then a page per gesture with a board to practise it on. Not a
@@ -14,7 +15,7 @@ struct OnboardingView: View {
     @Environment(\.motion) private var motion
     @Environment(\.dynamicTypeSize) private var typeSize
 
-    private var progress = OnboardingProgress()
+    private var progress = TourProgress.app
 
     @State private var page: TourPage = .welcome
     /// Lessons done on their boards, across pages.

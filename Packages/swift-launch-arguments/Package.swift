@@ -8,8 +8,14 @@ let package = Package(
     products: [
         .library(name: "LaunchArguments", targets: ["LaunchArguments"])
     ],
+    dependencies: [
+        .package(path: "../../../launchpad/Packages/swift-launch-options")
+    ],
     targets: [
-        .target(name: "LaunchArguments"),
+        .target(
+            name: "LaunchArguments",
+            dependencies: [.product(name: "LaunchOptions", package: "swift-launch-options")]
+        ),
         .testTarget(name: "LaunchArgumentsTests", dependencies: ["LaunchArguments"]),
     ]
 )

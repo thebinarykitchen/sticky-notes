@@ -1,5 +1,6 @@
 import AccessibilityIdentifiers
 import LaunchArguments
+import UITestSupport
 import XCTest
 
 /// The functional preview: every screen and notable state the app can be walked to, filed as
@@ -30,28 +31,6 @@ import XCTest
 /// - **Anything that depends on the device skips rather than fails** — the list of boards beside
 ///   the canvas, say, which only a wide screen has.
 
-// MARK: - Capture
-
-/// Hands out sequentially numbered names, so a tile's place in the sheet doesn't depend on the
-/// order XCTest ran the methods in. Each method seeds its own base; the gaps between bases keep
-/// the sections in the intended order.
-@MainActor
-final class PreviewShots {
-    private unowned let testCase: XCTestCase
-    private var next: Int
-
-    init(in testCase: XCTestCase, from start: Int) {
-        self.testCase = testCase
-        self.next = start
-    }
-
-    /// Files the screen under the next number, suffixed with `name`. See `capture(named:)`.
-    func capture(_ name: String) {
-        testCase.capture(named: String(format: "%02d-%@", next, name))
-        next += 1
-    }
-}
-
 // MARK: - The base
 
 /// What a preview launch reads as Pro's state.
@@ -70,23 +49,8 @@ enum ProLaunch {
 
 /// Holds the app and the numbering, and launches nothing: each test chooses its own state.
 @MainActor
-class FunctionalPreviewCase: XCTestCase {
-    var app: XCUIApplication!
-
-    override func setUp() async throws {
-        continueAfterFailure = false
-        Multitasking.useFullScreenApps()
-    }
-
-    override func tearDown() async throws {
-        app = nil
-    }
-
-    /// Waits out the animations `--reduce-motion` doesn't cover — sheets, the keyboard, a menu
-    /// opening. Two seconds covers a sheet presentation.
-    func settle(_ duration: TimeInterval = 2) {
-        _ = XCTWaiter().wait(for: [XCTestExpectation(description: "settling")], timeout: duration)
-    }
+class FunctionalPreviewCase: UITestCase {
+    override var usesFullScreenApps: Bool { true }
 
     /// Launches, and waits for the canvas: on the listing's boards, unless `seeded` is off.
     func launch(

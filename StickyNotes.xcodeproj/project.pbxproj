@@ -17,6 +17,14 @@
 		05A100483100000000000001 /* LaunchArguments in Frameworks */ = {isa = PBXBuildFile; productRef = 05A100383100000000000001 /* LaunchArguments */; };
 		05A100493100000000000001 /* PreviewRecording in Frameworks */ = {isa = PBXBuildFile; productRef = 05A100393100000000000001 /* PreviewRecording */; };
 		05A100513100000000000001 /* StoreKit.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 05A100503100000000000001 /* StoreKit.storekit */; };
+		05F1C0013100000000000001 /* PurchaseKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05F1B0013100000000000001 /* PurchaseKit */; };
+		05F1C0023100000000000001 /* PurchaseUI in Frameworks */ = {isa = PBXBuildFile; productRef = 05F1B0023100000000000001 /* PurchaseUI */; };
+		05F1C0033100000000000001 /* AppTour in Frameworks */ = {isa = PBXBuildFile; productRef = 05F1B0033100000000000001 /* AppTour */; };
+		05F1C0043100000000000001 /* PurchaseKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05F1B0043100000000000001 /* PurchaseKit */; };
+		05F1C0053100000000000001 /* PurchaseTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 05F1B0053100000000000001 /* PurchaseTesting */; };
+		05F1C0063100000000000001 /* AppTour in Frameworks */ = {isa = PBXBuildFile; productRef = 05F1B0063100000000000001 /* AppTour */; };
+		05F1C0073100000000000001 /* UITestSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 05F1B0073100000000000001 /* UITestSupport */; };
+		05F1C0083100000000000001 /* UITestSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 05F1B0083100000000000001 /* UITestSupport */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,12 +89,18 @@
 				05A100413100000000000001 /* AccessibilityIdentifiers in Frameworks */,
 				05A100423100000000000001 /* LaunchArguments in Frameworks */,
 				05A100433100000000000001 /* NoteModel in Frameworks */,
+				05F1C0033100000000000001 /* AppTour in Frameworks */,
+				05F1C0023100000000000001 /* PurchaseUI in Frameworks */,
+				05F1C0013100000000000001 /* PurchaseKit in Frameworks */,
 			);
 		};
 		05A100053100000000000001 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
 				05A100443100000000000001 /* NoteModel in Frameworks */,
+				05F1C0063100000000000001 /* AppTour in Frameworks */,
+				05F1C0053100000000000001 /* PurchaseTesting in Frameworks */,
+				05F1C0043100000000000001 /* PurchaseKit in Frameworks */,
 			);
 		};
 		05A100153100000000000001 /* Frameworks */ = {
@@ -94,6 +108,7 @@
 			files = (
 				05A100453100000000000001 /* AccessibilityIdentifiers in Frameworks */,
 				05A100463100000000000001 /* LaunchArguments in Frameworks */,
+				05F1C0073100000000000001 /* UITestSupport in Frameworks */,
 			);
 		};
 		05A100653100000000000001 /* Frameworks */ = {
@@ -102,6 +117,7 @@
 				05A100473100000000000001 /* AccessibilityIdentifiers in Frameworks */,
 				05A100483100000000000001 /* LaunchArguments in Frameworks */,
 				05A100493100000000000001 /* PreviewRecording in Frameworks */,
+				05F1C0083100000000000001 /* UITestSupport in Frameworks */,
 			);
 		};
 /* End PBXFrameworksBuildPhase section */
@@ -151,6 +167,9 @@
 				05A100313100000000000001 /* AccessibilityIdentifiers */,
 				05A100323100000000000001 /* LaunchArguments */,
 				05A100333100000000000001 /* NoteModel */,
+				05F1B0033100000000000001 /* AppTour */,
+				05F1B0023100000000000001 /* PurchaseUI */,
+				05F1B0013100000000000001 /* PurchaseKit */,
 			);
 			productName = StickyNotes;
 			productReference = 043EFF5C3080560300D3907C /* StickyNotes.app */;
@@ -175,6 +194,9 @@
 			name = StickyNotesTests;
 			packageProductDependencies = (
 				05A100343100000000000001 /* NoteModel */,
+				05F1B0063100000000000001 /* AppTour */,
+				05F1B0053100000000000001 /* PurchaseTesting */,
+				05F1B0043100000000000001 /* PurchaseKit */,
 			);
 			productName = StickyNotesTests;
 			productReference = 05A100013100000000000001 /* StickyNotesTests.xctest */;
@@ -200,6 +222,7 @@
 			packageProductDependencies = (
 				05A100353100000000000001 /* AccessibilityIdentifiers */,
 				05A100363100000000000001 /* LaunchArguments */,
+				05F1B0073100000000000001 /* UITestSupport */,
 			);
 			productName = StickyNotesUITests;
 			productReference = 05A100113100000000000001 /* StickyNotesUITests.xctest */;
@@ -226,6 +249,7 @@
 				05A100373100000000000001 /* AccessibilityIdentifiers */,
 				05A100383100000000000001 /* LaunchArguments */,
 				05A100393100000000000001 /* PreviewRecording */,
+				05F1B0083100000000000001 /* UITestSupport */,
 			);
 			productName = Screenshots;
 			productReference = 05A100613100000000000001 /* Screenshots.xctest */;
@@ -272,6 +296,9 @@
 				05A100223100000000000001 /* XCLocalSwiftPackageReference "Packages/swift-launch-arguments" */,
 				05A100233100000000000001 /* XCLocalSwiftPackageReference "Packages/swift-note-kit" */,
 				05A100243100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-preview-recording" */,
+				05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-one-time-purchase" */,
+				05F1A0023100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-app-tour" */,
+				05F1A0033100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-ui-test-support" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 043EFF5D3080560300D3907C /* Products */;
@@ -755,6 +782,18 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../launchpad/Packages/swift-preview-recording";
 		};
+		05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-one-time-purchase" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../launchpad/Packages/swift-one-time-purchase";
+		};
+		05F1A0023100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-app-tour" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../launchpad/Packages/swift-app-tour";
+		};
+		05F1A0033100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-ui-test-support" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../launchpad/Packages/swift-ui-test-support";
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -802,6 +841,46 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 05A100243100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-preview-recording" */;
 			productName = PreviewRecording;
+		};
+		05F1B0013100000000000001 /* PurchaseKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-one-time-purchase" */;
+			productName = PurchaseKit;
+		};
+		05F1B0023100000000000001 /* PurchaseUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-one-time-purchase" */;
+			productName = PurchaseUI;
+		};
+		05F1B0033100000000000001 /* AppTour */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05F1A0023100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-app-tour" */;
+			productName = AppTour;
+		};
+		05F1B0043100000000000001 /* PurchaseKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-one-time-purchase" */;
+			productName = PurchaseKit;
+		};
+		05F1B0053100000000000001 /* PurchaseTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-one-time-purchase" */;
+			productName = PurchaseTesting;
+		};
+		05F1B0063100000000000001 /* AppTour */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05F1A0023100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-app-tour" */;
+			productName = AppTour;
+		};
+		05F1B0073100000000000001 /* UITestSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05F1A0033100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-ui-test-support" */;
+			productName = UITestSupport;
+		};
+		05F1B0083100000000000001 /* UITestSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05F1A0033100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-ui-test-support" */;
+			productName = UITestSupport;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

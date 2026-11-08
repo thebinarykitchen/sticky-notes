@@ -1,4 +1,5 @@
 import AccessibilityIdentifiers
+import UITestSupport
 import XCTest
 
 /// The sheet that shows every note on a board, and going to one from it. On the sample "Home"

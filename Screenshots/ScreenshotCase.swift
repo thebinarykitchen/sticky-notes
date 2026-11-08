@@ -1,23 +1,11 @@
 import AccessibilityIdentifiers
 import LaunchArguments
+import UITestSupport
 import XCTest
 
-/// Base class for the listing: launch configuration and settling before capture.
-///
-/// Explicitly `@MainActor`, with async `setUp`/`tearDown` — see `AppTestCase` in
-/// `StickyNotesUITests`.
-@MainActor
-class ScreenshotCase: XCTestCase {
-    var app: XCUIApplication!
-
-    override func setUp() async throws {
-        continueAfterFailure = false
-        Multitasking.useFullScreenApps()
-    }
-
-    override func tearDown() async throws {
-        app = nil
-    }
+/// Base class for the listing: launch configuration.
+class ScreenshotCase: UITestCase {
+    override var usesFullScreenApps: Bool { true }
 
     /// Launches the app a shot is taken of. Each test calls it first, rather than `setUp`, since
     /// the shots want different launches and an alternate that skips wants none.
@@ -36,21 +24,6 @@ class ScreenshotCase: XCTestCase {
     func launchOntoTheBoard(makeNotes: Bool = false) {
         launch(makeNotes: makeNotes)
         app.note(saying: Seed.onTheBoard).awaiting("the board")
-    }
-
-    /// Waits for system animations (sheets, menus, the keyboard) that `--reduce-motion` doesn't
-    /// affect. Two seconds covers a sheet presentation.
-    func settle(_ duration: TimeInterval = 2) {
-        _ = XCTWaiter().wait(for: [XCTestExpectation(description: "settling")], timeout: duration)
-    }
-
-    /// Skips an alternate unless the run asked for them — see ``Shot/alternatesWanted``. Called
-    /// before ``launch(makeNotes:tour:pro:)``, so a listing run spends nothing on it.
-    func skipUnlessWanted(_ shot: Shot) throws {
-        guard !shot.isInTheListing else { return }
-        try XCTSkipUnless(
-            Shot.alternatesWanted,
-            "\(shot.fileName) is an alternate; set TEST_RUNNER_SCREENSHOT_ALTERNATES=1 to take it")
     }
 
     /// Waits for `element`, lets the screen settle, and takes `shot`.
@@ -74,7 +47,7 @@ extension XCUIApplication {
         // is served instead by the scheme's `StoreKit.storekit`.
         if pro { flags.append(.noStoreKit) }
         app.launchArguments = flags.map(\.rawValue)
-        // The tour version the app is on: `OnboardingProgress.version`.
+        // The tour version the app is on: `TourProgress.version`.
         app.launchArguments += LaunchDefault.onboardingFinished.arguments(tour ? "0" : "1")
         app.launchArguments += LaunchDefault.proUnlocked.arguments(pro ? "1" : "0")
         app.launchArguments += LaunchDefault.proUsedMakeNotes.arguments("0")

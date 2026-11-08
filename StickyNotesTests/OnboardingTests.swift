@@ -1,4 +1,5 @@
 import AccessibilityIdentifiers
+import AppTour
 import CoreGraphics
 import Foundation
 import NoteModel
@@ -81,39 +82,10 @@ struct TourPageIdentifierTests {
 
 @Suite("When the tour is up")
 struct OnboardingProgressTests {
-    @Test func aFirstLaunchTakesTheTour() {
-        #expect(OnboardingProgress.isDue(answered: 0))
-    }
-
-    @Test func onceAnsweredItStaysAway() {
-        #expect(!OnboardingProgress.isDue(answered: OnboardingProgress.version))
-    }
-
-    @Test func aRevisedTourComesBack() {
-        #expect(OnboardingProgress.isDue(answered: OnboardingProgress.version - 1))
-    }
-
-    @Test func anAnswerToALaterTourCounts() {
-        #expect(!OnboardingProgress.isDue(answered: OnboardingProgress.version + 1))
-    }
-}
-
-@Suite("Which window puts the tour up")
-struct TourStageTests {
-    @Test func oneWindowAtATime() {
-        let stage = TourStage()
-        let first = UUID()
-        let second = UUID()
-
-        #expect(stage.claim(for: first))
-        #expect(!stage.claim(for: second))
-        // Asking again, it still has it.
-        #expect(stage.claim(for: first))
-
-        stage.release(from: second)
-        #expect(stage.presenter == first)
-        stage.release(from: first)
-        #expect(stage.claim(for: second))
+    /// The UI and screenshot tests answer the tour by presetting this default to "1".
+    @Test("The tests' preset answers the tour this version shows")
+    func thePresetAnswersThisVersion() {
+        #expect(TourProgress.version == 1)
     }
 }
 

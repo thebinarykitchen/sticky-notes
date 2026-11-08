@@ -82,9 +82,9 @@ headless in seconds. Under `StickyNotes/`, dependencies only ever run down this 
   `Practice` store, never the reader's. On it a `Demonstration`, a pure function of time that
   `DemonstrationLayer` draws with the canvas's pieces and a `GhostHand`, loops until the first
   touch; under Reduce Motion it is a still. It takes the board's note only while the note is
-  away from rest, so a reader's touch at rest lands on the real one. `OnboardingProgress` says
-  when the tour is due — a first launch, or `markDue()` from the empty canvas, the list of boards
-  or Help — and `TourStage` keeps it to one window.
+  away from rest, so a reader's touch at rest lands on the real one. `TourProgress` says when the
+  tour is due — a first launch, or `markDue()` from the empty canvas, the list of boards or Help —
+  and `TourStage` keeps it to one window. Both are launchpad's `swift-app-tour`.
 
 ## Platforms
 

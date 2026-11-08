@@ -1,3 +1,4 @@
+import UITestSupport
 import XCTest
 
 /// On an iPad in landscape the list of boards stands beside the canvas, and the board runs under

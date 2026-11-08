@@ -1,4 +1,5 @@
 import AccessibilityIdentifiers
+import UITestSupport
 import XCTest
 
 /// The App Store listing: ``Shot``'s seven, and its alternates when a run asks for them.
@@ -14,7 +15,7 @@ final class Listing: ScreenshotCase {
     func testTheBoard() {
         launchOntoTheBoard()
         settle()
-        capture(.theBoard)
+        capture(Shot.theBoard)
     }
 
     /// A note tapped comes to the middle, above the keyboard, with the board blurred behind it.
@@ -24,7 +25,7 @@ final class Listing: ScreenshotCase {
         app.find(A11y.Canvas.blur).awaiting("the blur behind the note")
         app.dismissTheKeyboardTip()
         settle()
-        capture(.writingOnANote)
+        capture(Shot.writingOnANote)
     }
 
     /// Make Notes' sheet with a list written in it, over the empty board it will fill.
@@ -33,7 +34,7 @@ final class Listing: ScreenshotCase {
         app.openBoard(Seed.emptyBoard)
         app.writeInMakeNotes(Seed.madeFrom)
         settle()
-        capture(.makingNotes)
+        capture(Shot.makingNotes)
     }
 
     /// The notes the list became, together in the middle of the board.
@@ -51,7 +52,7 @@ final class Listing: ScreenshotCase {
         launchOntoTheBoard()
         app.showMenu(of: Seed.forTheMenu)
         settle()
-        capture(.aNotesColors)
+        capture(Shot.aNotesColors)
     }
 
     /// The list of boards: back from the canvas on an iPhone. Where it already stands beside the
@@ -66,7 +67,7 @@ final class Listing: ScreenshotCase {
             app.showBoards()
         }
         settle()
-        capture(.everyBoard)
+        capture(Shot.everyBoard)
     }
 
     /// One search over every board, each note found under the board it is on.
@@ -83,7 +84,7 @@ final class Listing: ScreenshotCase {
     /// The tour's pages. Not in the listing, where a tour page reads as a tutorial and is mostly
     /// a practice board. Under `--reduce-motion` each demonstration is a still.
     func testTheTour() throws {
-        try skipUnlessWanted(.tourWelcome)
+        try skipUnlessWanted(Shot.tourWelcome)
         launch(tour: true)
         capture(
             .tourWelcome, once: app.find(A11y.Tour.page(A11y.Tour.welcomePage)),
@@ -99,7 +100,7 @@ final class Listing: ScreenshotCase {
     /// The Pro sheet, for the in-app purchase's review screenshot. The only shot launched
     /// without Pro, and without `--no-storekit`, so the price is the scheme's `StoreKit.storekit`.
     func testUnlockingPro() throws {
-        try skipUnlessWanted(.unlockingPro)
+        try skipUnlessWanted(Shot.unlockingPro)
         launch(pro: false)
         app.note(saying: Seed.onTheBoard).awaiting("the board")
         app.showBoards()
@@ -110,6 +111,6 @@ final class Listing: ScreenshotCase {
             app.buttons[A11y.Pro.buyButton].waitForExistence(timeout: 10),
             "No price: StoreKit served no product, and the sheet offers Try Again")
         settle()
-        capture(.unlockingPro)
+        capture(Shot.unlockingPro)
     }
 }

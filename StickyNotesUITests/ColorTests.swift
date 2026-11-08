@@ -1,3 +1,4 @@
+import UITestSupport
 import XCTest
 
 final class ColorTests: AppTestCase {

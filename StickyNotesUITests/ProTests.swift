@@ -1,4 +1,5 @@
 import AccessibilityIdentifiers
+import UITestSupport
 import XCTest
 
 /// What is free, what asks for Pro, and the sheet that asks. Every launch passes

@@ -1,8 +1,10 @@
 # AGENTS.md — Pro
 
 What is bought and what is left: the App Store, the one non-consumable (`ProProduct.id`, $3.99,
-Family Sharing, no subscription), and what is free of each thing it covers. Copied from
-`task-manager`'s `Pro/`, and kept close to it. Repo-wide conventions: [`../../AGENTS.md`](../../AGENTS.md).
+Family Sharing, no subscription), and what is free of each thing it covers. StoreKit, the monthly
+counting and the sheet are launchpad's
+[`swift-one-time-purchase`](../../../launchpad/Packages/swift-one-time-purchase/README.md); what is
+free and the sheet's copy are here. Repo-wide conventions: [`../../AGENTS.md`](../../AGENTS.md).
 
 ## What is free
 
@@ -44,7 +46,7 @@ a purchase made there writes it.
 
 ## The App Store is the truth
 
-`pro.unlocked` is a cache. `Pro.refresh()` believes the store in both directions, so a preset
+`pro.unlocked` is a cache. `OneTimePurchase.refresh()` believes the store in both directions, so a preset
 default is not a way in — which is why the UI tests pass `--no-storekit` alongside a preset Pro
 state. That flag is `#if DEBUG`: a launch argument is an `open --args` away on a Mac.
 
@@ -54,7 +56,7 @@ and Test actions.
 
 ## The purchase starts in the view
 
-`Pro.buy(with:)` takes the sheet's `@Environment(\.purchase)`, which knows the sheet's window,
+`OneTimePurchase.buy(with:)` takes the sheet's `@Environment(\.purchase)`, which knows the sheet's window,
 so the payment sheet opens over the one that asked. `PurchaseTests` go through `buy(_:)`,
 answering for the App Store themselves. `ProductView` and `StoreView` are not used: they load
 the product themselves, which `--no-storekit` can't stop.

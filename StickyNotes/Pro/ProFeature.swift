@@ -1,7 +1,8 @@
 import Foundation
+import PurchaseUI
 
 /// What Pro covers, with what each is worth free and its Pro sheet copy.
-nonisolated enum ProFeature: String, CaseIterable, Identifiable, Sendable {
+nonisolated enum ProFeature: String, CaseIterable, Identifiable, Sendable, PurchaseFeature {
     /// Make Notes, ``NoteWriter``. Free uses refill every calendar month.
     case makeNotes
     /// More boards than ``freeBoards``. Counted as they stand, never spent: deleting one frees

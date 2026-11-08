@@ -36,7 +36,8 @@ assumes, getting the images out, and the video: [`README.md`](README.md).
 - **No raw strings across the boundary**, as in the UI tests: `A11y.…` and `LaunchFlag.…`. The
   exceptions are labels UIKit owns — a menu's "Delete", the keyboard tip's "Continue".
 - **`Staging` is a deliberate second copy** of the parts of `StickyNotesUITests/App.swift` a
-  shot walks past, since two test bundles link no code in common. Keep it thin.
+  shot walks past, since what they share isn't about this app and is launchpad's
+  `swift-ui-test-support`. Keep it thin.
 - **Anything that types puts the keyboard tip away first** (`dismissTheKeyboardTip()`). A
   simulator's first keyboard comes with one, which takes the typing and would be in the shot.
 - **The functional preview stands on its own.** It is every class here but `Listing` and

@@ -1,4 +1,5 @@
 import AccessibilityIdentifiers
+import UITestSupport
 import XCTest
 
 /// Searching the sample boards from the list of boards: "Home", which a launch opens, and

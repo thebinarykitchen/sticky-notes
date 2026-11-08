@@ -1,4 +1,5 @@
 import AccessibilityIdentifiers
+import UITestSupport
 import XCTest
 
 /// Uses the sample boards: "Home", with "Buy oat milk" and three other notes, then "Work", with

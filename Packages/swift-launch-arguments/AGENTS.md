@@ -20,8 +20,8 @@ swift test --package-path Packages/swift-launch-arguments
 - **Only flag what a tap can't reach.** State a test can navigate to is state the test should
   navigate to — a flag that skips the navigation also skips proving it works. The README's table
   says why each existing flag earned its place.
-- `isPresent(in:)` takes its arguments as a parameter so the parsing is testable without
-  launching a process. Keep it that way.
+- `isPresent(in:)` and `arguments(_:)` come from launchpad's `swift-launch-options`. The cases here
+  are this app's.
 - No app types, no SwiftUI. Strings and `ProcessInfo`, which is what lets both sides depend on
   it.
 

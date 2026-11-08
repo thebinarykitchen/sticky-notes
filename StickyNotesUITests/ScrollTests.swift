@@ -1,4 +1,5 @@
 import AccessibilityIdentifiers
+import UITestSupport
 import XCTest
 
 /// The canvas scrolls over a board with no edges. On the sample "Home" board, whose notes lie

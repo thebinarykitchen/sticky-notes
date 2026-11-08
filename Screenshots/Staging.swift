@@ -1,15 +1,11 @@
 import AccessibilityIdentifiers
+import UITestSupport
 import XCTest
 
 /// Navigation helpers for screenshots. A thin copy of `StickyNotesUITests/App.swift`, since two
 /// test bundles link no code in common.
 @MainActor
 extension XCUIApplication {
-    /// Any element with `identifier`. The canvas and the notes aren't buttons.
-    func find(_ identifier: String) -> XCUIElement {
-        descendants(matching: .any).matching(identifier: identifier).firstMatch
-    }
-
     /// The canvas as it is on screen. The board behind it scrolls.
     var surface: XCUIElement { find(A11y.Canvas.surface) }
 
@@ -57,14 +53,6 @@ extension XCUIApplication {
         dismissTheKeyboardTip()
         field.typeText(text)
         return field
-    }
-
-    /// Puts away the tip a simulator's first keyboard comes with ("slide to type"), which takes
-    /// the typing until it goes and would be in the picture. iOS's own, so found by its label.
-    /// Once per device; afterwards there is nothing to wait for but a second.
-    func dismissTheKeyboardTip() {
-        let tip = buttons["Continue"]
-        if tip.waitForExistence(timeout: 1) { tip.tap() }
     }
 
     /// Holds a note until its menu is up.
@@ -124,71 +112,9 @@ extension XCUIApplication {
 
 @MainActor
 extension XCUIElement {
-    /// Waits for this element, and fails where it never turns up.
-    ///
-    /// `exists` first: `waitForExistence` doesn't check until its first one-second poll, even
-    /// for an element already on screen.
-    @discardableResult
-    func awaiting(
-        _ what: String,
-        timeout: TimeInterval = 10,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) -> XCUIElement {
-        XCTAssertTrue(
-            exists || waitForExistence(timeout: timeout), "Never saw \(what)", file: file,
-            line: line)
-        return self
-    }
-
-    /// Waits for this element to go, and fails where it stays. `exists` first, for the same
-    /// one-second poll as ``awaiting(_:timeout:file:line:)``.
-    func awaitingDisappearance(
-        _ what: String,
-        timeout: TimeInterval = 10,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) {
-        XCTAssertTrue(
-            !exists || waitForNonExistence(timeout: timeout), "\(what) never went away",
-            file: file, line: line)
-    }
-
     /// The point at a fraction of this element.
     func point(_ dx: CGFloat, _ dy: CGFloat) -> XCUICoordinate {
         coordinate(withNormalizedOffset: CGVector(dx: dx, dy: dy))
-    }
-}
-
-/// Puts an iPad in Full Screen Apps before anything is photographed.
-///
-/// An iPad simulator can be left in Windowed Apps, and there a synthesized pinch-in is taken by
-/// the system rather than the app: it shrinks the app into a window, and the window keeps its
-/// place across the next launches. Settings is the one place the mode can be set from; the
-/// pane's rows carry stable identifiers. Seen in `task-manager`, whose shots pinch as the tour's
-/// pages here do.
-///
-/// Once per test process — the choice outlives the app, and each clone runs its own process.
-@MainActor
-enum Multitasking {
-    private static var isFullScreen = false
-
-    static func useFullScreenApps() {
-        guard UIDevice.current.userInterfaceIdiom == .pad, !isFullScreen else { return }
-
-        let settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
-        settings.launch()
-        settings.buttons["com.apple.settings.multitaskingAndGestures"]
-            .awaiting("Multitasking & Gestures in Settings")
-            .tap()
-        let fullScreen = settings.buttons[
-            "com.apple.settings.multitaskingAndGestures.fullScreenApps"
-        ]
-        .awaiting("the Full Screen Apps option")
-        if !fullScreen.isSelected { fullScreen.tap() }
-        settings.terminate()
-
-        isFullScreen = true
     }
 }
 

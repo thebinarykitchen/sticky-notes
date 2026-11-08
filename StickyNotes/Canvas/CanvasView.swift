@@ -1,4 +1,5 @@
 import AccessibilityIdentifiers
+import AppTour
 import NoteModel
 import SwiftData
 import SwiftUI
@@ -57,7 +58,7 @@ struct CanvasView: View {
     @State private var editing: UUID?
     /// The note VoiceOver is on: moved to a revealed one.
     @AccessibilityFocusState private var spoken: UUID?
-    private var tour = OnboardingProgress()
+    private var tour = TourProgress.app
 
     init(board: Board, reveal: Reveal? = nil) {
         self.board = board

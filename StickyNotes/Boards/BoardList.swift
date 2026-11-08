@@ -1,4 +1,5 @@
 import AccessibilityIdentifiers
+import AppTour
 import NoteModel
 import SwiftData
 import SwiftUI
@@ -16,7 +17,7 @@ struct BoardList: View {
     @Environment(NoteStore.self) private var store
     @Environment(Pro.self) private var pro
     @Environment(\.proOffer) private var offer
-    private var tour = OnboardingProgress()
+    private var tour = TourProgress.app
     @State private var isAdding = false
     @State private var renaming: Board?
     @State private var deleting: Board?

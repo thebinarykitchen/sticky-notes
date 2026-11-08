@@ -1,10 +1,11 @@
-import Foundation
+// Re-exported so a file reading a flag needs no second import for `isPresent()`.
+@_exported import LaunchOptions
 
 /// Launch-argument flags shared by the UI tests, which set them, and the app, which reads them,
 /// so a rename is a compile error.
 ///
 /// Add a flag only for state a test can't reach through the UI.
-public enum LaunchFlag: String, CaseIterable, Sendable {
+public enum LaunchFlag: String, CaseIterable, LaunchFlagKey {
     /// Uses an in-memory store, so tests don't inherit each other's notes.
     case ephemeralStore = "--ephemeral-store"
 
@@ -29,11 +30,6 @@ public enum LaunchFlag: String, CaseIterable, Sendable {
     /// Skips StoreKit and reads Pro state from defaults, so ``LaunchDefault/proUnlocked`` isn't
     /// overwritten by a store reporting nothing owned. Debug builds only.
     case noStoreKit = "--no-storekit"
-
-    /// Whether this flag is in `arguments`, which defaults to the current process's.
-    public func isPresent(in arguments: [String] = ProcessInfo.processInfo.arguments) -> Bool {
-        arguments.contains(rawValue)
-    }
 }
 
 /// A `UserDefaults` key the app keeps and a test can preset for one launch.
@@ -41,7 +37,7 @@ public enum LaunchFlag: String, CaseIterable, Sendable {
 /// `-key value` arguments go into the argument domain, which takes precedence over persisted
 /// values. Writes still persist but aren't read back while the argument is there, so a test
 /// checking that one sticks relaunches without it.
-public enum LaunchDefault: String, CaseIterable, Sendable {
+public enum LaunchDefault: String, CaseIterable, LaunchDefaultKey {
     /// The last tour version the reader finished or skipped; 0, the default, means never, and the
     /// tour is up at launch. The UI tests answer it, unless a test is about the tour.
     case onboardingFinished = "onboarding.finished"
@@ -53,7 +49,4 @@ public enum LaunchDefault: String, CaseIterable, Sendable {
     /// Make Notes runs spent this month. Must match the app's `"pro.used." + ProFeature.rawValue`,
     /// which `ProTests` checks. Boards are counted, and colors have no free uses, so no keys.
     case proUsedMakeNotes = "pro.used.makeNotes"
-
-    /// The two arguments that preset this key to `value`, ready to append to `launchArguments`.
-    public func arguments(_ value: String) -> [String] { ["-" + rawValue, value] }
 }

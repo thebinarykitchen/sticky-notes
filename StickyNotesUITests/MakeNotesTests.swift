@@ -1,4 +1,5 @@
 import AccessibilityIdentifiers
+import UITestSupport
 import XCTest
 
 /// Making notes with Apple Intelligence, through the stand-in that makes a note of each line or

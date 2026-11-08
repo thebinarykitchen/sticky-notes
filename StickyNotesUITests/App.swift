@@ -1,5 +1,6 @@
 import AccessibilityIdentifiers
 import LaunchArguments
+import UITestSupport
 import XCTest
 
 /// Which store a launch runs on.
@@ -76,7 +77,7 @@ extension XCUIApplication {
         if pro != .whateverStuck { flags.append(.noStoreKit) }
         app.launchArguments = flags.map(\.rawValue)
         switch tour {
-        // The tour version the app is on: `OnboardingProgress.version`.
+        // The tour version the app is on: `TourProgress.version`.
         case .answered: app.launchArguments += LaunchDefault.onboardingFinished.arguments("1")
         case .due: app.launchArguments += LaunchDefault.onboardingFinished.arguments("0")
         case .whateverStuck: break
@@ -95,11 +96,6 @@ extension XCUIApplication {
         case .whateverStuck: break
         }
         return app
-    }
-
-    /// Any element with `identifier`. The canvas and the notes aren't buttons.
-    func find(_ identifier: String) -> XCUIElement {
-        descendants(matching: .any).matching(identifier: identifier).firstMatch
     }
 
     /// The canvas as it is on screen. The board behind it scrolls.
@@ -121,31 +117,6 @@ extension XCUIApplication {
 
 @MainActor
 extension XCUIElement {
-    /// Waits for this element and fails the test if it doesn't appear.
-    @discardableResult
-    func awaiting(
-        _ what: String,
-        timeout: TimeInterval = 10,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) -> XCUIElement {
-        XCTAssertTrue(
-            waitForExistence(timeout: timeout), "\(what) never appeared", file: file, line: line)
-        return self
-    }
-
-    /// Waits for this element to go, and fails the test if it doesn't.
-    func awaitingDisappearance(
-        _ what: String,
-        timeout: TimeInterval = 10,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) {
-        XCTAssertTrue(
-            waitForNonExistence(timeout: timeout), "\(what) never went away", file: file,
-            line: line)
-    }
-
     /// The point at a fraction of this element.
     func point(_ dx: CGFloat, _ dy: CGFloat) -> XCUICoordinate {
         coordinate(withNormalizedOffset: CGVector(dx: dx, dy: dy))
@@ -197,23 +168,8 @@ extension XCUIApplication {
     }
 }
 
-/// Base class: holds the app and stops at the first failure.
-///
-/// Explicitly `@MainActor` (this bundle doesn't default to it): XCUIAutomation is main-actor
-/// isolated, and a main-actor subclass of `XCTestCase` can only override the async
-/// `setUp`/`tearDown`.
-@MainActor
-class AppTestCase: XCTestCase {
-    var app: XCUIApplication!
-
-    override func setUp() async throws {
-        continueAfterFailure = false
-    }
-
-    override func tearDown() async throws {
-        app = nil
-    }
-
+/// Base class: launches this suite's app, on top of holding it and stopping at the first failure.
+class AppTestCase: UITestCase {
     /// Launches and waits for the canvas.
     func launch(
         seeded: Bool = false, store: StoreKind = .ephemeral, intelligence: IntelligenceKind = .off,
