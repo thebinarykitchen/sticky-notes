@@ -12,11 +12,19 @@ let package = Package(
     products: [
         .library(name: "NoteModel", targets: ["NoteModel"])
     ],
+    dependencies: [
+        .package(path: "../../../launchpad/Packages/swift-schema-testing")
+    ],
     targets: [
         .target(name: "NoteModel", swiftSettings: isolation),
         .testTarget(
             name: "NoteModelTests",
-            dependencies: ["NoteModel"],
+            dependencies: [
+                "NoteModel",
+                .product(name: "SchemaTesting", package: "swift-schema-testing"),
+            ],
+            // Read from the source tree by `SchemaFixtures`, not bundled.
+            exclude: ["Fixtures"],
             swiftSettings: isolation
         ),
     ]

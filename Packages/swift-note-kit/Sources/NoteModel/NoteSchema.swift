@@ -24,8 +24,19 @@ public typealias CurrentSchema = NoteSchemaV1
 ///    from N-1 to N. `.lightweight` covers adding a model; adding or removing an optional or
 ///    defaulted property; renames via `@Attribute(originalName:)`; and index changes.
 /// 3. Append it to ``schemas``, ascending.
+/// 4. Record version N's shape and a store written by it, then commit the new files under
+///    `Tests/NoteModelTests/Fixtures`. Add what's new to `Fixture` in `SchemaMigrationTests`.
 ///
-/// Until 1.0 ships, version 1.0.0 may still change in place.
+///    ```sh
+///    RECORD_SCHEMA_FIXTURES=1 swift test --package-path Packages/swift-note-kit \
+///      --filter SchemaMigrationTests
+///    ```
+///
+///    A version can only be recorded while it is the current one, and recording never overwrites
+///    a file.
+///
+/// Until 1.0 ships, version 1.0.0 may still change, by deleting its two fixtures and recording
+/// them again. After that, a fixture is never regenerated: it is what that version wrote.
 public enum NoteMigrationPlan: SchemaMigrationPlan {
     public static var schemas: [any VersionedSchema.Type] { [NoteSchemaV1.self] }
     public static var stages: [MigrationStage] { [] }

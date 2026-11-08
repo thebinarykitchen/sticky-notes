@@ -1,0 +1,16 @@
+entity Board
+  attr createdAt: Date required default
+  attr id: UUID required default
+  attr name: String required default
+  rel notes -> Note to-many optional inverse=board delete=cascade
+
+entity Note
+  attr colorRaw: String required default
+  attr createdAt: Date required default
+  attr id: UUID required default
+  attr side: Double required default
+  attr text: String required default
+  attr x: Double required default
+  attr y: Double required default
+  attr z: Int required default
+  rel board -> Board to-one optional inverse=notes delete=nullify

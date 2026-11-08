@@ -390,11 +390,6 @@ struct NoteRowsTests {
 }
 
 struct NoteSchemaTests {
-    @Test func currentSchemaIsTheNewestInThePlan() {
-        let last = NoteMigrationPlan.schemas.last
-        #expect(last.map(ObjectIdentifier.init) == ObjectIdentifier(CurrentSchema.self))
-    }
-
     @Test func anUnknownColorReadsAsYellow() {
         let note = Note(center: .zero, color: .blue, z: 0)
         note.colorRaw = "mauve"
