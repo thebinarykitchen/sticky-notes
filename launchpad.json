@@ -24,6 +24,7 @@
       "phone": "iPhone 17",
       "pad": "iPad Pro 13-inch (M5)"
     },
+    "verifiedPhoneOrientations": ["UIInterfaceOrientationPortrait"],
     "launchFlags": {
       "type": "LaunchFlag",
       "live": ["ephemeralStore", "noAppleIntelligence", "reduceMotion"]
