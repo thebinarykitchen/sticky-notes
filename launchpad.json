@@ -4,15 +4,13 @@
 
   "screenshots": {
     "testBundle": "Screenshots/Listing",
-    "platforms": ["ios"],
-    "devices": ["iPhone 17 Pro Max", "iPad Pro 13-inch (M5)"]
+    "platforms": ["ios"]
   },
 
   "video-preview": {
     "testBundle": "Screenshots/VideoPreviews",
     "posterBeat": "notes-made",
-    "platform": "ios",
-    "devices": ["iPhone 17 Pro Max", "iPad Pro 13-inch (M5)"]
+    "platform": "ios"
   },
 
   "preflight": {
@@ -47,7 +45,8 @@
     },
     "listing": {
       "screenshots": [
-        { "size": "6.9-inch iPhone", "capturedOn": "iPhone 17 Pro Max" },
+        { "size": "6.9-inch iPhone", "capturedOn": "iPhone 18 Pro Max" },
+        { "size": "iPhone Duo", "capturedOn": "iPhone Duo" },
         { "size": "13-inch iPad", "capturedOn": "iPad Pro 13-inch (M5)" }
       ],
       "handChecks": [
