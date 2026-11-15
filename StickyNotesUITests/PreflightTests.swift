@@ -22,9 +22,8 @@ final class PreflightTests: AppTestCase {
         app.launch()
 
         XCTAssertEqual(app.state, .runningForeground, "The app did not come up")
-        let arrived =
-            app.surface.waitForExistence(timeout: 20)
-            || app.find(A11y.Tour.view).waitForExistence(timeout: 1)
+        let arrived = XCUIElement.waitForAny(
+            [app.surface, app.find(A11y.Tour.view)], timeout: 20)
         XCTAssertTrue(arrived, "Came up on nothing recognizable")
     }
 
