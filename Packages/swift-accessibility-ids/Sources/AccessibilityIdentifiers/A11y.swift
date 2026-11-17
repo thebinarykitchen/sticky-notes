@@ -18,6 +18,9 @@ public enum A11y {
         public static let searchResult = "boards.searchResult"
         /// The toolbar button that puts the tour back up.
         public static let tourButton = "boards.tourButton"
+        /// A board's name in the list. Every row carries this one identifier; they are told
+        /// apart by their label, the board's name, which an iPad's open board shows as its title too.
+        public static let row = "boards.row"
     }
 
     /// The bottom of the list of boards: what App Review looks for.

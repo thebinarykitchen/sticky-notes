@@ -19,7 +19,8 @@ struct A11yTests {
         let all =
             [
                 A11y.Boards.addButton, A11y.Boards.searchResult, A11y.Boards.tourButton,
-                A11y.Canvas.surface, A11y.Canvas.addButton, A11y.Canvas.makeNotesButton,
+                A11y.Boards.row, A11y.Canvas.surface, A11y.Canvas.addButton,
+                A11y.Canvas.makeNotesButton,
                 A11y.Canvas.overviewButton, A11y.Canvas.emptyState, A11y.Canvas.tourButton,
                 A11y.Canvas.undoBanner, A11y.Canvas.undoButton, A11y.Canvas.blur,
                 A11y.Overview.note, A11y.MakeNotes.text, A11y.MakeNotes.addButton,
@@ -38,7 +39,10 @@ struct A11yTests {
             #expect(id.hasPrefix("canvas."))
         }
         #expect(A11y.Overview.note.hasPrefix("overview."))
-        for id in [A11y.Boards.addButton, A11y.Boards.searchResult, A11y.Boards.tourButton] {
+        for id in [
+            A11y.Boards.addButton, A11y.Boards.searchResult, A11y.Boards.tourButton,
+            A11y.Boards.row,
+        ] {
             #expect(id.hasPrefix("boards."))
         }
         for id in [A11y.MakeNotes.text, A11y.MakeNotes.addButton] {

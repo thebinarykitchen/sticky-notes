@@ -137,10 +137,17 @@ extension XCUIApplication {
         addBoardButton.awaiting("the list of boards")
     }
 
+    /// The row of the board named `name` in the list of boards, and not the open board's title,
+    /// which on an iPad reads the same.
+    func boardRow(_ name: String) -> XCUIElement {
+        staticTexts.matching(identifier: A11y.Boards.row)
+            .matching(NSPredicate(format: "label == %@", name)).firstMatch
+    }
+
     /// Opens the board named `name` from the list of boards.
     func openBoard(_ name: String) {
         showBoards()
-        staticTexts[name].awaiting("the board \(name)").tap()
+        boardRow(name).awaiting("the board \(name)").tap()
         surface.awaiting("the canvas of \(name)")
     }
 }

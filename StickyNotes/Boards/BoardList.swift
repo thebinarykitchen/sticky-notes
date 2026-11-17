@@ -142,6 +142,7 @@ struct BoardList: View {
             ForEach(boards) { board in
                 Label {
                     board.title
+                        .accessibilityIdentifier(A11y.Boards.row)
                 } icon: {
                     Image(systemName: "note.text")
                 }

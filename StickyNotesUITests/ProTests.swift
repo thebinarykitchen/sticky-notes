@@ -47,7 +47,7 @@ final class ProTests: AppTestCase {
         XCTAssertFalse(app.alerts.firstMatch.exists, "the name prompt came up behind the sheet")
 
         closeSheet()
-        XCTAssertFalse(app.staticTexts["Untitled Board"].exists)
+        XCTAssertFalse(app.boardRow("Untitled Board").exists)
     }
 
     func testWithProBoardsAreUnlimited() {
@@ -65,9 +65,8 @@ final class ProTests: AppTestCase {
         app.showBoards()
         addBoard("Groceries")
 
-        // In the list's rows: on an iPad the open board's title says "Groceries" too.
         app.showBoards()
-        let row = app.cells.staticTexts["Groceries"]
+        let row = app.boardRow("Groceries")
         row.awaiting("the third board").press(forDuration: 1.0)
         app.buttons["Delete"].awaiting("the Delete item").tap()
         app.buttons["Delete Board"].awaiting("the confirmation").tap()

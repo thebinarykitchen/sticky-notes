@@ -47,12 +47,12 @@ final class BoardsTests: AppTestCase {
         launch(seeded: true)
         app.showBoards()
 
-        app.staticTexts["Work"].awaiting("the Work board").press(forDuration: 1.0)
+        app.boardRow("Work").awaiting("the Work board").press(forDuration: 1.0)
         app.buttons["Delete"].awaiting("the Delete item").tap()
         app.buttons["Delete Board"].awaiting("the confirmation").tap()
-        app.staticTexts["Work"].awaitingDisappearance("the deleted board")
+        app.boardRow("Work").awaitingDisappearance("the deleted board")
 
-        app.staticTexts["Home"].press(forDuration: 1.0)
+        app.boardRow("Home").press(forDuration: 1.0)
         XCTAssertFalse(app.buttons["Delete"].awaiting("the Delete item").isEnabled)
     }
 }
