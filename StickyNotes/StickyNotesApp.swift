@@ -29,6 +29,7 @@ struct StickyNotesApp: App {
     var body: some Scene {
         WindowGroup {
             BoardsView()
+                .foldsStarterBoards()
                 .stagesTheTour(.app, size: OnboardingView.macSize) { OnboardingView() }
                 .watchesTheStore(pro.purchase, onActive: pro.allowance.rollOver)
                 .environment(store)

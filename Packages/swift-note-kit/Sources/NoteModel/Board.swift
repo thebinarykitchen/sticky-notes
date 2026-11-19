@@ -12,12 +12,18 @@ public final class Board {
     public var name: String = ""
     /// Boards are listed oldest first.
     public var createdAt: Date = Date.now
+    /// Made by ``NoteStore/firstBoard(creatingOneNamed:)`` on a first launch rather than by the
+    /// reader. Every device makes one before it has seen the others', so after a sync there can
+    /// be several; ``NoteStore/foldStarterBoards()`` folds them into one. Stays set when the
+    /// board is renamed: it is still the board that launch made.
+    public var isStarter: Bool = false
 
     /// Deleting a board deletes its notes. Unordered: fetch notes by board and sort by `z`.
     @Relationship(deleteRule: .cascade, inverse: \Note.board)
     public var notes: [Note]? = []
 
-    public init(name: String) {
+    public init(name: String, isStarter: Bool = false) {
         self.name = name
+        self.isStarter = isStarter
     }
 }

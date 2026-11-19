@@ -59,6 +59,10 @@ public final class NoteStore {
     /// copies or deletes notes.
     @ObservationIgnored private var draft: (note: Note, text: String)?
 
+    /// Each board ``foldStarterBoards()`` folded away, and the one it went into, so an undo
+    /// still finds where its note went. Kept for the process's life: the undo stack is no longer.
+    @ObservationIgnored private var foldedBoards: [UUID: UUID] = [:]
+
     /// Set by ``delete(_:)`` and cleared by any other write, undo or redo — so while it is set,
     /// ``undo()`` brings this note back.
     public private(set) var lastDeletion: Deletion?
@@ -204,7 +208,7 @@ public final class NoteStore {
         if let first = try? context.fetch(descriptor).first {
             board = first
         } else {
-            board = Board(name: name)
+            board = Board(name: name, isStarter: true)
             context.insert(board)
         }
         let strays =
@@ -216,6 +220,50 @@ public final class NoteStore {
         for note in strays { note.board = board }
         save()
         return board
+    }
+
+    /// Folds every starter board into one, and returns how many were folded away. Zero is the
+    /// ordinary case.
+    ///
+    /// Each device makes a starter board on its first launch, before it has seen another's, so
+    /// once they sync there are two. The oldest survives, ties going to the lowest ``Board/id``:
+    /// every device computes that from the same rows, so each folds the same boards into the
+    /// same one. Choosing locally instead has each device delete the board the other kept, and
+    /// the two deletes sync into no board at all. The oldest is also the one in use: a second
+    /// device's starter is usually still empty when the first device's arrives.
+    ///
+    /// Nothing is lost. The others' notes move onto the survivor, above its own, in the order
+    /// they were stacked; then the emptied boards go. A board the reader made is never touched.
+    /// Not undoable — the reader didn't ask for it — but an undo of a change to a note that was
+    /// on a folded board still finds it, on the survivor.
+    @discardableResult
+    public func foldStarterBoards() -> Int {
+        let starters =
+            (try? context.fetch(FetchDescriptor<Board>(predicate: #Predicate { $0.isStarter })))
+            ?? []
+        guard starters.count > 1 else { return 0 }
+        let ordered = starters.sorted {
+            ($0.createdAt, $0.id.uuidString) < ($1.createdAt, $1.id.uuidString)
+        }
+        let survivor = ordered[0]
+        var top = (survivor.notes ?? []).map(\.z).max() ?? -1
+        for board in ordered.dropFirst() {
+            let notes = (board.notes ?? []).sorted { ($0.z, $0.id.uuidString) < ($1.z, $1.id.uuidString) }
+            for note in notes {
+                top += 1
+                note.z = top
+                note.board = survivor
+            }
+            foldedBoards[board.id] = survivor.id
+            if let deletion = lastDeletion, deletion.boardID == board.id {
+                lastDeletion = Deletion(noteID: deletion.noteID, boardID: survivor.id)
+            }
+        }
+        // Saved with the notes moved before any board goes, so the cascade can't take them.
+        save()
+        for board in ordered.dropFirst() { context.delete(board) }
+        save()
+        return ordered.count - 1
     }
 
     @discardableResult
@@ -294,9 +342,11 @@ public final class NoteStore {
         return Reversal { $0.inserting(values) }
     }
 
-    /// Nil, and nothing inserted, when the note's board has since been deleted.
+    /// Nil, and nothing inserted, when the note's board has since been deleted. A board folded
+    /// into another by ``foldStarterBoards()`` hasn't been: the note goes back onto the survivor.
     private func inserting(_ values: NoteValues) -> Reversal? {
-        guard let boardID = values.boardID, let board = board(withID: boardID) else { return nil }
+        guard let boardID = values.boardID, let board = board(withID: survivor(of: boardID))
+        else { return nil }
         let note = values.makeNote()
         context.insert(note)
         note.board = board
@@ -323,6 +373,13 @@ public final class NoteStore {
         var descriptor = FetchDescriptor<Note>(predicate: #Predicate { $0.id == id })
         descriptor.fetchLimit = 1
         return try? context.fetch(descriptor).first
+    }
+
+    /// The board `id` was folded into, through any number of folds; `id` itself if it never was.
+    private func survivor(of id: UUID) -> UUID {
+        var id = id
+        while let next = foldedBoards[id] { id = next }
+        return id
     }
 
     private func board(withID id: UUID) -> Board? {

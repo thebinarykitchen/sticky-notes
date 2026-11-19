@@ -1,6 +1,7 @@
 entity Board
   attr createdAt: Date required default
   attr id: UUID required default
+  attr isStarter: Bool required default
   attr name: String required default
   rel notes -> Note to-many optional inverse=board delete=cascade
 

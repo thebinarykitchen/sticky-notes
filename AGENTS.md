@@ -112,6 +112,17 @@ screenshots, its own review pass and a deployment target that has to keep compil
   settings only. **The schema is versioned from the first build**: any change to a `@Model` goes
   through a new `VersionedSchema`; the checklist is on `NoteMigrationPlan`. Every stored property
   has a declaration-site default.
+- **The store syncs** through the private database in `ICloudContainer.identifier`
+  (`iCloud.com.thebinarykitchen.Stickies`): `ModelContainer.onDisk(syncing:)`, which the app
+  opens with `syncing: true` unless launched with `--no-sync`; `inMemory()` never syncs. So every
+  model stays CloudKit-shaped and every version only adds, through a lightweight stage
+  (`SchemaMigrationTests` checks both), and the CloudKit schema is deployed to production before
+  a build ships. Signed out of iCloud, the store is this device's alone, and uploads on sign-in.
+- **Every device makes a starter board on its first launch** (`Board.isStarter`), so after a sync
+  there are several. `NoteStore.foldStarterBoards()` folds them into the oldest whenever a window
+  comes forward or an import lands (`foldsStarterBoards()`); boards the reader made are never
+  folded. Any other rule that one row of something exists needs the same kind of pass, choosing
+  its survivor from synced fields alone so every device folds the same way.
 - **Animation goes through `Motion`** (`@Environment(\.motion)`), never a literal curve. What a
   finger is holding is not animation: a dragged note tracks it undamped.
 - **Undo is the store's own.** Add, move, resize, recolor and delete register their inverse with the

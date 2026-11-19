@@ -76,7 +76,7 @@ private enum Fixture {
     static let noteID = UUID(uuidString: "00000000-0000-0000-0000-000000000003")!
 
     static func write(in context: ModelContext) {
-        let board = Board(name: "Kitchen wall")
+        let board = Board(name: "Kitchen wall", isStarter: true)
         board.id = boardID
         board.createdAt = boardCreated
         context.insert(board)
@@ -112,6 +112,7 @@ private enum Fixture {
         let board = try #require(boards.first { $0.id == boardID }, "\(version): the full board")
         #expect(board.name == "Kitchen wall", "\(version): a board's name")
         #expect(board.createdAt == boardCreated, "\(version): when a board was made")
+        #expect(board.isStarter, "\(version): the board a first launch made")
         #expect(board.notes?.count == 2, "\(version): a board's notes")
 
         let note = try #require(notes.first { $0.id == noteID }, "\(version): the full note")
