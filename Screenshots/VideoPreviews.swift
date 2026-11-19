@@ -63,8 +63,8 @@ final class VideoPreviews: UITestCase {
         // Before recording: the tip would take the typing on camera.
         warmTheKeyboard()
 
+        // Returns once the video has its first frame, however late `simctl` begins.
         recorder.start()
-        holdForTheRecorder()
 
         // 1 — A double tap on a free spot of the board (board points, which open at the
         // canvas's top-left — see `SampleData.seedListing`), and the note it adds written on.
@@ -145,12 +145,6 @@ final class VideoPreviews: UITestCase {
 
     private func mark(_ label: String) {
         recorder.mark(label)
-    }
-
-    /// `simctl` begins capturing up to several seconds after it is started, and a beat marked
-    /// before the video's first frame keeps none of its own start.
-    private func holdForTheRecorder() {
-        hold(4.0)
     }
 }
 
