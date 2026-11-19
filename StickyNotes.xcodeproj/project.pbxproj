@@ -155,6 +155,7 @@
 			buildPhases = (
 				043EFF583080560300D3907C /* Sources */,
 				043EFF593080560300D3907C /* Frameworks */,
+				3B98A99B73E395AD8B34012B /* Render App Icon */,
 				043EFF5A3080560300D3907C /* Resources */,
 			);
 			buildRules = (
@@ -336,6 +337,31 @@
 			);
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3B98A99B73E395AD8B34012B /* Render App Icon */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"$(SRCROOT)/AppIcon.xcfilelist",
+			);
+			inputPaths = (
+				"$(SRCROOT)/../launchpad/Packages/swift-one-time-purchase/Scripts/render-app-icon.sh",
+			);
+			name = "Render App Icon";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/AppIconImage-Light.png",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/AppIconImage-Dark.png",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$SRCROOT/../launchpad/Packages/swift-one-time-purchase/Scripts/render-app-icon.sh\" \"$SRCROOT/StickyNotes/AppIcon.icon\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		043EFF583080560300D3907C /* Sources */ = {

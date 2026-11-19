@@ -1,0 +1,3 @@
+$(SRCROOT)/StickyNotes/AppIcon.icon/Assets/back-note.svg
+$(SRCROOT)/StickyNotes/AppIcon.icon/Assets/note.svg
+$(SRCROOT)/StickyNotes/AppIcon.icon/icon.json
