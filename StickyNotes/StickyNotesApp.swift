@@ -69,7 +69,7 @@ struct StickyNotesApp: App {
             container = memoryFallback()
         } else {
             do {
-                container = try .onDisk()
+                container = try .onDisk(syncing: !LaunchFlag.noSync.isPresent())
             } catch {
                 Logger.store.critical("On-disk store wouldn't open, running from memory: \(error)")
                 container = memoryFallback()

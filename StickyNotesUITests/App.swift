@@ -6,7 +6,8 @@ import XCTest
 /// Which store a launch runs on.
 enum StoreKind {
     case ephemeral
-    /// The persistent store, for testing persistence across launches.
+    /// The persistent store, for testing persistence across launches. Never synced: it adds
+    /// `LaunchFlag.noSync`.
     case onDisk
 }
 
@@ -68,7 +69,10 @@ extension XCUIApplication {
     ) -> XCUIApplication {
         let app = XCUIApplication()
         var flags: [LaunchFlag] = [.reduceMotion]
-        if store == .ephemeral { flags.append(.ephemeralStore) }
+        switch store {
+        case .ephemeral: flags.append(.ephemeralStore)
+        case .onDisk: flags.append(.noSync)
+        }
         if seeded { flags.append(.seedStore) }
         switch intelligence {
         case .off: flags.append(.noAppleIntelligence)

@@ -27,7 +27,7 @@
     "verifiedPhoneOrientations": ["UIInterfaceOrientationPortrait"],
     "launchFlags": {
       "type": "LaunchFlag",
-      "live": ["ephemeralStore", "noAppleIntelligence", "reduceMotion"]
+      "live": ["ephemeralStore", "noAppleIntelligence", "noSync", "reduceMotion"]
     },
     "releaseBranchPrefix": "release/",
     "tests": {

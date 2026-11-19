@@ -9,6 +9,11 @@ public enum LaunchFlag: String, CaseIterable, LaunchFlagKey {
     /// Uses an in-memory store, so tests don't inherit each other's notes.
     case ephemeralStore = "--ephemeral-store"
 
+    /// Opens the on-disk store without iCloud sync, so a persistence test neither sends its
+    /// notes to the simulator's iCloud account nor finds that account's notes arriving.
+    /// Read in Release too: the persistence test is a Release preflight check.
+    case noSync = "--no-sync"
+
     /// Seeds the store with sample notes. Debug builds only.
     case seedStore = "--seed-store"
 

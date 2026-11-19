@@ -190,7 +190,8 @@ The exceptions are labels UIKit owns, like a context menu's "Delete".
   as `TourTests` does. Under Reduce Motion the tour's demonstrations are stills: a loop would
   never let the app idle.
 - A test on the real store (`.onDisk`) must find its own notes by unique text and delete them
-  when done: the store outlives the run.
+  when done: the store outlives the run. It passes `--no-sync`, so it never meets the simulator's
+  iCloud account.
 - Gestures are `press(forDuration:thenDragTo:…)`, not `swipe…`, which can finish before a
   recognizer measures it.
 
@@ -224,8 +225,6 @@ Deliberately out of the first version, and each its own decision when it comes:
 - **A Mac listing.** `Screenshots` is iOS-only, like the UI tests, and the Mac can't be driven
   from a session here; what it would take is in [`Screenshots/AGENTS.md`](Screenshots/AGENTS.md).
 - **Zooming.** The canvas scrolls but doesn't zoom; SwiftUI's `ScrollView` has no zoom of its own.
-- **iCloud sync.** It would need CloudKit-safe models (the defaults are already there) and an
-  iCloud container.
 
 ## Gaps
 

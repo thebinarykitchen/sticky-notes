@@ -28,11 +28,18 @@ struct SchemaMigrationTests {
         #expect(audit.containerProblems(try .inMemory()) == [])
     }
 
-    /// The models are written to stay CloudKit-safe, so turning sync on needs no migration.
-    /// Evolution isn't checked: while the store doesn't sync, a version may still drop a field.
-    @Test("Every model could be mirrored to CloudKit")
-    func modelsCouldSync() {
+    /// The store mirrors to CloudKit, and a model CloudKit can't take fails the store at open:
+    /// the app then runs from memory, so this has to fail first.
+    @Test("Every model, in every version, can be mirrored to CloudKit")
+    func modelsCanSync() {
         #expect(audit.syncShapeProblems() == [])
+    }
+
+    /// CloudKit never drops or retypes a field, and a custom stage would run on every device and
+    /// sync its output into the others'.
+    @Test("Every version only adds, through a lightweight stage")
+    func versionsOnlyAdd() {
+        #expect(audit.syncEvolutionProblems() == [])
     }
 
     @Test("Every @Model is listed by a version in the plan")

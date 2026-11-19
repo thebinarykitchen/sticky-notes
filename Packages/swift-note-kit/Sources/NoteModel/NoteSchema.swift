@@ -20,9 +20,10 @@ public typealias CurrentSchema = NoteSchemaV1
 /// 1. Copy *all* of the outgoing version's models into its namespace and point its `models` at
 ///    the copies. Freezing only some leaves frozen relationships pointing at live models, which
 ///    crashes on launch.
-/// 2. Add `NoteSchemaVN` listing the live types, point ``CurrentSchema`` at it, and add a stage
-///    from N-1 to N. `.lightweight` covers adding a model; adding or removing an optional or
-///    defaulted property; renames via `@Attribute(originalName:)`; and index changes.
+/// 2. Add `NoteSchemaVN` listing the live types, point ``CurrentSchema`` at it, and add a
+///    `.lightweight` stage from N-1 to N. The store syncs, so a version only *adds*: models, and
+///    optional or defaulted properties. CloudKit never drops or retypes a field, and a custom
+///    stage would run on every device and sync its output into the others'.
 /// 3. Append it to ``schemas``, ascending.
 /// 4. Record version N's shape and a store written by it, then commit the new files under
 ///    `Tests/NoteModelTests/Fixtures`. Add what's new to `Fixture` in `SchemaMigrationTests`.
@@ -34,6 +35,10 @@ public typealias CurrentSchema = NoteSchemaV1
 ///
 ///    A version can only be recorded while it is the current one, and recording never overwrites
 ///    a file.
+///
+/// 5. Run a Debug build signed into iCloud so the new fields reach the development schema, then
+///    deploy the CloudKit schema to production before the build ships. TestFlight talks to
+///    production too, and an undeployed field there is sync failing without an error.
 ///
 /// Until 1.0 ships, version 1.0.0 may still change, by deleting its two fixtures and recording
 /// them again. After that, a fixture is never regenerated: it is what that version wrote.
