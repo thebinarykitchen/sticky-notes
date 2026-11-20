@@ -4,6 +4,7 @@
 
   "screenshots": {
     "testBundle": "Screenshots/Listing",
+    "reviewScreenshot": { "test": "Screenshots/Listing/testUnlockingPro", "products": ["com.thebinarykitchen.Stickies.IAP.Pro"] },
     "platforms": ["ios"]
   },
 
