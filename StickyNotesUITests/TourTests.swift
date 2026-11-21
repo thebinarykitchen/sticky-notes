@@ -176,8 +176,7 @@ final class TourTests: AppTestCase {
         launchTheTour()
         pressOn(to: "holdForMenu")
 
-        practiceNotes.firstMatch.press(forDuration: 1.0)
-        app.buttons["Pink"].awaiting("the colors").tap()
+        practiceNotes.firstMatch.openMenu(showing: app.buttons["Pink"], "the colors").tap()
         awaitPractised()
     }
 

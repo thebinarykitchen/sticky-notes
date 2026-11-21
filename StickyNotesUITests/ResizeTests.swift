@@ -44,12 +44,10 @@ final class ResizeTests: AppTestCase {
     /// The same verb, for anyone a pinch doesn't suit. Menu items drop their identifiers, so
     /// they're matched by label.
     func testTheMenuResizesANoteOneStepAtATime() {
-        note.press(forDuration: 1.0)
-        app.buttons["Make Bigger"].awaiting("Make Bigger").tap()
+        note.openMenu(showing: app.buttons["Make Bigger"], "Make Bigger").tap()
         XCTAssertEqual(note.frame.width, Side.start + Side.step, accuracy: 1)
 
-        note.press(forDuration: 1.0)
-        app.buttons["Make Smaller"].awaiting("Make Smaller").tap()
+        note.openMenu(showing: app.buttons["Make Smaller"], "Make Smaller").tap()
         XCTAssertEqual(note.frame.width, Side.start, accuracy: 1)
     }
 }

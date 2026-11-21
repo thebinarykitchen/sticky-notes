@@ -57,9 +57,8 @@ extension XCUIApplication {
 
     /// Holds a note until its menu is up.
     func showMenu(of text: String) {
-        note(saying: text).awaiting("the note \(text)").press(forDuration: 1.0)
         // Menu items drop their identifiers; matched by label.
-        buttons["Delete"].awaiting("the note's menu")
+        note(saying: text).awaiting("the note \(text)").openMenu(showing: buttons["Delete"], "the note's menu")
     }
 
     /// Closes a note's menu with a tap on the backdrop, at a corner of the canvas clear of the

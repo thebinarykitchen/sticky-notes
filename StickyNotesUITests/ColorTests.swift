@@ -8,15 +8,13 @@ final class ColorTests: AppTestCase {
         launch(seeded: true)
         let note = app.note(saying: "Buy oat milk").awaiting("a seeded note")
 
-        note.press(forDuration: 1.0)
-        XCTAssertTrue(app.buttons["Yellow"].awaiting("the colors").isSelected)
+        XCTAssertTrue(note.openMenu(showing: app.buttons["Yellow"], "the colors").isSelected)
         app.buttons["Pink"].tap()
 
         app.surface.point(0.5, 0.05).tap()
         app.buttons["Delete"].awaitingDisappearance("the menu")
 
-        note.press(forDuration: 1.0)
-        XCTAssertTrue(app.buttons["Pink"].awaiting("the colors again").isSelected)
+        XCTAssertTrue(note.openMenu(showing: app.buttons["Pink"], "the colors again").isSelected)
         XCTAssertFalse(app.buttons["Yellow"].isSelected)
     }
 }

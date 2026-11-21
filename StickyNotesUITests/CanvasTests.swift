@@ -139,8 +139,7 @@ final class CanvasTests: AppTestCase {
         launch(store: .onDisk)
 
         let note = app.note(saying: text).awaiting("the note after relaunch")
-        note.press(forDuration: 1.0)
-        app.buttons["Delete"].awaiting("the Delete item").tap()
+        note.openMenu(showing: app.buttons["Delete"], "the Delete item").tap()
         note.awaitingDisappearance("the cleaned-up note")
     }
 

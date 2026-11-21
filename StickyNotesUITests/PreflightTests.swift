@@ -56,8 +56,7 @@ final class PreflightTests: AppTestCase {
 
         XCTAssertEqual(app.state, .runningForeground, "The store did not open on a relaunch")
         let note = app.note(saying: text).awaiting("the note after a relaunch")
-        note.press(forDuration: 1.0)
-        app.buttons["Delete"].awaiting("the Delete item").tap()
+        note.openMenu(showing: app.buttons["Delete"], "the Delete item").tap()
         note.awaitingDisappearance("the cleaned-up note")
     }
 
@@ -124,8 +123,7 @@ final class PreflightTests: AppTestCase {
         let note = app.note(saying: text).awaiting("the note the button added")
         app.stopWriting()
 
-        note.press(forDuration: 1.0)
-        app.buttons["Delete"].awaiting("the Delete item").tap()
+        note.openMenu(showing: app.buttons["Delete"], "the Delete item").tap()
         note.awaitingDisappearance("the note the menu deleted")
     }
 }

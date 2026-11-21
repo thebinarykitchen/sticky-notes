@@ -67,8 +67,7 @@ final class ProTests: AppTestCase {
 
         app.showBoards()
         let row = app.boardRow("Groceries")
-        row.awaiting("the third board").press(forDuration: 1.0)
-        app.buttons["Delete"].awaiting("the Delete item").tap()
+        row.awaiting("the third board").openMenu(showing: app.buttons["Delete"], "the Delete item").tap()
         app.buttons["Delete Board"].awaiting("the confirmation").tap()
         row.awaitingDisappearance("the deleted board")
 
@@ -83,8 +82,7 @@ final class ProTests: AppTestCase {
         launch(seeded: true)
         let note = app.note(saying: "Buy oat milk").awaiting("a seeded note")
 
-        note.press(forDuration: 1.0)
-        app.buttons["Purple"].awaiting("the colors").tap()
+        note.openMenu(showing: app.buttons["Purple"], "the colors").tap()
         awaitSheet(for: "colors")
         closeSheet()
 
@@ -95,8 +93,7 @@ final class ProTests: AppTestCase {
         launch(seeded: true)
         let note = app.note(saying: "Buy oat milk").awaiting("a seeded note")
 
-        note.press(forDuration: 1.0)
-        app.buttons["Green"].awaiting("the colors").tap()
+        note.openMenu(showing: app.buttons["Green"], "the colors").tap()
         app.surface.point(0.5, 0.05).tap()
         app.buttons["Delete"].awaitingDisappearance("the menu")
 
@@ -108,8 +105,7 @@ final class ProTests: AppTestCase {
         launch(seeded: true, pro: .unlocked)
         let note = app.note(saying: "Buy oat milk").awaiting("a seeded note")
 
-        note.press(forDuration: 1.0)
-        app.buttons["Purple"].awaiting("the colors").tap()
+        note.openMenu(showing: app.buttons["Purple"], "the colors").tap()
         app.surface.point(0.5, 0.05).tap()
         app.buttons["Delete"].awaitingDisappearance("the menu")
 

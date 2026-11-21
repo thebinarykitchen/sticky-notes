@@ -53,9 +53,8 @@ final class DeleteTests: AppTestCase {
         launch(seeded: true)
         let note = app.note(saying: "Buy oat milk").awaiting("a seeded note")
 
-        note.press(forDuration: 1.0)
         // Menu items drop their identifiers; matched by label.
-        app.buttons["Delete"].awaiting("the Delete item").tap()
+        note.openMenu(showing: app.buttons["Delete"], "the Delete item").tap()
         note.awaitingDisappearance("the deleted note")
 
         app.undoButton.awaiting("Undo").tap()
@@ -66,8 +65,7 @@ final class DeleteTests: AppTestCase {
     func testTheUndoOfferGoesAway() {
         launch(seeded: true)
         let note = app.note(saying: "Buy oat milk").awaiting("a seeded note")
-        note.press(forDuration: 1.0)
-        app.buttons["Delete"].awaiting("the Delete item").tap()
+        note.openMenu(showing: app.buttons["Delete"], "the Delete item").tap()
 
         app.undoButton.awaiting("Undo")
         app.undoButton.awaitingDisappearance("Undo, after a while", timeout: 10)

@@ -101,8 +101,7 @@ final class VideoPreviews: UITestCase {
         // 4 — Its menu, and a color only Pro has.
         // Marked once the menu is up: opening it takes most of a beat, and the beat is the pick
         // and the note in its new color, which a cut at four seconds from the press missed.
-        note.press(forDuration: 1.0)
-        let purple = app.buttons["Purple"].awaiting("the colors")
+        let purple = note.openMenu(showing: app.buttons["Purple"], "the colors")
         mark("its-color")
         hold(0.5)
         purple.tap()

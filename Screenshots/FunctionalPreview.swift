@@ -221,8 +221,7 @@ final class PreviewBoards: FunctionalPreviewCase {
         app.alerts.buttons["Cancel"].tap()
         app.alerts.firstMatch.awaitingDisappearance("the prompt")
 
-        app.staticTexts[Seed.anotherBoard].awaiting("a board's row").press(forDuration: 1.0)
-        app.buttons["Rename"].awaiting("the board's menu")
+        app.staticTexts[Seed.anotherBoard].awaiting("a board's row").openMenu(showing: app.buttons["Rename"], "the board's menu")
         settle()
         shots.capture("ABoardsMenu")
 
@@ -233,8 +232,7 @@ final class PreviewBoards: FunctionalPreviewCase {
         app.alerts.buttons["Cancel"].tap()
         app.alerts.firstMatch.awaitingDisappearance("the prompt")
 
-        app.staticTexts[Seed.anotherBoard].press(forDuration: 1.0)
-        app.buttons["Delete"].awaiting("the board's menu").tap()
+        app.staticTexts[Seed.anotherBoard].openMenu(showing: app.buttons["Delete"], "the board's menu").tap()
         app.buttons["Delete Board"].awaiting("the confirmation")
         settle()
         shots.capture("DeletingABoard")
