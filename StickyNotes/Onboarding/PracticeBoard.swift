@@ -130,10 +130,7 @@ private struct PracticeSurface: View {
             add(at: CGPoint(x: size.width / 2, y: size.height / 2))
         }
         .accessibilityIdentifier(A11y.Tour.practiceBoard)
-        .onChange(of: editing) {
-            if editing != nil { did(.tapToWrite) }
-        }
-        .onChange(of: arrangement) { before, after in compare(before, after) }
+        .onChange(of: sides) { before, after in compare(before, after) }
         .onChange(of: store.lastDeletion) {
             guard store.lastDeletion != nil else { return }
             did(.dragToBin)
@@ -169,31 +166,17 @@ private struct PracticeSurface: View {
 
     // MARK: - What the reader does
 
-    /// Each note's place, size and color, to tell what a change did to which.
-    private var arrangement: [UUID: Arrangement] {
-        Dictionary(notes.map { ($0.id, Arrangement($0)) }) { first, _ in first }
+    /// Each note's size, to tell which a change resized.
+    private var sides: [UUID: Double] {
+        Dictionary(notes.map { ($0.id, $0.side) }) { first, _ in first }
     }
 
-    private struct Arrangement: Equatable {
-        let center: CGPoint
-        let side: Double
-        let color: String
-
-        init(_ note: Note) {
-            center = note.center
-            side = note.side
-            color = note.colorRaw
-        }
-    }
-
-    /// What changed between the notes as they were and as they are. A note that is new, or new
-    /// again after an undo, is neither moved nor resized nor recolored.
-    private func compare(_ before: [UUID: Arrangement], _ after: [UUID: Arrangement]) {
-        for (id, now) in after {
+    /// Whether a note was resized between the notes as they were and as they are. A note that is
+    /// new, or new again after an undo, wasn't.
+    private func compare(_ before: [UUID: Double], _ after: [UUID: Double]) {
+        for (id, side) in after {
             guard let was = before[id] else { continue }
-            if now.center != was.center { did(.dragToMove) }
-            if now.side != was.side { did(.pinchToResize) }
-            if now.color != was.color { did(.holdForMenu) }
+            if side != was { did(.pinchToResize) }
         }
     }
 

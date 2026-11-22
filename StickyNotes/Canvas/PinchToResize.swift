@@ -15,6 +15,8 @@ import SwiftUI
 struct PinchToResize<Content: View>: View {
     let note: Note
     let onCrumple: () -> Void
+    /// After a pinch that resized the note rather than crumpling it.
+    var onResize: () -> Void = {}
     @ViewBuilder let content: (_ side: Double) -> Content
 
     @Environment(NoteStore.self) private var store
@@ -45,6 +47,7 @@ struct PinchToResize<Content: View>: View {
                             onCrumple()
                         } else {
                             store.resize(note, to: asked)
+                            onResize()
                         }
                     }
             )

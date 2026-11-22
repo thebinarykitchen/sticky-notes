@@ -47,6 +47,11 @@ public enum LaunchDefault: String, CaseIterable, LaunchDefaultKey {
     /// tour is up at launch. The UI tests answer it, unless a test is about the tour.
     case onboardingFinished = "onboarding.finished"
 
+    /// The lessons the reader knows, as comma-separated `Lesson` raw values. One not known is
+    /// hinted at the foot of a board with notes enough to do it on, so the UI tests preset every
+    /// lesson known, unless a test is about the hints.
+    case onboardingKnown = "onboarding.known"
+
     /// Whether Pro is unlocked. Only holds with ``LaunchFlag/noStoreKit``; otherwise StoreKit
     /// overwrites it.
     case proUnlocked = "pro.unlocked"

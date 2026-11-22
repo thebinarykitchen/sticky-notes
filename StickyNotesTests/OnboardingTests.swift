@@ -186,7 +186,7 @@ struct DemonstrationTests {
         let look = demonstration.look
         let rest = demonstration.rest
         return look.center == rest.center && look.asked == rest.side && look.color == rest.color
-            && look.text == rest.text && !look.isRaised && !look.isOverTrash && !look.isWriting
+            && look.text == rest.text && !look.isRaised && !look.isOverTrash
             && look.isGone == (demonstration.lesson == .doubleTapToAdd)
     }
 
@@ -200,7 +200,7 @@ struct DemonstrationTests {
             let demonstration = demonstration(lesson, at: phase)
             #expect(isAtRest(demonstration))
             #expect(
-                !demonstration.showsBin && !demonstration.showsMenu && !demonstration.offersUndo)
+                !demonstration.showsBin && !demonstration.offersUndo)
             #expect(!demonstration.isAway)
             #expect(demonstration.fingers.allSatisfy { $0.presence == 0 && !$0.isDown })
         }
@@ -233,26 +233,10 @@ struct DemonstrationTests {
             #expect(!done.look.isGone)
             #expect(done.look.center == rest.center)
             #expect(done.fingers[0].at == done.spot)
-        case .tapToWrite:
-            #expect(done.look.isWriting)
-            let written = demonstration(lesson, at: 3.5)
-            #expect(written.look.isWriting)
-            #expect(written.look.text == rest.text + "\n" + String(localized: Lesson.written))
-        case .dragToMove:
-            #expect(distance(done.look.center, done.destination) < 0.001)
-            #expect(!done.look.isRaised)
-            #expect(!TrashZone.contains(done.destination, in: Self.board))
-            #expect(
-                CGRect(origin: .zero, size: Self.board).contains(
-                    PracticeLayoutTests.frame(around: done.destination, side: rest.side)))
         case .pinchToResize:
             #expect(abs(done.look.asked - rest.side * Lesson.spread) < 0.001)
             #expect(NoteGeometry.clampSide(done.look.asked) == done.look.asked)
             #expect(!NoteGeometry.crumples(done.look.asked))
-        case .holdForMenu:
-            #expect(done.look.color == Lesson.picked)
-            #expect(Lesson.picked != rest.color)
-            #expect(done.showsMenu)
         case .dragToBin:
             let over = demonstration(lesson, at: landing - 0.05)
             #expect(TrashZone.contains(over.fingers[0].at, in: Self.board))
@@ -303,7 +287,7 @@ struct DemonstrationTests {
         #expect(isAtRest(still))
         #expect(!still.isAway && !still.drawsNote)
         #expect(still.showsBin == (lesson == .dragToBin))
-        #expect(!still.showsMenu && !still.offersUndo)
+        #expect(!still.offersUndo)
         #expect(still.taps == (lesson == .doubleTapToAdd ? 2 : 1))
     }
 
@@ -317,21 +301,36 @@ struct DemonstrationTests {
         #expect(landing + Demonstration.fade < rewind)
         #expect(rewind + Demonstration.settle < Demonstration.loop(of: lesson))
     }
+}
 
-    @Test("The menu's colors are where its finger taps, clear of the note")
-    func theMenuIsWhereTheFingerGoes() {
-        let tap = demonstration(.holdForMenu, at: 2.0)
-        let menu = tap.menu
-        let swatch = menu.swatch(Lesson.picked)
+@Suite("Which gesture a board hints")
+struct LessonHintTests {
+    @Test("Nothing known: the first the board has notes enough for")
+    func firstInTeachingOrder() {
+        #expect(OnboardingProgress.hint(known: [], notes: 0) == nil, "an empty board says how")
+        #expect(OnboardingProgress.hint(known: [], notes: 1) == .doubleTapToAdd)
+        #expect(OnboardingProgress.hint(known: [.doubleTapToAdd], notes: 1) == .pinchToResize)
+    }
 
-        #expect(CGRect(origin: .zero, size: Self.board).contains(menu.frame))
-        #expect(menu.frame.contains(swatch))
-        #expect(tap.fingers[0].isDown)
-        #expect(distance(tap.fingers[0].at, swatch) < 0.001)
+    @Test("A delete is hinted only with another note left to keep")
+    func deletesWaitForTwoNotes() {
+        let added: Set<Lesson> = [.doubleTapToAdd, .pinchToResize]
+        #expect(OnboardingProgress.hint(known: added, notes: 1) == nil)
+        #expect(OnboardingProgress.hint(known: added, notes: 2) == .dragToBin)
         #expect(
-            !menu.frame.intersects(
-                PracticeLayoutTests.frame(around: tap.rest.center, side: tap.rest.side)))
-        // The tap that puts it away is off it.
-        #expect(!menu.frame.contains(tap.outside))
+            OnboardingProgress.hint(known: added.union([.dragToBin]), notes: 2) == .pinchToCrumple)
+    }
+
+    @Test("Everything known: no hint")
+    func allKnown() {
+        #expect(OnboardingProgress.hint(known: Set(Lesson.allCases), notes: 9) == nil)
+    }
+
+    @Test("The stored list reads back, and drops a lesson it doesn't know")
+    func storedList() {
+        let lessons: Set<Lesson> = [.pinchToCrumple, .doubleTapToAdd]
+        let list = OnboardingProgress.list(of: lessons)
+        #expect(list == "doubleTapToAdd,pinchToCrumple")
+        #expect(OnboardingProgress.lessons(in: list + ",holdForMenu") == lessons)
     }
 }

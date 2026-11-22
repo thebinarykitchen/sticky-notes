@@ -59,6 +59,7 @@ struct CanvasView: View {
     /// The note VoiceOver is on: moved to a revealed one.
     @AccessibilityFocusState private var spoken: UUID?
     private var tour = TourProgress.app
+    private var lessons = OnboardingProgress()
 
     init(board: Board, reveal: Reveal? = nil) {
         self.board = board
@@ -111,6 +112,7 @@ struct CanvasView: View {
         .overlay {
             if notes.isEmpty { emptyState }
         }
+        .overlay(alignment: .bottom) { lessonHint }
         .modifier(
             CanvasOverlays(
                 board: board, notes: notes, drag: drag, scroll: scroll, size: size,
@@ -203,7 +205,10 @@ struct CanvasView: View {
             .contentShape(.rect)
             .gesture(
                 SpatialTapGesture(count: 2)
-                    .onEnded { add(at: scroll.boardPoint(fromContent: $0.location)) }
+                    .onEnded {
+                        add(at: scroll.boardPoint(fromContent: $0.location))
+                        lessons.learn(.doubleTapToAdd)
+                    }
             )
             .accessibilityHidden(true)
     }
@@ -239,6 +244,25 @@ struct CanvasView: View {
             .accessibilityIdentifier(A11y.Canvas.tourButton)
         }
         .padding()
+    }
+
+    /// See ``LessonHint``. Not while a note is held or written on, or while a delete offers Undo
+    /// where the hint would be: each is busy with a gesture already.
+    @ViewBuilder
+    private var lessonHint: some View {
+        let isBusy = editing != nil || drag.isActive || store.lastDeletion != nil
+        let lesson = isBusy ? nil : lessons.hint(notes: notes.count)
+        ZStack {
+            if let lesson {
+                LessonHint(lesson: lesson) {
+                    withAnimation(motion.edit) { lessons.learn(lesson) }
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 24)
+                .transition(motion.banner)
+            }
+        }
+        .animation(motion.edit, value: lesson)
     }
 
     private func add(at point: CGPoint) {

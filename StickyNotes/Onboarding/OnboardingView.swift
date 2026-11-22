@@ -16,6 +16,7 @@ struct OnboardingView: View {
     @Environment(\.dynamicTypeSize) private var typeSize
 
     private var progress = TourProgress.app
+    private var known = OnboardingProgress()
 
     @State private var page: TourPage = .welcome
     /// Lessons done on their boards, across pages.
@@ -222,6 +223,7 @@ struct OnboardingView: View {
 
     private func learn(_ lesson: Lesson) {
         withAnimation(motion.pageTurn) { _ = learned.insert(lesson) }
+        known.learn(lesson)
     }
 
     private func go() {

@@ -62,10 +62,12 @@ extension XCUIApplication {
     ///   - store: Ephemeral unless testing persistence.
     ///   - intelligence: Off unless testing making notes.
     ///   - tour: Answered unless testing the tour.
+    ///   - hints: Off unless testing them: every lesson known, so no board has a hint over its
+    ///     notes.
     ///   - pro: Locked with nothing spent unless testing Pro.
     static func underTest(
         seeded: Bool = false, store: StoreKind = .ephemeral, intelligence: IntelligenceKind = .off,
-        tour: TourState = .answered, pro: ProState = .locked
+        tour: TourState = .answered, hints: Bool = false, pro: ProState = .locked
     ) -> XCUIApplication {
         let app = XCUIApplication()
         var flags: [LaunchFlag] = [.reduceMotion]
@@ -86,6 +88,8 @@ extension XCUIApplication {
         case .due: app.launchArguments += LaunchDefault.onboardingFinished.arguments("0")
         case .whateverStuck: break
         }
+        app.launchArguments += LaunchDefault.onboardingKnown.arguments(
+            hints ? "" : A11y.Tour.lessonPages.joined(separator: ","))
         // Every key preset: `UserDefaults` outlives the run, unlike the ephemeral store.
         let unlocked = LaunchDefault.proUnlocked
         let used = LaunchDefault.proUsedMakeNotes

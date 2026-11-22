@@ -51,6 +51,11 @@ public enum A11y {
         public static let undoBanner = "canvas.undoBanner"
         /// The banner's Undo, which brings the note back.
         public static let undoButton = "canvas.undoButton"
+        /// A gesture the reader hasn't done yet — the tour skipped, or pressed through — named at
+        /// the foot of a board with notes enough to do it on.
+        public static let lessonHint = "canvas.lessonHint"
+        /// The hint's close button: the gesture counts as known.
+        public static let lessonHintDismiss = "canvas.lessonHintDismiss"
         /// The blur over the board while a note is written on in the middle of it. A tap on it
         /// ends the writing.
         public static let blur = "canvas.blur"
@@ -91,8 +96,7 @@ public enum A11y {
         /// `Lesson.allCases` raw values in order, for the UI tests. `OnboardingTests` checks they
         /// match.
         public static let lessonPages = [
-            "doubleTapToAdd", "tapToWrite", "dragToMove", "pinchToResize", "holdForMenu",
-            "dragToBin", "pinchToCrumple",
+            "doubleTapToAdd", "pinchToResize", "dragToBin", "pinchToCrumple",
         ]
 
         /// The line under the title: how to do the gesture, and once it is done, what else to

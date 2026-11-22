@@ -9,8 +9,10 @@ middle, above the keyboard, and the rest of the board blurs); its menu changes i
 onto the bin, or pinch it until it crumples, to delete it; every delete offers Undo. Where the
 device has Apple Intelligence, the toolbar's Make Notes turns what is written in its sheet into
 notes with the on-device model: a list into a note per item, a topic into ideas; everywhere else
-nothing of it is drawn. A first launch opens on a tour of the gestures, a page each with a board to
-try it on; an empty board, the list of boards and the Help menu put it back up. Free has three
+nothing of it is drawn. A first launch opens on a tour of the four gestures nothing on screen shows — double-tap to
+add, pinch to resize, drag to the bin, pinch to crumple — a page each with a board to try it on;
+an empty board, the list of boards and the Help menu put it back up. A gesture the tour was
+skipped past is hinted, one at a time, at the foot of a board with notes enough to do it on. Free has three
 boards, ten Make Notes a month and four colors; Sticky Notes Pro, one purchase, lifts the limits
 and adds four colors.
 `StickyNotes.xcodeproj`, one scheme
@@ -85,6 +87,8 @@ headless in seconds. Under `StickyNotes/`, dependencies only ever run down this 
   away from rest, so a reader's touch at rest lands on the real one. `TourProgress` says when the
   tour is due — a first launch, or `markDue()` from the empty canvas, the list of boards or Help —
   and `TourStage` keeps it to one window. Both are launchpad's `swift-app-tour`.
+  `OnboardingProgress` keeps which lessons are known — done on the tour or a real board, or their
+  hint dismissed — and `LessonHint` names the first one that isn't, under `CanvasView`.
 
 ## Platforms
 
@@ -196,7 +200,8 @@ The exceptions are labels UIKit owns, like a context menu's "Delete".
 - Every launch but `ProState.whateverStuck` passes `--no-storekit` and presets Pro (locked, with
   nothing spent, unless the test is about Pro): asked what it owns, a simulator answers nothing,
   and the app believes it. Buying is `PurchaseTests`', in the unit tests.
-- `underTest` presets the tour answered (`LaunchDefault`) unless the test is about it. A preset
+- `underTest` presets the tour answered and every lesson known (`LaunchDefault`) unless the test
+  is about the tour or the hints. A preset
   hides the app's own writes, so a test that needs one to stick relaunches with nothing preset,
   as `TourTests` does. Under Reduce Motion the tour's demonstrations are stills: a loop would
   never let the app idle.

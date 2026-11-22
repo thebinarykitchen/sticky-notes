@@ -156,6 +156,9 @@ extension XCUIApplication {
             LaunchFlag.ephemeralStore, .seedListing, .fakeAppleIntelligence, .noStoreKit,
         ].map(\.rawValue)
         app.launchArguments += LaunchDefault.onboardingFinished.arguments("1")
+        // Every lesson known: no hint over the boards photographed.
+        app.launchArguments += LaunchDefault.onboardingKnown.arguments(
+            A11y.Tour.lessonPages.joined(separator: ","))
         app.launchArguments += LaunchDefault.proUnlocked.arguments("1")
         app.launchArguments += LaunchDefault.proUsedMakeNotes.arguments("0")
         return app

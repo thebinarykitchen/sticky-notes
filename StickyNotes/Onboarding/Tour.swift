@@ -51,9 +51,9 @@ nonisolated enum TourCopy {
     /// Names the count, so it changes with the lessons. A whole string rather than a number put
     /// into one, for translation.
     static let welcomeTitle = LocalizedStringResource(
-        "Seven Gestures",
+        "Four Gestures",
         comment:
-            "The title of the tour's welcome page: the tour has a page for each of seven gestures."
+            "The title of the tour's welcome page: the tour has a page for each of four gestures."
     )
 
     static var welcomeBody: LocalizedStringResource { welcomeBody(for: .current) }

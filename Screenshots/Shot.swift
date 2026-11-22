@@ -13,10 +13,7 @@ enum Shot: Int, CaseIterable, ListingShot {
 
     case tourWelcome
     case doubleTapToAdd
-    case tapToWrite
-    case dragToMove
     case pinchToResize
-    case holdForMenu
     case dragToBin
     case pinchToCrumple
     case unlockingPro
@@ -26,8 +23,7 @@ enum Shot: Int, CaseIterable, ListingShot {
 
     /// The tour's lesson pages, in `A11y.Tour.lessonPages` order.
     static let lessons: [Shot] = [
-        .doubleTapToAdd, .tapToWrite, .dragToMove, .pinchToResize, .holdForMenu, .dragToBin,
-        .pinchToCrumple,
+        .doubleTapToAdd, .pinchToResize, .dragToBin, .pinchToCrumple,
     ]
 
     /// Written out rather than derived from the case name, so renames don't change file names.
@@ -42,10 +38,7 @@ enum Shot: Int, CaseIterable, ListingShot {
         case .search: "search"
         case .tourWelcome: "tour-welcome"
         case .doubleTapToAdd: "double-tap-to-add"
-        case .tapToWrite: "tap-to-write"
-        case .dragToMove: "drag-to-move"
         case .pinchToResize: "pinch-to-resize"
-        case .holdForMenu: "hold-for-menu"
         case .dragToBin: "drag-to-bin"
         case .pinchToCrumple: "pinch-to-crumple"
         case .unlockingPro: "unlocking-pro"

@@ -24,6 +24,8 @@ struct NoteView: View {
     @Environment(\.proOffer) private var offer
     @Environment(\.motion) private var motion
     @Environment(\.layoutDirection) private var layoutDirection
+    /// Told of each gesture the tour teaches, so its hint goes once it has been done.
+    private var lessons = OnboardingProgress()
 
     private var isEditing: Bool { editing.wrappedValue == note.id }
 
@@ -38,7 +40,12 @@ struct NoteView: View {
     }
 
     var body: some View {
-        PinchToResize(note: note, onCrumple: delete) { side in
+        PinchToResize(note: note) {
+            lessons.learn(.pinchToCrumple)
+            delete()
+        } onResize: {
+            lessons.learn(.pinchToResize)
+        } content: { side in
             card(side: side)
         }
         .contextMenu {
@@ -81,7 +88,10 @@ struct NoteView: View {
                 }
             }
         }
-        .dragToMove(note, in: canvas, onTrash: delete)
+        .dragToMove(note, in: canvas) {
+            lessons.learn(.dragToBin)
+            delete()
+        }
         .accessibilityElement(children: .contain)
         .accessibilityLabel(Text(note.color.accessibilityName))
         .accessibilityIdentifier(A11y.Note.card)

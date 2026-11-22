@@ -34,15 +34,6 @@ struct GhostHand: View {
             .fill(.gray.opacity(finger.isDown ? 0.45 : 0.3))
             .overlay(Circle().strokeBorder(.white.opacity(0.9), lineWidth: 1.5))
             .overlay {
-                if let hold = finger.hold {
-                    Circle()
-                        .trim(from: 0, to: hold)
-                        .stroke(.tint, style: StrokeStyle(lineWidth: 3, lineCap: .round))
-                        .rotationEffect(.degrees(-90))
-                        .padding(-6)
-                }
-            }
-            .overlay {
                 // A second ring round the first: tap twice.
                 if isStill && demonstration.taps > 1 {
                     Circle()

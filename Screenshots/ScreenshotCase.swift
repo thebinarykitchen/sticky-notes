@@ -49,6 +49,9 @@ extension XCUIApplication {
         app.launchArguments = flags.map(\.rawValue)
         // The tour version the app is on: `TourProgress.version`.
         app.launchArguments += LaunchDefault.onboardingFinished.arguments(tour ? "0" : "1")
+        // Every lesson known: no hint over the boards photographed.
+        app.launchArguments += LaunchDefault.onboardingKnown.arguments(
+            A11y.Tour.lessonPages.joined(separator: ","))
         app.launchArguments += LaunchDefault.proUnlocked.arguments(pro ? "1" : "0")
         app.launchArguments += LaunchDefault.proUsedMakeNotes.arguments("0")
 

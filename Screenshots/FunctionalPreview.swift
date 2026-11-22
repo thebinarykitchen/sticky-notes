@@ -87,6 +87,9 @@ extension XCUIApplication {
         app.launchArguments = flags.map(\.rawValue)
 
         app.launchArguments += LaunchDefault.onboardingFinished.arguments(tour ? "0" : "1")
+        // Every lesson known: no hint over the boards photographed.
+        app.launchArguments += LaunchDefault.onboardingKnown.arguments(
+            A11y.Tour.lessonPages.joined(separator: ","))
         app.launchArguments += LaunchDefault.proUnlocked.arguments(pro == .unlocked ? "1" : "0")
         // Exceeds any allowance, so the wall doesn't depend on what the limit currently is.
         app.launchArguments += LaunchDefault.proUsedMakeNotes.arguments(
@@ -221,7 +224,8 @@ final class PreviewBoards: FunctionalPreviewCase {
         app.alerts.buttons["Cancel"].tap()
         app.alerts.firstMatch.awaitingDisappearance("the prompt")
 
-        app.staticTexts[Seed.anotherBoard].awaiting("a board's row").openMenu(showing: app.buttons["Rename"], "the board's menu")
+        app.staticTexts[Seed.anotherBoard].awaiting("a board's row").openMenu(
+            showing: app.buttons["Rename"], "the board's menu")
         settle()
         shots.capture("ABoardsMenu")
 
@@ -232,7 +236,9 @@ final class PreviewBoards: FunctionalPreviewCase {
         app.alerts.buttons["Cancel"].tap()
         app.alerts.firstMatch.awaitingDisappearance("the prompt")
 
-        app.staticTexts[Seed.anotherBoard].openMenu(showing: app.buttons["Delete"], "the board's menu").tap()
+        app.staticTexts[Seed.anotherBoard].openMenu(
+            showing: app.buttons["Delete"], "the board's menu"
+        ).tap()
         app.buttons["Delete Board"].awaiting("the confirmation")
         settle()
         shots.capture("DeletingABoard")

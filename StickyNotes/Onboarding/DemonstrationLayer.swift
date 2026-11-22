@@ -72,14 +72,10 @@ private struct DemonstrationFrame: View {
                         .transition(.opacity)
                 }
                 banner
-                writing(look)
-                menu(look)
             }
             .animation(motion.lift, value: demonstration.showsBin)
             .animation(motion.edit, value: demonstration.offersUndo)
             .animation(motion.edit, value: look.isGone)
-            .animation(motion.writing, value: look.isWriting)
-            .animation(motion.lift, value: demonstration.showsMenu)
             // The board going back as one change, the way an undo puts it back.
             .animation(motion.edit, value: demonstration.isRewound)
             // Out of the beats' animations: between loops it goes back to where it starts
@@ -98,99 +94,10 @@ private struct DemonstrationFrame: View {
                     .notePaper(side: NoteGeometry.clampSide(look.asked), color: look.color)
                     .modifier(PinchLook(asked: look.asked))
                     .modifier(HeldLook(isRaised: look.isRaised, isOverTrash: look.isOverTrash))
-                    // In the middle while it is written on.
-                    .opacity(look.isWriting ? 0 : 1)
                     .transition(motion.arrival)
             }
         }
         .position(look.center)
-    }
-
-    /// The rest of the board blurred, and the note in the middle, as ``EditedNote`` draws it.
-    private func writing(_ look: Demonstration.Look) -> some View {
-        let rest = demonstration.rest
-        let side = EditedNote.side(rest.side, in: board)
-        return ZStack {
-            if look.isWriting {
-                Rectangle()
-                    .fill(.ultraThinMaterial)
-                    .transition(.opacity)
-                NoteView.words(look.text)
-                    .notePaper(side: side, color: look.color)
-                    .shadow(color: .black.opacity(0.25), radius: NoteStyle.liftedShadow, y: 8)
-                    .position(x: board.width / 2, y: board.height / 2)
-                    // From its place on the board, at its own size, and back.
-                    .transition(
-                        motion.toTheMiddle(
-                            from: CGSize(
-                                width: rest.center.x - board.width / 2,
-                                height: rest.center.y - board.height / 2),
-                            scale: rest.side / side))
-            }
-        }
-    }
-
-    /// A stand-in for the note's menu, laid out as ``Demonstration/Menu`` says: the rows the real
-    /// one has, and its colors, the note's own marked.
-    private func menu(_ look: Demonstration.Look) -> some View {
-        let frame = demonstration.menu.frame
-        return ZStack {
-            if demonstration.showsMenu {
-                VStack(spacing: 0) {
-                    row(
-                        Text("Make Bigger", comment: "Makes a note one step larger."),
-                        symbol: "plus.magnifyingglass")
-                    Divider()
-                    row(
-                        Text("Make Smaller", comment: "Makes a note one step smaller."),
-                        symbol: "minus.magnifyingglass")
-                    Divider()
-                    palette(marking: look.color)
-                    Divider()
-                    row(Text("Delete", comment: "Removes a note."), symbol: "trash")
-                        .foregroundStyle(.red)
-                }
-                .frame(width: frame.width, height: frame.height)
-                .background(.regularMaterial, in: .rect(cornerRadius: 12))
-                .shadow(color: .black.opacity(0.15), radius: 8, y: 2)
-                .transition(motion.arrival)
-            }
-        }
-        .position(x: frame.midX, y: frame.midY)
-    }
-
-    private func row(_ title: Text, symbol: String) -> some View {
-        HStack {
-            title
-            Spacer(minLength: 8)
-            Image(systemName: symbol)
-        }
-        .font(.subheadline)
-        .lineLimit(1)
-        // A picture of the menu, not the menu: it keeps its size at any text size.
-        .minimumScaleFactor(0.5)
-        .padding(.horizontal, 14)
-        .frame(height: Demonstration.Menu.rowHeight)
-    }
-
-    /// The colors share the row equally, as ``Demonstration/Menu/swatch(_:)`` has it.
-    private func palette(marking current: NoteColor) -> some View {
-        HStack(spacing: 0) {
-            ForEach(NoteColor.handedOut, id: \.self) { color in
-                RoundedRectangle(cornerRadius: 3)
-                    .fill(color.fill)
-                    .overlay(RoundedRectangle(cornerRadius: 3).strokeBorder(.separator))
-                    .frame(width: 24, height: 24)
-                    .padding(4)
-                    .overlay {
-                        if color == current {
-                            RoundedRectangle(cornerRadius: 6).strokeBorder(.tint, lineWidth: 2)
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-            }
-        }
-        .frame(height: Demonstration.Menu.paletteHeight)
     }
 
     /// "Note deleted · Undo", where the canvas puts it. Only a picture: nothing here takes a tap.

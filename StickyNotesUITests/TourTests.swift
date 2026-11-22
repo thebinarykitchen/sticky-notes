@@ -156,44 +156,6 @@ final class TourTests: AppTestCase {
         XCTAssertEqual(app.notes.count, 0, "Practice reached the reader's board")
     }
 
-    /// The canvas's own tap: the note comes to the middle of the practice board with the rest of
-    /// it blurred, and a tap on the blur sends it back.
-    func testTappingAPracticeNoteOpensItForWriting() {
-        launchTheTour()
-        pressOn(to: "tapToWrite")
-
-        practiceNotes.firstMatch.tap()
-        app.find(A11y.Canvas.blur).awaiting("the blur over the practice board")
-        awaitPractised()
-
-        // A corner of the board, clear of the note in the middle.
-        practiceBoard.point(0, 0).withOffset(CGVector(dx: 12, dy: 12)).tap()
-        app.find(A11y.Canvas.blur).awaitingDisappearance("the blur")
-    }
-
-    /// The note's own menu. Its items are UIKit's, and drop their identifiers: matched by label.
-    func testHoldingAPracticeNoteOpensItsMenu() {
-        launchTheTour()
-        pressOn(to: "holdForMenu")
-
-        practiceNotes.firstMatch.openMenu(showing: app.buttons["Pink"], "the colors").tap()
-        awaitPractised()
-    }
-
-    func testDraggingAPracticeNoteMovesIt() {
-        launchTheTour()
-        pressOn(to: "dragToMove")
-        let note = practiceNotes.firstMatch
-        let start = note.frame
-
-        note.point(0.5, 0.5).press(
-            forDuration: 0.2, thenDragTo: practiceBoard.point(0.3, 0.6), withVelocity: .slow,
-            thenHoldForDuration: 0.1)
-
-        awaitPractised()
-        XCTAssertGreaterThan(abs(note.frame.midY - start.midY), 40, "the note didn't move")
-    }
-
     func testPinchingAPracticeNoteResizesIt() {
         launchTheTour()
         pressOn(to: "pinchToResize")

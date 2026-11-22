@@ -34,6 +34,7 @@ that checks a write sticks relaunches without it.
 | Key | Why it can't be tapped |
 | --- | --- |
 | `onboarding.finished` | Whether the tour is up at launch depends on what the last run on that simulator left in its defaults, which `--ephemeral-store` doesn't reach. Answered by tapping, it would put the tour at the top of every test. The UI tests preset it answered, unless a test is about the tour. |
+| `onboarding.known` | A lesson not known is hinted at the foot of a board with notes enough for it, over the notes a test taps. The UI tests and screenshots preset every lesson known, unless a test is about the hints. |
 | `pro.unlocked` | Buying Pro is a payment sheet no test can get through. Holds only with `--no-storekit`. |
 | `pro.used.makeNotes` | Running out takes ten Make Notes runs, and the count outlives the ephemeral store. The UI tests preset it, to none spent unless a test is about running out. |
 

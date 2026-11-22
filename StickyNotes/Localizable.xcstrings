@@ -62,9 +62,6 @@
     "All Notes" : {
       "comment" : "The title of a board's overview."
     },
-    "Apples, bread and milk" : {
-      "comment" : "Written on the tour's practice note \"Groceries\", as the tour shows writing."
-    },
     "Ask Sam" : {
       "comment" : "A note on the tour's practice board."
     },
@@ -80,20 +77,8 @@
     "Boards" : {
       "comment" : "The title of the list of boards."
     },
-    "Boards have no edges: hold a note near the edge of the screen, and the board scrolls along with it." : {
-      "comment" : "On the tour, once a note has been moved."
-    },
-    "Boards have no edges: hold a note near the edge of the window, and the board scrolls along with it." : {
-      "comment" : "On the tour, once a note has been moved, on a Mac."
-    },
-    "Book the vet" : {
-      "comment" : "A note on the tour's practice board."
-    },
     "Bring lemonade" : {
       "comment" : "The note the tour's practice board adds on a double tap."
-    },
-    "Call Grandma" : {
-      "comment" : "A note on the tour's practice board."
     },
     "Can't make notes from that. Try different words." : {
       "comment" : "Above what was written, when no notes can be made from it."
@@ -104,20 +89,8 @@
     "Change Color" : {
       "comment" : "What Undo and Redo call changing a note's color."
     },
-    "Click a note to write on it." : {
-      "comment" : "How to write on a note, on the tour, on a Mac."
-    },
-    "Click to Write" : {
-      "comment" : "Title of the tour page on writing on a note, on a Mac."
-    },
     "Color" : {
       "comment" : "Labels the colors in a note's menu."
-    },
-    "Control-Click for the Menu" : {
-      "comment" : "Title of the tour page on a note's menu, which changes its color, on a Mac."
-    },
-    "Control-click a note, then pick a color for it." : {
-      "comment" : "How to open a note's menu and change its color, on the tour, on a Mac."
     },
     "Couldn't make notes just now. Try again." : {
       "comment" : "Above what was written, when making notes failed."
@@ -137,8 +110,8 @@
     "Delete Note" : {
       "comment" : "What Undo and Redo call deleting a note."
     },
-    "Dentist on Tuesday" : {
-      "comment" : "A note on the tour's practice board."
+    "Dismiss hint" : {
+      "comment" : "VoiceOver label for the button that closes a gesture's hint."
     },
     "Done" : {
       "comment" : "Ends writing on a note: what VoiceOver calls the blur over the board."
@@ -164,12 +137,6 @@
     "Drag a note onto the bin that appears at the bottom, and let go once the bin turns red." : {
       "comment" : "How to delete a note by dragging it onto the bin, on the tour."
     },
-    "Drag a note to move it somewhere else on the board." : {
-      "comment" : "How to move a note, on the tour."
-    },
-    "Drag to Move" : {
-      "comment" : "Title of the tour page on moving a note."
-    },
     "Drag to the Bin" : {
       "comment" : "Title of the tour page on deleting a note by dragging it onto the bin."
     },
@@ -191,6 +158,9 @@
     "Every page has a board to practice on. Its notes aren't yours, so try anything." : {
       "comment" : "The tour's welcome page, its second paragraph."
     },
+    "Four Gestures" : {
+      "comment" : "The title of the tour's welcome page: the tour has a page for each of four gestures."
+    },
     "Four colors are always free" : {
       "comment" : "Under the colors offer on the Pro sheet."
     },
@@ -211,12 +181,6 @@
     },
     "Green note" : {
       "comment" : "VoiceOver name for a note."
-    },
-    "Groceries" : {
-      "comment" : "A note on the tour's practice board; the tour writes a list under it."
-    },
-    "Gym bag" : {
-      "comment" : "A note on the tour's practice board."
     },
     "Ideas for the party" : {
       "comment" : "A note on the tour's practice board."
@@ -317,9 +281,6 @@
     "On your own boards, a new note opens for writing straight away. The + button adds one in the middle of the window, too." : {
       "comment" : "On the tour, once a note has been added, on a Mac."
     },
-    "One purchase lifts every limit below." : {
-      "comment" : "Under the Pro sheet's title, when it was opened from the list of boards."
-    },
     "Only with Pro" : {
       "comment" : "Under the colors offer on the Pro sheet when one of them was picked."
     },
@@ -386,9 +347,6 @@
     "Search Notes" : {
       "comment" : "Placeholder in the field that searches every board's notes."
     },
-    "Seven Gestures" : {
-      "comment" : "The title of the tour's welcome page: the tour has a page for each of seven gestures."
-    },
     "Show All Notes" : {
       "comment" : "Opens the overview of every note on the board."
     },
@@ -415,6 +373,9 @@
         }
       }
     },
+    "Sticky Notes" : {
+      "comment" : "The app's name, which the Pro sheet's title puts before PRO."
+    },
     "Sticky Notes Pro" : {
       "comment" : "The name of the one thing this app sells, and the Pro sheet's title."
     },
@@ -430,12 +391,6 @@
     "Support" : {
       "comment" : "In the list of boards: opens the support page."
     },
-    "Tap a note to write on it." : {
-      "comment" : "How to write on a note, on the tour."
-    },
-    "Tap to Write" : {
-      "comment" : "Title of the tour page on writing on a note."
-    },
     "Teal" : {
       "comment" : "A color in a note's menu."
     },
@@ -445,15 +400,6 @@
     "That's too long to make notes from. Try a shorter piece." : {
       "comment" : "Above what was written, when it is too long to make notes from."
     },
-    "The menu also makes a note bigger or smaller, or deletes it. New notes take the color after the last one." : {
-      "comment" : "On the tour, once a note's color has been changed."
-    },
-    "The note comes to the middle while you write, and goes back when you click anywhere around it." : {
-      "comment" : "On the tour, once a note has been opened for writing, on a Mac."
-    },
-    "The note comes to the middle while you write, and goes back when you tap anywhere around it." : {
-      "comment" : "On the tour, once a note has been opened for writing."
-    },
     "The words reflow to fit. Make Bigger and Make Smaller in the note's menu do the same, a step at a time." : {
       "comment" : "On the tour, once a note has been resized."
     },
@@ -462,12 +408,6 @@
     },
     "Three boards are free. Pro lets you make as many as you like." : {
       "comment" : "Under the Pro sheet's title when every free board is used."
-    },
-    "Touch and Hold for the Menu" : {
-      "comment" : "Title of the tour page on a note's menu, which changes its color."
-    },
-    "Touch and hold a note, then pick a color for it." : {
-      "comment" : "How to open a note's menu and change its color, on the tour."
     },
     "Undo" : {
       "comment" : "Brings back the note just deleted."
@@ -486,9 +426,6 @@
     },
     "Version" : {
       "comment" : "In the list of boards, beside the app's version."
-    },
-    "Water the plants" : {
-      "comment" : "A note on the tour's practice board."
     },
     "What to make notes from" : {
       "comment" : "VoiceOver label for the field notes are made from."

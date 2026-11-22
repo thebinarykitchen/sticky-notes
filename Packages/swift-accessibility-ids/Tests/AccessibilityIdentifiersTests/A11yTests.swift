@@ -23,6 +23,7 @@ struct A11yTests {
                 A11y.Canvas.makeNotesButton,
                 A11y.Canvas.overviewButton, A11y.Canvas.emptyState, A11y.Canvas.tourButton,
                 A11y.Canvas.undoBanner, A11y.Canvas.undoButton, A11y.Canvas.blur,
+                A11y.Canvas.lessonHint, A11y.Canvas.lessonHintDismiss,
                 A11y.Overview.note, A11y.MakeNotes.text, A11y.MakeNotes.addButton,
                 A11y.Note.card, A11y.Note.text,
             ] + Self.tour + Self.pro

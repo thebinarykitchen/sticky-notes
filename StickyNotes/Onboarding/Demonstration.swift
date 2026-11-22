@@ -35,8 +35,6 @@ nonisolated struct Demonstration: Equatable {
         var isDown: Bool
         /// 0...1: in before the gesture, and out once it has let go.
         var presence: Double
-        /// How far a touch and hold has got, 0...1; nil for any other touch.
-        var hold: Double?
     }
 
     /// The way a finger goes, drawn as a dotted line.
@@ -52,11 +50,9 @@ nonisolated struct Demonstration: Equatable {
         var asked: Double
         var color: NoteColor
         var text: String
-        /// Lifted off the board: held by a drag, or by its menu.
+        /// Lifted off the board: held by a drag.
         var isRaised = false
         var isOverTrash = false
-        /// In the middle, being written on, with the rest of the board blurred.
-        var isWriting = false
         /// Deleted — or, for the double tap, not added yet.
         var isGone = false
     }
@@ -67,23 +63,18 @@ nonisolated struct Demonstration: Equatable {
     static func loop(of lesson: Lesson) -> Double {
         switch lesson {
         case .doubleTapToAdd: 3.6
-        case .tapToWrite: 5.8
-        case .dragToMove: 4.2
         case .pinchToResize: 4.0
-        case .holdForMenu: 5.4
         case .dragToBin, .pinchToCrumple: 4.8
         }
     }
 
-    /// When what the gesture does lands — the note added, opened for writing, put down, resized,
-    /// recolored or deleted — as the finger lets go.
+    /// When what the gesture does lands — the note added, resized or deleted — as the finger
+    /// lets go.
     static func landing(of lesson: Lesson) -> Double {
         switch lesson {
         case .doubleTapToAdd: 0.8
-        case .tapToWrite: 0.6
         case .pinchToResize: 1.9
-        case .dragToMove, .dragToBin, .pinchToCrumple: 2.0
-        case .holdForMenu: 2.1
+        case .dragToBin, .pinchToCrumple: 2.0
         }
     }
 
@@ -91,10 +82,7 @@ nonisolated struct Demonstration: Equatable {
     static func rewind(of lesson: Lesson) -> Double {
         switch lesson {
         case .doubleTapToAdd: 2.8
-        case .tapToWrite: 5.1
-        case .dragToMove: 3.4
         case .pinchToResize: 3.2
-        case .holdForMenu: 4.6
         case .dragToBin, .pinchToCrumple: 3.9
         }
     }
@@ -102,9 +90,9 @@ nonisolated struct Demonstration: Equatable {
     /// When the finger first presses.
     static func press(of lesson: Lesson) -> Double {
         switch lesson {
-        case .doubleTapToAdd, .tapToWrite: 0.45
-        case .dragToMove, .dragToBin: 0.3
-        case .pinchToResize, .pinchToCrumple, .holdForMenu: 0.35
+        case .doubleTapToAdd: 0.45
+        case .dragToBin: 0.3
+        case .pinchToResize, .pinchToCrumple: 0.35
         }
     }
 
@@ -117,16 +105,6 @@ nonisolated struct Demonstration: Equatable {
     /// How long the demonstration goes on drawing its note once the board has it back, so the
     /// board's own is there before this one goes.
     private static let overlap = 0.1
-
-    /// The writing, after the tap that starts it: when the words start and stop coming, and when
-    /// a tap on the blur ends it.
-    private static let typing = 1.0...3.0
-    private static let writingEnds = 3.85
-
-    /// The menu, after the hold that opens it: when it is up, and when the color picked from it
-    /// lands; a tap outside it puts it away.
-    private static let menuOpens = 1.0
-    private static let menuCloses = 3.25
 
     private var isStill: Bool { phase == nil }
 
@@ -153,54 +131,6 @@ nonisolated struct Demonstration: Equatable {
     /// Where the double tap lands.
     var spot: CGPoint { Lesson.place(Lesson.spot, in: board) }
 
-    /// Where the drag puts its note down.
-    var destination: CGPoint {
-        let fit = Lesson.fit(in: board)
-        return CGPoint(
-            x: rest.center.x + Lesson.travel.width * fit,
-            y: rest.center.y + Lesson.travel.height * fit)
-    }
-
-    /// Where a tap ends the writing: on the blur, in a corner the middle note never reaches.
-    var corner: CGPoint { CGPoint(x: 44, y: 44) }
-
-    /// Where a tap puts the menu away: on the board, clear of the menu and the notes.
-    var outside: CGPoint { CGPoint(x: board.width - 44, y: 44) }
-
-    var menu: Menu { Menu(for: rest, on: board) }
-
-    /// The stand-in for the note's menu, under the note — or over it, where there's no room below.
-    nonisolated struct Menu: Equatable {
-        static let width: CGFloat = 200
-        static let rowHeight: CGFloat = 36
-        static let paletteHeight: CGFloat = 44
-        static let gap: CGFloat = 12
-        /// Make Bigger and Make Smaller, the colors, then Delete, as the menu has them.
-        static var height: CGFloat { 3 * rowHeight + paletteHeight }
-
-        let frame: CGRect
-
-        init(for note: Rest, on board: CGSize) {
-            let below = note.center.y + note.side / 2 + Self.gap
-            let above = note.center.y - note.side / 2 - Self.gap - Self.height
-            frame = CGRect(
-                x: min(max(note.center.x - Self.width / 2, 8), board.width - Self.width - 8),
-                y: below + Self.height <= board.height - 8 ? below : above,
-                width: Self.width, height: Self.height)
-        }
-
-        /// The middle of the swatch for `color`: the colors share the row equally. The four every
-        /// note is handed, not all eight, which wouldn't fit a swatch apiece in the picture.
-        func swatch(_ color: NoteColor) -> CGPoint {
-            let colors = NoteColor.handedOut
-            let slot = frame.width / CGFloat(colors.count)
-            let index = CGFloat(colors.firstIndex(of: color) ?? 0)
-            return CGPoint(
-                x: frame.minX + slot * (index + 0.5),
-                y: frame.minY + 2 * Self.rowHeight + Self.paletteHeight / 2)
-        }
-    }
-
     // MARK: - The hand
 
     var fingers: [Finger] {
@@ -211,29 +141,10 @@ nonisolated struct Demonstration: Equatable {
                     at: spot, presence: arriving(0) * leaving(Self.landing(of: lesson)),
                     isDown: pressed(Self.press(of: lesson)..<0.55) || pressed(0.7..<0.8))
             ]
-        case .tapToWrite:
-            // The same finger taps the note, then the blur.
-            if isStill || t < 2 {
-                [
-                    finger(
-                        at: rest.center, presence: arriving(0) * leaving(Self.landing(of: lesson)),
-                        isDown: pressed(Self.press(of: lesson)..<Self.landing(of: lesson)))
-                ]
-            } else {
-                [
-                    finger(
-                        at: corner, presence: arriving(3.3) * leaving(Self.writingEnds),
-                        isDown: pressed(3.7..<Self.writingEnds))
-                ]
-            }
-        case .dragToMove:
-            [dragging(to: destination)]
         case .dragToBin:
             [dragging(to: TrashZone.center(in: board))]
         case .pinchToResize, .pinchToCrumple:
             pinching
-        case .holdForMenu:
-            [holding]
         }
     }
 
@@ -242,8 +153,7 @@ nonisolated struct Demonstration: Equatable {
 
     var tracks: [Track] {
         switch lesson {
-        case .doubleTapToAdd, .tapToWrite, .holdForMenu: []
-        case .dragToMove: [Track(from: rest.center, to: destination)]
+        case .doubleTapToAdd: []
         case .dragToBin: [Track(from: rest.center, to: TrashZone.center(in: board))]
         case .pinchToResize, .pinchToCrumple:
             [-1.0, 1.0].map { sign in
@@ -269,27 +179,6 @@ nonisolated struct Demonstration: Equatable {
                 presence: arriving(0) * leaving(Self.landing(of: lesson)),
                 isDown: pressed(Self.press(of: lesson)..<Self.landing(of: lesson)))
         }
-    }
-
-    /// Down on the note until the menu opens; across to the color, and a tap on it; then a tap
-    /// outside, which puts the menu away.
-    private var holding: Finger {
-        let swatch = menu.swatch(Lesson.picked)
-        let hold = Self.press(of: lesson)..<1.05
-        if isStill {
-            return Finger(at: rest.center, isDown: true, presence: 1, hold: 1)
-        }
-        if t >= 2.5 {
-            return finger(
-                at: outside, presence: arriving(2.7) * leaving(Self.menuCloses),
-                isDown: pressed(3.1..<Self.menuCloses))
-        }
-        return Finger(
-            at: Self.mix(rest.center, swatch, Self.ramp(t, from: 1.2, to: 1.8)),
-            isDown: pressed(hold) || pressed(1.95..<Self.landing(of: lesson)),
-            presence: arriving(0) * leaving(Self.landing(of: lesson)),
-            hold: hold.contains(t)
-                ? min(1, (t - hold.lowerBound) / (Self.menuOpens - hold.lowerBound)) : nil)
     }
 
     /// A finger as the still has it, down where the gesture starts, or as it is now.
@@ -330,19 +219,10 @@ nonisolated struct Demonstration: Equatable {
         switch lesson {
         case .doubleTapToAdd:
             look.isGone = t < landing || t >= rewind
-        case .tapToWrite:
-            look.isWriting = t >= landing && t < Self.writingEnds
-            if t >= Self.typing.lowerBound && t < rewind { look.text = rest.text + "\n" + typed }
-        case .dragToMove:
-            look.isRaised = t >= 0.4 && t < landing
-            if t < rewind { look.center = fingers[0].at }
         case .pinchToResize:
             if t < rewind {
                 look.asked = Self.mix(rest.side, rest.side * Lesson.spread, pinchProgress)
             }
-        case .holdForMenu:
-            look.isRaised = t >= 0.9 && t < Self.menuCloses
-            if t >= landing && t < rewind { look.color = Lesson.picked }
         case .dragToBin:
             look.isRaised = t >= 0.4 && t < landing
             if t < landing {
@@ -364,22 +244,9 @@ nonisolated struct Demonstration: Equatable {
         lesson == .dragToBin && (isStill || (t >= 0.45 && t < Self.landing(of: lesson)))
     }
 
-    var showsMenu: Bool {
-        lesson == .holdForMenu && !isStill && t >= Self.menuOpens && t < Self.menuCloses
-    }
-
     var offersUndo: Bool {
         (lesson == .dragToBin || lesson == .pinchToCrumple) && !isStill
             && t >= Self.landing(of: lesson) && t < Self.rewind(of: lesson)
-    }
-
-    /// What has been written on the note by now.
-    private var typed: String {
-        let written = String(localized: Lesson.written)
-        let typing = Self.typing
-        let share = min(
-            max((t - typing.lowerBound) / (typing.upperBound - typing.lowerBound), 0), 1)
-        return String(written.prefix(Int((Double(written.count) * share).rounded(.down))))
     }
 
     // MARK: - Easing
