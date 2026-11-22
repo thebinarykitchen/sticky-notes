@@ -24,11 +24,14 @@ extension XCUIApplication {
 
     /// Brings the list of boards up: back from the canvas on an iPhone, the sidebar's toggle on
     /// an iPad in portrait, and nothing where the list already stands beside the canvas. Both
-    /// buttons are UIKit's: the back button is labeled with the list's title.
+    /// buttons are UIKit's. The back button is labeled with the list's title in an iPhone's
+    /// navigation bar; on an iPhone Duo it stands in the canvas's toolbar with no label, only
+    /// UIKit's identifier.
     func showBoards() {
         if !addBoardButton.isHittable {
-            let back = navigationBars.buttons["Boards"]
-            if back.exists {
+            let back = [navigationBars.buttons["Boards"], buttons[Level.backButton]]
+                .first { $0.exists }
+            if let back {
                 back.tap()
             } else {
                 buttons[Level.sidebarToggle].awaiting("the button that puts the list up").tap()
@@ -44,10 +47,14 @@ extension XCUIApplication {
         navigationBars[name].awaiting("the canvas of \(name)")
     }
 
-    /// The list's search field, focused and written in. It is UIKit's, found by type.
+    /// The list's search field, focused and written in. It is UIKit's, found by type. On an
+    /// iPhone Duo it is folded into a Search button in the toolbar until that is tapped.
     @discardableResult
     func search(for text: String) -> XCUIElement {
         showBoards()
+        if !searchFields.firstMatch.exists {
+            toolbars.buttons[Level.searchButton].awaiting("the search button").tap()
+        }
         let field = searchFields.firstMatch.awaiting("the search field")
         field.tap()
         dismissTheKeyboardTip()
@@ -145,4 +152,8 @@ enum Seed {
 enum Level {
     /// UIKit's sidebar toggle identifier (note UIKit's `SideBar` spelling).
     static let sidebarToggle = "ToggleSideBar"
+    /// UIKit's back button identifier, where the button has no label to find it by.
+    static let backButton = "BackButton"
+    /// The label of the button a minimized `.searchable` field is folded into.
+    static let searchButton = "Search"
 }
