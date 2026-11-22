@@ -28,12 +28,8 @@ struct ProSheet: View {
             purchase: pro.purchase,
             features: features,
             reason: reason.feature,
-            title: LocalizedStringResource(
-                "Sticky Notes Pro",
-                comment: "The name of the one thing this app sells, and the Pro sheet's title."),
-            overview: LocalizedStringResource(
-                "One purchase lifts every limit below.",
-                comment: "Under the Pro sheet's title, when it was opened from the list of boards."),
+            appName: LocalizedStringResource(
+                "Sticky Notes", comment: "The app's name, which the Pro sheet's title puts before PRO."),
             identifiers: PurchaseSheetIdentifiers(
                 sheet: A11y.Pro.sheet,
                 reason: A11y.Pro.reason(reason.id),
