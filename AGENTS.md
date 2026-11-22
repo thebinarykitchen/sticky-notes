@@ -275,11 +275,14 @@ device.
 empty spot: made twice without a scroll, a block covers the last one of its size exactly. A block
 too tall for the screen runs on below it.
 
-**What the model writes is checked only by `NoteWriterModelTests`,** which run wherever the
-model can, a Simulator on this Mac included, and are skipped elsewhere. A Simulator just created
-says the model isn't ready, and skips them, for its first few minutes (about four, on iOS 27.0).
+**What the model writes is checked only by `NoteWriterModelTests`,** which run on a Mac or a
+device with Apple Intelligence, and are skipped elsewhere — a Simulator included, so preflight's
+unit tests never run them. On iOS 27.0 a Simulator used the Mac's model; on iOS 27.2 its
+guardrails answer "Simulator is not supported" and every list fails. Run them on the Mac
+(`-destination 'platform=macOS' -only-testing:StickyNotesTests/NoteWriterModelTests`).
 How `NoteWriter` asks the model was tuned against them: reworded, it took lists for topics and
-refused ordinary lists. Run them after changing it, and on a new OS.
+refused ordinary lists; leaving the schema out of the prompt kept bullets on list notes (macOS
+27.2). Run them after changing it, and on a new OS.
 
 **The Pro sheet and "Sticky Notes Pro…" on a Mac are checked only by compiling.** The sheet's
 size, and the menu item in the app menu, want a look on a Mac.

@@ -12,7 +12,8 @@ import SwiftUI
 /// topics, refused ordinary lists as unsafe and lowercased the reader's words. The first ask is
 /// greedy, or it now and then wrote the output format it is shown into a note. It still takes
 /// some things named for lists of one, or heads its ideas with the topic, so a note that only
-/// repeats what was written is dropped, and with none left it is asked again, for ideas alone.
+/// repeats what was written is dropped, and with none left it is asked again, for ideas alone. A
+/// list's note that isn't in what was written is dropped too.
 /// `NoteWriterModelTests` checks the result against the model.
 nonisolated struct NoteWriter: Sendable {
     /// Where notes come from: the on-device model; nowhere, so nothing is offered; or a stand-in
@@ -79,8 +80,10 @@ nonisolated struct NoteWriter: Sendable {
                 to: text, generating: WrittenNotes.self,
                 options: GenerationOptions(samplingMode: .greedy)
             )
-            .content.notes
-        let notes = tidied(written).filter { !repeats($0, text) }
+            .content
+        let notes = tidied(written.notes).filter {
+            !repeats($0, text) && (written.job == .topic || copies($0, text))
+        }
         guard notes.isEmpty else { return notes }
         let ideas = try await LanguageModelSession(model: model, instructions: ideasInstructions)
             .respond(to: text, generating: Ideas.self)
@@ -104,6 +107,14 @@ nonisolated struct NoteWriter: Sendable {
         let edges = CharacterSet.whitespacesAndNewlines.union(.punctuationCharacters)
         return note.trimmingCharacters(in: edges)
             .localizedCaseInsensitiveCompare(text.trimmingCharacters(in: edges)) == .orderedSame
+    }
+
+    /// Whether `note`, made of a list, is in what was written, its case aside. A list's notes are
+    /// asked for in the writer's words, so one that isn't is the model's own: on macOS 27.2,
+    /// with greedy sampling, it added the format it is shown ("Respond using the following JSON
+    /// format") to a list of three errands every time.
+    static func copies(_ note: String, _ text: String) -> Bool {
+        text.localizedCaseInsensitiveContains(note)
     }
 
     // Not UI text, so not in the catalog. Reworded, the model has taken lists for topics again,

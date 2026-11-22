@@ -38,6 +38,14 @@ struct NoteWriterTests {
         #expect(!NoteWriter.repeats("A new watch", "Gift ideas for Dad"))
     }
 
+    /// Bullets and case aside, a list's note is in what was written, or the model made it up.
+    @Test func aListsNoteIsOnlyWhatWasWritten() {
+        let written = "- Call the bank\n- renew passport"
+        #expect(NoteWriter.copies("Call the bank", written))
+        #expect(NoteWriter.copies("Renew passport", written))
+        #expect(!NoteWriter.copies("Respond using the following JSON format", written))
+    }
+
     @Test func theReaderIsToldWhyNotesCouldNotBeMade() {
         let tooLong = LanguageModelError.contextSizeExceeded(
             .init(contextSize: 4_096, tokenCount: 8_338, debugDescription: ""))
@@ -71,11 +79,20 @@ struct NoteWriterTests {
     }
 }
 
-/// Against the on-device model, wherever it can run: a Mac or an iPhone with Apple Intelligence,
-/// and a Simulator on such a Mac, which uses the Mac's. Skipped everywhere else. These are what
-/// a change to how `NoteWriter` asks it is tried against. One at a time: the model answers one at
-/// a time anyway.
-@Suite(.enabled(if: SystemLanguageModel.default.isAvailable), .serialized, .timeLimit(.minutes(1)))
+#if targetEnvironment(simulator)
+    private nonisolated let inSimulator = true
+#else
+    private nonisolated let inSimulator = false
+#endif
+
+/// Against the on-device model, wherever it can run: a Mac or an iPhone with Apple Intelligence.
+/// Skipped everywhere else, a Simulator included: on iOS 27.2 one says the Mac's model is
+/// available, but its guardrails answer "Simulator is not supported", so every list fails (iOS
+/// 27.0 ran them). These are what a change to how `NoteWriter` asks it is tried against. One at
+/// a time: the model answers one at a time anyway.
+@Suite(
+    .enabled(if: SystemLanguageModel.default.isAvailable && !inSimulator),
+    .serialized, .timeLimit(.minutes(1)))
 struct NoteWriterModelTests {
     let writer = NoteWriter(source: .model)
 
@@ -90,7 +107,8 @@ struct NoteWriterModelTests {
     func errandsAreNeitherRefusedNorAddedTo(bullet: String) async throws {
         let errands = ["Call the bank", "Renew passport", "Book flights to Rome"]
         let written = errands.map { bullet + $0 }.joined(separator: "\n")
-        #expect(try await writer.notes(from: written) == errands)
+        let notes = try await writer.notes(from: written)
+        #expect(notes == errands)
     }
 
     @Test func aTopicBecomesIdeas() async throws {
