@@ -1,13 +1,14 @@
 import AccessibilityIdentifiers
 import AppTour
 import NoteModel
+import PurchaseUI
 import SwiftData
 import SwiftUI
 
 /// Every board, oldest first. The toolbar's `+` adds one, or offers Pro once every free board is
 /// in use; a board's menu renames or deletes it. The last board can't be deleted, so there is
-/// always a canvas to show. Searching lists the notes found in place of the boards. Pro's row is
-/// under the boards.
+/// always a canvas to show. Searching lists the notes found in place of the boards. Pro and
+/// Restore Purchases are under the boards, above About.
 struct BoardList: View {
     let boards: [Board]
     @Binding var selection: UUID?
@@ -16,6 +17,7 @@ struct BoardList: View {
 
     @Environment(NoteStore.self) private var store
     @Environment(Pro.self) private var pro
+    @Environment(\.motion) private var motion
     @Environment(\.proOffer) private var offer
     private var tour = TourProgress.app
     @State private var isAdding = false
@@ -170,51 +172,16 @@ struct BoardList: View {
                     .disabled(boards.count == 1)
                 }
             }
-            Section {
-                proRow
-            }
+            PurchaseSettingsSection(
+                purchase: pro.purchase,
+                appName: ProSheet.appName,
+                identifiers: PurchaseSettingsIdentifiers(
+                    proRow: A11y.Pro.listRow, restoreButton: A11y.Pro.listRestoreButton),
+                // `Motion.edit` is nil under Reduce Motion and the `--reduce-motion` launch flag.
+                reducesMotion: motion.edit == nil,
+                showOffer: { offer?.show(nil) }
+            )
             AboutSection()
-        }
-    }
-
-    /// Pro's price, or that it is unlocked. Where Restore Purchases is found, on the sheet it
-    /// opens. The price is left out until it loads, since an empty `Text` fails the
-    /// accessibility audit.
-    @ViewBuilder
-    private var proRow: some View {
-        if pro.isUnlocked {
-            LabeledContent {
-                // Primary: the default gray falls short of the audit's contrast.
-                Text("Unlocked", comment: "Beside Sticky Notes Pro, once it is bought.")
-                    .foregroundStyle(Color.primary)
-            } label: {
-                proName
-            }
-            .accessibilityElement(children: .combine)
-            .accessibilityIdentifier(A11y.Pro.listRow)
-        } else {
-            Button {
-                offer?.show(nil)
-            } label: {
-                LabeledContent {
-                    if let price = pro.price {
-                        Text(verbatim: price).foregroundStyle(Color.primary)
-                    }
-                } label: {
-                    proName
-                }
-            }
-            .accessibilityIdentifier(A11y.Pro.listRow)
-        }
-    }
-
-    private var proName: some View {
-        Label {
-            Text(
-                "Sticky Notes Pro",
-                comment: "The name of the one thing this app sells, and the Pro sheet's title.")
-        } icon: {
-            Image(systemName: "sparkles.rectangle.stack")
         }
     }
 

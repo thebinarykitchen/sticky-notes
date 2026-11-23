@@ -125,6 +125,8 @@ public enum A11y {
         public static let message = "pro.message"
         /// The row under the boards showing Pro's price or that it is unlocked.
         public static let listRow = "pro.listRow"
+        /// Asks the App Store for a Pro bought before, under ``listRow``.
+        public static let listRestoreButton = "pro.listRestoreButton"
 
         public static let reasonPrefix = "pro.reason."
         /// Why the sheet is up, keyed by `ProFeature.rawValue` or ``listReason``.

@@ -374,10 +374,7 @@
       }
     },
     "Sticky Notes" : {
-      "comment" : "The app's name, which the Pro sheet's title puts before PRO."
-    },
-    "Sticky Notes Pro" : {
-      "comment" : "The name of the one thing this app sells, and the Pro sheet's title."
+      "comment" : "The app's name, which the Pro sheet's title and Settings' Pro row put before PRO."
     },
     "Sticky Notes Pro…" : {
       "comment" : "The app menu item that opens the Pro sheet."
@@ -417,9 +414,6 @@
     },
     "Unlimited Make Notes with Pro" : {
       "comment" : "The Pro sheet's title once this month's free Make Notes are used."
-    },
-    "Unlocked" : {
-      "comment" : "Beside Sticky Notes Pro, once it is bought."
     },
     "Untitled Board" : {
       "comment" : "What a board with no name is called."

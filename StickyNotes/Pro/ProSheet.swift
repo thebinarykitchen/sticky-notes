@@ -28,8 +28,7 @@ struct ProSheet: View {
             purchase: pro.purchase,
             features: features,
             reason: reason.feature,
-            appName: LocalizedStringResource(
-                "Sticky Notes", comment: "The app's name, which the Pro sheet's title puts before PRO."),
+            appName: Self.appName,
             identifiers: PurchaseSheetIdentifiers(
                 sheet: A11y.Pro.sheet,
                 reason: A11y.Pro.reason(reason.id),
@@ -64,6 +63,14 @@ struct ProSheet: View {
             .frame(maxWidth: .infinity)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(Text(trial.color.accessibilityName))
+    }
+}
+
+extension ProSheet {
+    /// The app's name, which the Pro sheet's title and Settings' Pro row put before PRO.
+    static var appName: LocalizedStringResource {
+        LocalizedStringResource(
+            "Sticky Notes", comment: "The app's name, which the Pro sheet's title and Settings' Pro row put before PRO.")
     }
 }
 

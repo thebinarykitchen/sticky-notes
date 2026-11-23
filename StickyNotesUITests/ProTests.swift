@@ -143,6 +143,8 @@ final class ProTests: AppTestCase {
     func testTheListOffersProAndRestoreSaysWhatItFound() {
         launch()
         app.showBoards()
+        // Beside Pro, for an account that bought it before.
+        app.buttons[A11y.Pro.listRestoreButton].awaiting("Restore Purchases, under the boards")
         app.buttons[A11y.Pro.listRow].awaiting("Pro's row").tap()
         awaitSheet(for: A11y.Pro.listReason)
 
@@ -158,6 +160,8 @@ final class ProTests: AppTestCase {
         XCTAssertTrue(row.label.contains("Unlocked"), "the row says \(row.label)")
         row.tap()
         XCTAssertFalse(sheet.waitForExistence(timeout: 1))
+        // Still there once bought: App Review looks for it whatever the account has.
+        app.buttons[A11y.Pro.listRestoreButton].awaiting("Restore Purchases, under the boards")
     }
 
     func testTheSheetPassesTheAccessibilityAudit() throws {
