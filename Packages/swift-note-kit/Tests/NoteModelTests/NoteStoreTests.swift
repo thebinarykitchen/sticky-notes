@@ -204,7 +204,9 @@ struct NoteStoreTests {
         #expect(note.text.isEmpty)
         #expect(!container.mainContext.hasChanges)
 
-        let deadline = ContinuousClock.now + .seconds(5)
+        // Long, because the wait ends as soon as the save lands: under load, as when a release
+        // captures screenshots beside these tests, the save waits seconds for the main actor.
+        let deadline = ContinuousClock.now + .seconds(60)
         while note.text.isEmpty, ContinuousClock.now < deadline {
             try await Task.sleep(for: .milliseconds(10))
         }
