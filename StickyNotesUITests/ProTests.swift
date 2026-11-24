@@ -10,9 +10,12 @@ import XCTest
 final class ProTests: AppTestCase {
     private var sheet: XCUIElement { app.find(A11y.Pro.sheet) }
 
+    /// Waits for the sheet up for `reason`, with the colors Pro adds drawn: every sheet shows
+    /// them, whatever brought it up.
     private func awaitSheet(for reason: String) {
         sheet.awaiting("the Pro sheet")
         app.find(A11y.Pro.reason(reason)).awaiting("the reason \(reason)")
+        app.find(A11y.Pro.colorGallery).awaiting("the Pro colors, on the sheet for \(reason)")
     }
 
     /// The system's Cancel, found by its label, in the navigation bar: outside the container

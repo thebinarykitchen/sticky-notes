@@ -5,7 +5,8 @@ import SwiftData
 import SwiftUI
 
 /// The Pro purchase sheet, shown when something free runs out, or from the list of boards or the
-/// menu bar. A color picked for a note is shown on the note.
+/// menu bar. Every one shows the colors Pro adds, whatever brought it up; a color picked for a
+/// note is outlined among them.
 struct ProSheet: View {
     let reason: ProOffer.Reason
 
@@ -13,9 +14,6 @@ struct ProSheet: View {
     @Environment(NoteStore.self) private var store
     @Environment(\.noteWriter) private var writer
     @Environment(\.motion) private var motion
-
-    /// The note a picked color is shown on.
-    private static let trialSide: CGFloat = 120
 
     /// Make Notes only where it can run: Apple Intelligence adds, and never replaces, and a device
     /// without it isn't sold it.
@@ -47,22 +45,10 @@ struct ProSheet: View {
                     store.recolor(trial.note, to: trial.color)
                 }
             },
-            lead: {
-                if let trial = reason.trying { trialNote(trial) }
-            }
+            // Whatever brought the sheet up: the colors are what Pro is best shown by, and a sheet
+            // from the list sells the same Pro as one from a note's menu.
+            lead: { ProColorGallery(picked: reason.trying?.color) }
         )
-    }
-
-    /// The note the color was picked for, in that color, so the color is seen rather than named.
-    private func trialNote(_ trial: ProOffer.Trial) -> some View {
-        Text(verbatim: trial.note.text)
-            .foregroundStyle(NoteStyle.ink)
-            .font(.callout)
-            .lineLimit(4)
-            .notePaper(side: Self.trialSide, color: trial.color)
-            .frame(maxWidth: .infinity)
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(Text(trial.color.accessibilityName))
     }
 }
 

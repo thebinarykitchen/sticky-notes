@@ -123,6 +123,8 @@ public enum A11y {
         public static let restoreButton = "pro.restoreButton"
         /// What the last purchase or restore came to, shown under ``restoreButton``.
         public static let message = "pro.message"
+        /// The colors Pro adds, drawn as notes, on every Pro sheet.
+        public static let colorGallery = "pro.colorGallery"
         /// The row under the boards showing Pro's price or that it is unlocked.
         public static let listRow = "pro.listRow"
         /// Asks the App Store for a Pro bought before, under ``listRow``.
