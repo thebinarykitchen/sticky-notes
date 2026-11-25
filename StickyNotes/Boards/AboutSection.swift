@@ -41,12 +41,9 @@ enum AppInfo {
     /// Must match the Privacy Policy URL in App Store Connect.
     static let privacyPolicy = URL(string: "https://www.thebinarykitchen.com/privacy-policy/")!
 
-    /// Marketing version and build, e.g. `1.0.0 (27)`.
+    /// Marketing version only, e.g. `1.0`. The build number means nothing to the person using the app.
     static var version: String {
-        let info = Bundle.main.infoDictionary
-        let marketing = info?["CFBundleShortVersionString"] as? String ?? "?"
-        let build = info?["CFBundleVersion"] as? String ?? "?"
-        return "\(marketing) (\(build))"
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?"
     }
 }
 

@@ -25,7 +25,7 @@ public enum A11y {
 
     /// The bottom of the list of boards: what App Review looks for.
     public enum About {
-        /// The app's version and build.
+        /// The app's version.
         public static let versionRow = "about.versionRow"
         /// Opens the support page.
         public static let supportLink = "about.supportLink"
