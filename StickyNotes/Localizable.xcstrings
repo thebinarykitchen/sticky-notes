@@ -50,9 +50,6 @@
         }
       }
     },
-    "About" : {
-      "comment" : "The heading over the version, support and privacy policy."
-    },
     "Add Note" : {
       "comment" : "Adds a note: the toolbar button, and what Undo and Redo call it."
     },
@@ -326,9 +323,6 @@
     "Practiced" : {
       "comment" : "VoiceOver, after a tour page's instruction, once its gesture is done."
     },
-    "Privacy Policy" : {
-      "comment" : "In the list of boards: opens the privacy policy."
-    },
     "Purple" : {
       "comment" : "A color in a note's menu."
     },
@@ -385,9 +379,6 @@
     "Still to do" : {
       "comment" : "A note on the tour's practice board."
     },
-    "Support" : {
-      "comment" : "In the list of boards: opens the support page."
-    },
     "Teal" : {
       "comment" : "A color in a note's menu."
     },
@@ -417,9 +408,6 @@
     },
     "Untitled Board" : {
       "comment" : "What a board with no name is called."
-    },
-    "Version" : {
-      "comment" : "In the list of boards, beside the app's version."
     },
     "What to make notes from" : {
       "comment" : "VoiceOver label for the field notes are made from."
