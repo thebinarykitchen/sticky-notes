@@ -1,5 +1,5 @@
 import Foundation
-import PurchaseUI
+import AppUI
 
 /// What Pro covers, with what each is worth free and its Pro sheet copy.
 nonisolated enum ProFeature: String, CaseIterable, Identifiable, Sendable, PurchaseFeature {

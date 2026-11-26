@@ -3,7 +3,7 @@
 What is bought and what is left: the App Store, the one non-consumable (`ProProduct.id`, $3.99,
 Family Sharing, no subscription), and what is free of each thing it covers. StoreKit, the monthly
 counting and the sheet are launchpad's
-[`swift-one-time-purchase`](../../../launchpad/Packages/swift-one-time-purchase/README.md); what is
+[`swift-app-kit`](../../../launchpad/Packages/swift-app-kit/README.md); what is
 free and the sheet's copy are here. Repo-wide conventions: [`../../AGENTS.md`](../../AGENTS.md).
 
 ## What is free

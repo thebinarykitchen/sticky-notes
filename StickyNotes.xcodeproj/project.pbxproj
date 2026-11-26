@@ -18,7 +18,7 @@
 		05A100493100000000000001 /* PreviewRecording in Frameworks */ = {isa = PBXBuildFile; productRef = 05A100393100000000000001 /* PreviewRecording */; };
 		05A100513100000000000001 /* StoreKit.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 05A100503100000000000001 /* StoreKit.storekit */; };
 		05F1C0013100000000000001 /* PurchaseKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05F1B0013100000000000001 /* PurchaseKit */; };
-		05F1C0023100000000000001 /* PurchaseUI in Frameworks */ = {isa = PBXBuildFile; productRef = 05F1B0023100000000000001 /* PurchaseUI */; };
+		05F1C0023100000000000001 /* AppUI in Frameworks */ = {isa = PBXBuildFile; productRef = 05F1B0023100000000000001 /* AppUI */; };
 		05F1C0033100000000000001 /* AppTour in Frameworks */ = {isa = PBXBuildFile; productRef = 05F1B0033100000000000001 /* AppTour */; };
 		05F1C0043100000000000001 /* PurchaseKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05F1B0043100000000000001 /* PurchaseKit */; };
 		05F1C0053100000000000001 /* PurchaseTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 05F1B0053100000000000001 /* PurchaseTesting */; };
@@ -103,7 +103,7 @@
 				05A100423100000000000001 /* LaunchArguments in Frameworks */,
 				05A100433100000000000001 /* NoteModel in Frameworks */,
 				05F1C0033100000000000001 /* AppTour in Frameworks */,
-				05F1C0023100000000000001 /* PurchaseUI in Frameworks */,
+				05F1C0023100000000000001 /* AppUI in Frameworks */,
 				05F1C0013100000000000001 /* PurchaseKit in Frameworks */,
 			);
 		};
@@ -182,7 +182,7 @@
 				05A100323100000000000001 /* LaunchArguments */,
 				05A100333100000000000001 /* NoteModel */,
 				05F1B0033100000000000001 /* AppTour */,
-				05F1B0023100000000000001 /* PurchaseUI */,
+				05F1B0023100000000000001 /* AppUI */,
 				05F1B0013100000000000001 /* PurchaseKit */,
 			);
 			productName = StickyNotes;
@@ -310,7 +310,7 @@
 				05A100223100000000000001 /* XCLocalSwiftPackageReference "Packages/swift-launch-arguments" */,
 				05A100233100000000000001 /* XCLocalSwiftPackageReference "Packages/swift-note-kit" */,
 				05A100243100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-preview-recording" */,
-				05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-one-time-purchase" */,
+				05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-app-kit" */,
 				05F1A0023100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-app-tour" */,
 				05F1A0033100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-ui-test-support" */,
 			);
@@ -361,7 +361,7 @@
 				"$(SRCROOT)/AppIcon.xcfilelist",
 			);
 			inputPaths = (
-				"$(SRCROOT)/../launchpad/Packages/swift-one-time-purchase/Scripts/render-app-icon.sh",
+				"$(SRCROOT)/../launchpad/Packages/swift-app-kit/Scripts/render-app-icon.sh",
 			);
 			name = "Render App Icon";
 			outputFileListPaths = (
@@ -372,7 +372,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../launchpad/Packages/swift-one-time-purchase/Scripts/render-app-icon.sh\" \"$SRCROOT/StickyNotes/AppIcon.icon\"\n";
+			shellScript = "\"$SRCROOT/../launchpad/Packages/swift-app-kit/Scripts/render-app-icon.sh\" \"$SRCROOT/StickyNotes/AppIcon.icon\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -825,9 +825,9 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../launchpad/Packages/swift-preview-recording";
 		};
-		05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-one-time-purchase" */ = {
+		05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-app-kit" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = "../launchpad/Packages/swift-one-time-purchase";
+			relativePath = "../launchpad/Packages/swift-app-kit";
 		};
 		05F1A0023100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-app-tour" */ = {
 			isa = XCLocalSwiftPackageReference;
@@ -887,13 +887,13 @@
 		};
 		05F1B0013100000000000001 /* PurchaseKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-one-time-purchase" */;
+			package = 05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-app-kit" */;
 			productName = PurchaseKit;
 		};
-		05F1B0023100000000000001 /* PurchaseUI */ = {
+		05F1B0023100000000000001 /* AppUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-one-time-purchase" */;
-			productName = PurchaseUI;
+			package = 05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-app-kit" */;
+			productName = AppUI;
 		};
 		05F1B0033100000000000001 /* AppTour */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -902,12 +902,12 @@
 		};
 		05F1B0043100000000000001 /* PurchaseKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-one-time-purchase" */;
+			package = 05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-app-kit" */;
 			productName = PurchaseKit;
 		};
 		05F1B0053100000000000001 /* PurchaseTesting */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-one-time-purchase" */;
+			package = 05F1A0013100000000000001 /* XCLocalSwiftPackageReference "../launchpad/Packages/swift-app-kit" */;
 			productName = PurchaseTesting;
 		};
 		05F1B0063100000000000001 /* AppTour */ = {

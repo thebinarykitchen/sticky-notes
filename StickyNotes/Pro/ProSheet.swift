@@ -1,6 +1,6 @@
 import AccessibilityIdentifiers
 import NoteModel
-import PurchaseUI
+import AppUI
 import SwiftData
 import SwiftUI
 
