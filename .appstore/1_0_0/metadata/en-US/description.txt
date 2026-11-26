@@ -5,12 +5,12 @@ Boards of sticky notes with no edges. Double-tap to add a note, drag it where it
 • Search finds a note on any board and opens the board right on it
 • A short tour lets you try each gesture on a practice board
 • Every gesture also has a button or menu item, and VoiceOver actions
-• iPhone and iPad
+• iPhone, iPad and Mac
 
 Make Notes
-On devices with Apple Intelligence, write a list and get a note per item, or write a topic and get ideas to move around. It runs on your device, so what you write stays there.
+On devices with Apple Intelligence, write a list and get a note per item, or write a topic and get ideas to move around. It runs on your device, so what you write isn't sent to an AI service.
 
 Sticky Notes Pro
 One purchase, no subscription. The free app has three boards, ten Make Notes a month and four colors. Pro removes the limits and adds four more colors.
 
-Your notes stay on your device. No account, no tracking.
+Your boards sync through iCloud to your iPhone, iPad and Mac. No account, no tracking.
