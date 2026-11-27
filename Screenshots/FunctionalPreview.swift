@@ -379,7 +379,7 @@ final class PreviewPro: FunctionalPreviewCase {
 
 /// What the largest Dynamic Type size does to a note, the list, and a note being written on.
 final class PreviewLargestType: FunctionalPreviewCase {
-    private static let largest = "UICTContentSizeCategoryAccessibilityXXXL"
+    private static let largest = ContentSize.largest
 
     func testTheBoardAndTheListAtTheLargestSize() {
         launch(contentSize: Self.largest)

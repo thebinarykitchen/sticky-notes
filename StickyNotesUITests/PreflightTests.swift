@@ -93,7 +93,7 @@ final class PreflightTests: AppTestCase {
     }
 
     func testNothingClipsAtTheLargestDynamicType() throws {
-        let largest = "UICTContentSizeCategoryAccessibilityXXXL"
+        let largest = ContentSize.largest
         launchAsShipped(contentSize: largest)
         app.surface.awaiting("the board at the largest type size")
         try app.performAccessibilityAudit(for: [.textClipped, .dynamicType])
