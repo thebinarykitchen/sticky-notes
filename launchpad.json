@@ -58,7 +58,8 @@
         "The in-app purchase com.thebinarykitchen.Stickies.IAP.Pro is a non-consumable at the price in StoreKit.storekit, is Ready to Submit, and is attached to this version.",
         "Buy Pro on a device with a sandbox account, then delete and reinstall the app and use Restore Purchases from the Pro sheet: Pro comes back.",
         "App Privacy in App Store Connect says Data Not Collected: notes stay on the device, and Make Notes runs on the on-device model.",
-        "The privacy policy and support URLs in App Store Connect are the ones the list of boards opens; both are in AppInfo."
+        "The privacy policy and support URLs in App Store Connect are the ones the list of boards opens; both are in AppInfo.",
+        "The App Group group.com.thebinarykitchen.Stickies is on the App ID for iOS and Mac, and in both provisioning profiles: the store opens in it."
       ],
       "reviewNotes": [
         "Sticky Notes needs no account and works offline. Notes are stored on the device; nothing is sent to a server.",

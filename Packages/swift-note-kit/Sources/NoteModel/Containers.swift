@@ -11,7 +11,8 @@ public enum ICloudContainer {
 /// Each names its `cloudKitDatabase` explicitly: the default, `.automatic`, syncs wherever
 /// entitlements allow. Both take their models from ``CurrentSchema``.
 extension ModelContainer {
-    /// The persistent store, in the app's default location.
+    /// The persistent store, in the ``AppGroup`` container so an extension can open it. The group
+    /// is named, never left to `.automatic`, which follows whatever group the entitlements list.
     ///
     /// - Parameter syncing: Whether it mirrors to the private database in
     ///   ``ICloudContainer/identifier``. The app syncs; a persistence UI test opens it without, so
@@ -22,6 +23,7 @@ extension ModelContainer {
             for: Schema(versionedSchema: CurrentSchema.self),
             migrationPlan: NoteMigrationPlan.self,
             configurations: ModelConfiguration(
+                groupContainer: .identifier(AppGroup.identifier),
                 cloudKitDatabase: syncing ? .private(ICloudContainer.identifier) : .none)
         )
     }

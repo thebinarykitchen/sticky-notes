@@ -122,6 +122,8 @@ screenshots, its own review pass and a deployment target that has to keep compil
   model stays CloudKit-shaped and every version only adds, through a lightweight stage
   (`SchemaMigrationTests` checks both), and the CloudKit schema is deployed to production before
   a build ships. Signed out of iCloud, the store is this device's alone, and uploads on sign-in.
+- **The store lives in the App Group** `group.com.thebinarykitchen.Stickies` (`AppGroup`), so an
+  extension can open it: `onDisk(syncing:)` names it as `groupContainer`, never `.automatic`.
 - **Every device makes a starter board on its first launch** (`Board.isStarter`), so after a sync
   there are several. `NoteStore.foldStarterBoards()` folds them into the oldest whenever a window
   comes forward or an import lands (`foldsStarterBoards()`); boards the reader made are never
